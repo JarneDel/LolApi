@@ -5,15 +5,12 @@ const logger = require("morgan");
 const dotenv = require("dotenv").config();
 
 let calculator = require("./models/calculateWinrate");
+const db = require("./models/db")
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const fs = require("fs");
-const {
-  calculateWinrateNormal,
-  calculateWinRateAram,
-  calculateWinrate,
-} = require("./models/calculateWinrate");
 const { cacheMatchHistory } = require("./models/cacheMatchHistory");
+const { calculateWinrateNormal } = require("./models/calculateWinrate");
 
 const app = express();
 
@@ -23,13 +20,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-calculator.getLastMatches("JungleDiffAt0m", "euw1").then((matches) => {
+calculator.CreateMatchesWithCache("JungleDiffAt0m").then((someObject) =>{
+  console.log(someObject);
+  db.getAllMatches()
+    .then( (matches )=>{
+    console.log(calculator.calculateWinrate(matches));
+  })
+})
 
-  console.log(calculateWinrateNormal(matches));
-  console.log(calculateWinRateAram(matches));
-  console.log(calculateWinrate(matches));
-  cacheMatchHistory(matches);
-});
+
+
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);

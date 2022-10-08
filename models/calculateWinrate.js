@@ -3,6 +3,8 @@ const getMatch = require("./getMatch");
 const { cacheMatchHistory } = require("./cacheMatchHistory");
 const db = require("./db");
 
+
+// deprecated
 const getLastMatches = async (username, region = "euw1", amount = 20) => {
   let globalRegion;
   let matches = [];
@@ -55,6 +57,9 @@ const __getAllMatches = async function (){
   return db.getAllMatches();
 }
 
+const __getMatchesByMatchID = async function (puuid){
+  return db.getMatchIDsByPuuid(puuid)
+}
 
 
 const calculateWinrate = function (matches) {
@@ -109,6 +114,8 @@ const calculateWinRateAram = function (matches) {
 
 module.exports = {
   getLastMatches,
+  CreateMatchesWithCache,
+
   calculateWinrate,
   calculateWinrateNormal,
   calculateWinRateAram,

@@ -1,8 +1,8 @@
 //@ts-check
+"use strict";
 const CosmosClient = require("@azure/cosmos").CosmosClient;
 
 const config = require("../config");
-const url = require("url");
 
 const endpoint = config.endpoint;
 const key = config.key;
@@ -56,16 +56,36 @@ async function readContainer() {
 
 /** create a family item if it does not exist */
 async function addMatch(match) {
-  match.matchid = match.metadata.matchId;
-  match.id = match.metadata.matchId;
-  const {resource: createdItem} = await client.database(databaseId).container(containerId).items.create(match);
-  return createdItem;
+  if (match === null) return "match does not exist";
+  try {
+    match.matchid = match.metadata.matchId;
+    match.id = match.metadata.matchId;
+    const { resource: createdItem } = await client
+      .database(databaseId)
+      .container(containerId)
+      .items.create(match);
+    return createdItem;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
 }
 
-async function getMatchIdList () {
+async function getMatchIdList() {
   // cosmos db select query
-  const {resources} = await client.database(databaseId).container(containerId).items.query("SELECT i.matchid FROM items i").fetchAll();
-  return resources;
+  const { resources } = await client
+    .database(databaseId)
+    .container(containerId)
+    .items.query("SELECT c.matchid FROM c")
+    .fetchAll();
+  // convert array of objects to array of matchid's
+  let returnList = [];
+  // console.log(resources)
+  for (let i = 0; i < resources.length; i++) {
+    returnList.push(resources[i].matchid);
+  }
+  console.log("matchIDList", returnList);
+  return returnList;
 }
 
 const getAllMatches = async function () {
@@ -75,8 +95,33 @@ const getAllMatches = async function () {
     .items.readAll()
     .fetchAll();
   return resources;
+};
+
+async function getMatchesByPuuid(puuid) {
+  const { resources } = await client
+    .database(databaseId)
+    .container(containerId)
+    .items.query({
+      query:
+        "SELECT * FROM c WHERE ARRAY_CONTAINS(c.metadata.participants, @param1)",
+      parameters: [{ name: "@param1", value: puuid }],
+    })
+    .fetchAll();
+  return resources;
 }
 
+async function getMatchIDsByPuuid(puuid) {
+  const { resources } = await client
+    .database(databaseId)
+    .container(containerId)
+    .items.query({
+      query:
+        "SELECT * FROM c WHERE ARRAY_CONTAINS(c.metadata.participants, @param1)",
+      parameters: [{ name: "@param1", value: puuid }],
+    })
+    .fetchAll();
+  return resources;
+}
 
 async function cleanup() {
   await client.database(databaseId).delete();
@@ -94,9 +139,7 @@ function exit(message) {
   process.stdin.on("data", process.exit.bind(process, 0));
 }
 
-
-
-module.exports= {
+module.exports = {
   addMatch,
   createDatabase,
   readDatabase,
@@ -105,4 +148,6 @@ module.exports= {
   cleanup,
   getMatchIdList,
   getAllMatches,
-}
+  getMatchesByPuuid,
+  getMatchIDsByPuuid,
+};

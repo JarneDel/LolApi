@@ -21,9 +21,15 @@ async function getMatchTimeline(matchID, region = "europe") {
   return await get.get(url);
 }
 
+async function getMatchInfoAsync(matchID, region = "europe"){
+  let url = `https://${region}.api.riotgames.com/lol/match/v5/matches/${matchID}`
+  return get.get(url)
+}
+
 module.exports = {
   getSummonerInfo,
   getMatchID,
   getMatchInfo,
   getMatchTimeline,
+  getMatchInfoAsync,
 };

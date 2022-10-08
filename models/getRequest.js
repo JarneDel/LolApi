@@ -23,7 +23,7 @@ const get = function (url, extraHeaders) {
         res.on("end", () => {
           console.log("response ended");
           const result = JSON.parse(Buffer.concat(data).toString());
-          console.log(result);
+          // console.log(result);
           resolve(result);
         });
       })
