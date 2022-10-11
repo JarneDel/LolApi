@@ -16,14 +16,17 @@ const get = function (url, extraHeaders) {
             : "no response date";
         console.log("Status Code:", res.statusCode);
         console.log("Date in Response header:", headerDate);
-
+        if(res.statusCode === 429){
+          console.log("Too many requests, waiting 60 seconds");
+          reject({status: 429})
+        }
         res.on("data", (chunk) => {
           data.push(chunk);
         });
         res.on("end", () => {
           console.log("response ended");
           const result = JSON.parse(Buffer.concat(data).toString());
-          // console.log(result);
+          console.log(result);
           resolve(result);
         });
       })

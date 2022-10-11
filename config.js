@@ -1,12 +1,12 @@
+// please add this to your .gitignore file
+
 var config = {};
 require("dotenv").config();
 
 const mh = require("./test.json");
-config.endpoint =
-  "https://dbeindwerkinteractiondesign.documents.azure.com:443/";
-config.key =
-  "Pwr3HNwJoN68TJE3LCRtvawmQKZzJZ2BGfp1xLrk15WJ84qteEup4z9dtKOQ6ivihs1afBkEgSBWVlNIOQZuiw==";
-console.log(config.endpoint, config.key);
+config.endpoint = process.env.COSMOS_ENDPOINT;
+config.key = process.env.COSMOS_KEY;
+
 
 config.database = {
   id: "lolmatchhistory",
@@ -15,6 +15,10 @@ config.database = {
 config.container = {
   id: "matchhistory",
 };
+
+config.userContainer = {
+  id: "userContainer",
+}
 
 config.items = {
   matches: mh,

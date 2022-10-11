@@ -8,7 +8,7 @@ async function getSummonerInfo(username, region = "euw1") {
 }
 
 async function getMatchID(puuid, region = "europe", count = 100) {
-  let url = `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=${count}`;
+  let url = `https://${region}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=${count}`;
   return await get.get(url);
 }
 
