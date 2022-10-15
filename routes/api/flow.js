@@ -10,6 +10,11 @@ async function newUser(username, region, callbackDoSomething) {
   // list of matches
   let outMatches = [];
 
+  // test performace
+  // let start = performance.now()
+  // const getUser = await db.getUser(username, region);
+  // let end = performance.now()
+  // console.log("getUser: " + (end - start) + "ms");
   // will contain the matchList of the cached matches
   const user = await cacheUsers.cacheUser(username, region); // 450 ms when user is cached, 650 ms when user is not cached
   // get recent matches from league api
@@ -52,18 +57,18 @@ async function newUser(username, region, callbackDoSomething) {
 }
 
 const callbackCoupleMachToUser = function(matchObjectList, userObject) {
-  const listMatchIds = matchObjectList.map((matchObject) => matchObject.matchid);
+  const listMatchIds = matchObjectList.map((matchObject) => matchObject.id);
 
-  cacheUsers.cacheMatchIds(userObject.puuid, listMatchIds).then(
-    (result) => {
-      console.log("Paired successfully: " + result);
-      // todo -- once paired successfully, we need to get the other cached matches and add them to the matchObjectList, so that we can use them for the calculations
-    }
-  );
+  cacheUsers.cacheMatchIds(userObject.puuid, listMatchIds).then((result) => {
+    console.log("Paired successfully: " + result);
+    // todo -- once paired successfully, we need to get the other cached matches and add them to the matchObjectList, so that we can use them for the calculations
+  });
 
 
 };
 
+// newUser("JungleDiffAt0m", "euw1");
 
-newUser("xceing", "euw1", callbackCoupleMachToUser);
+
+newUser("JungleDiffAt0m", "euw1", callbackCoupleMachToUser);
 console.log("done");

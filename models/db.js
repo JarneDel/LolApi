@@ -4,69 +4,30 @@ const CosmosClient = require("@azure/cosmos").CosmosClient;
 
 const config = require("../config");
 
-const endpoint = config.endpoint;
-const key = config.key;
 
-const databaseId = config.database.id;
-const containerId = config.container.id;
-const userContainerId = config.userContainer.id;
+const { endpoint, key, databaseId, containerId, userContainerId } = config;
+
+// const userContainerId = config.userContainer.id;
 const partitionKey = { kind: "Hash", paths: ["/matchid"] };
 const clientPartitionKey = { kind: "Hash", paths: ["/puuid"] };
 
 const options = {
-  endpoint: endpoint,
-  key: key,
-  userAgentSuffix: "lolNodeServer"
+  endpoint: endpoint, key: key, userAgentSuffix: "lolNodeServer"
 };
 
-const client = new CosmosClient(options);
 
-/** create the database if it does not exist */
+const client = new CosmosClient({ endpoint, key });
 
-async function createDatabase() {
-  const { database } = await client.databases.createIfNotExists({
-    id: databaseId
-  });
-  console.log(`Created database:\n${database.id}\n`);
-}
-
-/** read the database definition */
-
-async function readDatabase() {
-  const { resource: databaseDefinition } = await client
-    .database(databaseId)
-    .read();
-  console.log(`Reading database:\n${databaseDefinition.id}\n`);
-}
-
-/** create the container if it does not exist */
-async function createContainer() {
-  const { container } = await client
-    .database(databaseId)
-    .containers.createIfNotExists({ id: containerId, partitionKey });
-  console.log(`Created container:\n${config.container.id}\n`);
-}
-
-/** read the container definition */
-async function readContainer() {
-  const { resource: containerDefinition } = await client
-    .database(databaseId)
-    .container(containerId)
-    .read();
-  console.log(`Reading container:\n${containerDefinition.id}\n`);
-}
+const database = client.database(databaseId);
+const matchContainer = database.container(containerId);
+const userContainer = database.container(userContainerId);
 
 async function checkIfMatchExists(matchId) {
-  const { resources } = await client
-    .database(databaseId)
-    .container(containerId)
-    .items.query({
-      query: "SELECT * FROM c WHERE c.matchid = @param1",
-      parameters: [{ name: "@param1", value: matchId }]
-    })
+  const { resources } = await matchContainer.items.query({
+    query: "SELECT c.id, c.metadata FROM c WHERE c.matchid = @param1", parameters: [{ name: "@param1", value: matchId }]
+  })
     .fetchAll();
-  if(resources.length > 0) return resources[0];
-  else return null;
+  if (resources.length > 0) return resources[0]; else return null;
 }
 
 
@@ -74,9 +35,7 @@ async function checkIfMatchExists(matchId) {
 async function addMatch(match) {
   if (match === null) return "match does not exist";
   // check if match already exists in db
-  let a = await client
-    .database(databaseId)
-    .container(containerId)
+  let a = await matchContainer
     .items.query({
       query: "SELECT * FROM c WHERE c.matchid = @param1",
       parameters: [{ name: "@param1", value: match.metadata.matchId }]
@@ -90,10 +49,7 @@ async function addMatch(match) {
     // add match to db
     match.matchid = match.metadata.matchId;
     match.id = match.metadata.matchId;
-    const { resource: createdItem } = await client
-      .database(databaseId)
-      .container(containerId)
-      .items.create(match);
+    const { resource: createdItem } = await matchContainer.items.create(match);
     console.log(`Created item with id:\n${createdItem.id}\n`);
     // return matchData
     return createdItem;
@@ -102,9 +58,7 @@ async function addMatch(match) {
 
 async function getMatchIdList() {
   // cosmos db select query
-  const { resources } = await client
-    .database(databaseId)
-    .container(containerId)
+  const { resources } = await matchContainer
     .items.query("SELECT c.matchid FROM c")
     .fetchAll();
   // convert array of objects to array of matchid's
@@ -118,56 +72,38 @@ async function getMatchIdList() {
 }
 
 const getAllMatches = async function() {
-  const { resources } = await client
-    .database(databaseId)
-    .container(containerId)
-    .items.readAll()
-    .fetchAll();
+  const { resources } = await matchContainer.items.readAll().fetchAll();
   return resources;
 };
 
 async function getMatchesByPuuid(puuid) {
-  const { resources } = await client
-    .database(databaseId)
-    .container(containerId)
-    .items.query({
-      query:
-        "SELECT * FROM c WHERE ARRAY_CONTAINS(c.metadata.participants, @param1)",
-      parameters: [{ name: "@param1", value: puuid }]
-    })
-    .fetchAll();
+  const query = {
+    query: "SELECT * FROM c WHERE ARRAY_CONTAINS(c.metadata.participants, @param1)",
+    parameters: [{ name: "@param1", value: puuid }]
+  };
+  const { resources } = await matchContainer.items.query(query).fetchAll();
   return resources;
 }
 
 async function getMatchIDsByPuuid(puuid) {
-  const { resources } = await client
-    .database(databaseId)
-    .container(containerId)
-    .items.query({
-      query:
-        "SELECT c.matchid FROM c WHERE ARRAY_CONTAINS(c.metadata.participants, @param1)",
-      parameters: [{ name: "@param1", value: puuid }]
-    })
-    .fetchAll();
+  const query = {
+    query: "SELECT c.matchid FROM c WHERE ARRAY_CONTAINS(c.metadata.participants, @param1)",
+    parameters: [{ name: "@param1", value: puuid }]
+  };
+  const { resources } = await matchContainer.items.query(query).fetchAll();
   return resources;
 }
 
 async function winOrLoseByChampion(puuid) {
-  const { resources } = await client
-    .database(databaseId)
-    .container(containerId)
-    .items.query({
-      query: "SELECT c.queueId, c."
-    });
+  const { resources } = await matchContainer.items.query({
+    query: "SELECT c.queueId, c."
+  });
 }
 
 async function getMatchCountByPuuid(puuid) {
-  const resources = await client
-    .database(databaseId)
-    .container(containerId)
+  const resources = await matchContainer
     .items.query({
-      query:
-        "SELECT VALUE COUNT(1) FROM c WHERE ARRAY_CONTAINS(c.metadata.participants, @param1)",
+      query: "SELECT VALUE COUNT(1) FROM c WHERE ARRAY_CONTAINS(c.metadata.participants, @param1)",
       parameters: [{ name: "@param1", value: puuid }]
     })
     .fetchAll();
@@ -180,24 +116,18 @@ async function getMatchCountByPuuid(puuid) {
 
 async function addUser(user) {
   user.nameLowerCase = user.name.toLowerCase();
-  const { resource: createdItem } = await client
-    .database(databaseId)
-    .container(userContainerId)
+  const { resource: createdItem } = await userContainer
     .items.create(user);
   console.log(`Created item with id:\n${createdItem.id}\n`);
   return createdItem;
 }
 
 async function AddMatchListToUser(puuid, matchList) {
-  const { resource: createdItem } = await client
-    .database(databaseId)
-    .container(userContainerId)
-    .items.query(
-      {
-        query: "INSERT INTO c (c.matchList) VALUES (@param1) WHERE c.puuid = @param2",
-        parameters: [{ name: "@param1", value: matchList }, { name: "@param2", value: puuid }]
-      }
-    );
+  const { resource: createdItem } = await userContainer
+    .items.query({
+      query: "INSERT INTO c (c.matchList) VALUES (@param1) WHERE c.puuid = @param2",
+      parameters: [{ name: "@param1", value: matchList }, { name: "@param2", value: puuid }]
+    });
   // console.log(`updated item with puuid:\n${createdItem.puuid}\n`);
   console.log(createdItem);
   return createdItem;
@@ -207,17 +137,18 @@ async function AddMatchListToUser(puuid, matchList) {
 async function addMatchToUser(puuid, matchList) {
   let user = await getUserByPuuid(puuid);
   if (user !== null) {
+    if (user.matchList === undefined) {
+      user.matchList = [];
+    }
     user.matchList = user.matchList.concat(matchList);
-    const { resource } = await client.database(databaseId).container(userContainerId).items.upsert(user);
+    const { resource } = await userContainer.items.upsert(user);
     return resource;
   }
 }
 
 
 async function checkIfUserExits(username, region) {
-  const { resources } = await client
-    .database(databaseId)
-    .container(userContainerId)
+  const { resources } = await userContainer
     .items.query({
       query: "SELECT * FROM c WHERE c.nameLowerCase = @param1 and c.region = @param2",
       parameters: [{ name: "@param1", value: username.toLowerCase() }, { name: "@param2", value: region }]
@@ -227,9 +158,7 @@ async function checkIfUserExits(username, region) {
 }
 
 async function checkIfUserExitsByPuuid(puuid) {
-  const { resources } = await client
-    .database(databaseId)
-    .container(userContainerId)
+  const { resources } = await userContainer
     .items.query({
       query: "SELECT count(1) FROM c WHERE c.puuid = @param1",
       parameters: [{ name: "@param1", value: puuid }]
@@ -240,24 +169,23 @@ async function checkIfUserExitsByPuuid(puuid) {
 
 async function getUser(username, region) {
   console.log("Getting user", username, region);
-  const { resources } = await client
-    .database(databaseId)
-    .container(userContainerId)
+  let start1 = performance.now();
+  const a = await userContainer
     .items.query({
       query: "SELECT * FROM c WHERE c.nameLowerCase = @param1 AND c.region = @param2",
       parameters: [{ name: "@param1", value: username.toLowerCase() }, { name: "@param2", value: region }]
     })
-    .fetchAll();
-  return resources[0];
+    .fetchNext();
+  let end1 = performance.now();
+  console.log("getUser time", end1 - start1);
+
+  return a.resources[0];
 }
 
 async function getUserByPuuid(puuid) {
-  const { resources } = await client
-    .database(databaseId)
-    .container(userContainerId)
+  const { resources } = await userContainer
     .items.query({
-      query: "SELECT * FROM c WHERE c.puuid = @param1",
-      parameters: [{ name: "@param1", value: puuid }]
+      query: "SELECT * FROM c WHERE c.puuid = @param1", parameters: [{ name: "@param1", value: puuid }]
     })
     .fetchAll();
   return resources[0];
