@@ -1,63 +1,78 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+    color: #00B7FF;
 }
 
-:root{
-  --padding-button: 18px;
+:root {
+    --padding-button: 18px;
 }
 
 .userForm {
-  transition: animation 0.5s;
+    transition: animation 0.5s;
 }
 
-.is-invalid{
-  /*shake animation*/
-  animation: error .5s;
+.is-invalid {
+    /*shake animation*/
+    animation: error .5s;
 
 }
 
 html {
-  /*max-width: 90rem;*/
-  box-sizing: border-box;
-  margin: 0 auto;
+    /*max-width: 90rem;*/
+    box-sizing: border-box;
+    margin: 0 auto;
 }
 
 
 .c-container {
-  display: grid;
+    margin: 0 auto;
+    display: grid;
+    width: 100%;
     grid-column-gap: 36px;
     grid-row-gap: 36px;
-    grid-template-columns: repeat(5, 1fr);
+    justify-content: center;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
 }
 
 
 .c-card {
     background: #fff;
     border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     display: grid;
     grid-template-rows: auto 1fr auto;
-    grid-row-gap: 10px;
-    max-width: 18.875rem;
+
+    /*max-width: 18.875rem;*/
 }
 
-.c-card__body{
+.c-card__body {
     padding: 0 1rem;
+    margin-top: 0;
 }
-.c-card__header{
-    padding: 0 1rem;
 
+.c-card__body p {
+    color: #707070;
+}
+
+.c-card__body p:first-child {
+    margin-top: 0;
+}
+
+.c-card__title {
+    padding: 0 1rem;
+    margin: 1rem 0;
 }
 
 .c-card__img {
-  width: 100%;
-  padding: 0;
-  margin: 0;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border-radius: 5px 0 0 5px;
 }
 
 
@@ -66,49 +81,78 @@ html {
     height: 100%;
     object-fit: cover;
     aspect-ratio: 1/1;
+    border-radius: 5px 5px 0 0;
+
+}
+
+/* create a popup card that is scrollable */
+.c-popup {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 68vw;
+    min-height: 80vh;
+    /*center this item*/
+    background: white;
+    z-index: 100;
+    overflow: scroll;
+}
+/* darken the page when popup is shown*/
+.c-popup__overlay {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99;
 }
 
 
-
+/* utilities */
+.u-hidden {
+    display: none;
+}
 
 
 
 @keyframes error {
 
-  5% {
-    padding-left: calc(var(--padding-button) - 8px);
-    padding-right: calc(var(--padding-button) + 8px);
-  }
-  10% {
-    padding-left: calc(var(--padding-button) + 7px);
-    padding-right: calc(var(--padding-button) - 7px);
-  }
-  20% {
-    padding-left: calc(var(--padding-button) - 6px);
-    padding-right: calc(var(--padding-button) + 6px);
-  }
-  30% {
-    padding-left: calc(var(--padding-button) + 5px);
-    padding-right: calc(var(--padding-button) - 5px);
-  }
-  40% {
-    padding-left: calc(var(--padding-button) - 4px);
-    padding-right: calc(var(--padding-button) + 4px);
-  }
-  50% {
-    padding-left: calc(var(--padding-button) + 3px);
-    padding-right: calc(var(--padding-button) - 3px);
-  }
-  60% {
-    padding-left: calc(var(--padding-button) - 2px);
-    padding-right: calc(var(--padding-button) + 2px);
-  }
-  70% {
-    padding-left: calc(var(--padding-button) + 1px);
-    padding-right: calc(var(--padding-button) - 1px);
-  }
-  80% {
-    padding-left: var(--padding-button);
-    padding-right: var(--padding-button);
-  }
+    5% {
+        padding-left: calc(var(--padding-button) - 8px);
+        padding-right: calc(var(--padding-button) + 8px);
+    }
+    10% {
+        padding-left: calc(var(--padding-button) + 7px);
+        padding-right: calc(var(--padding-button) - 7px);
+    }
+    20% {
+        padding-left: calc(var(--padding-button) - 6px);
+        padding-right: calc(var(--padding-button) + 6px);
+    }
+    30% {
+        padding-left: calc(var(--padding-button) + 5px);
+        padding-right: calc(var(--padding-button) - 5px);
+    }
+    40% {
+        padding-left: calc(var(--padding-button) - 4px);
+        padding-right: calc(var(--padding-button) + 4px);
+    }
+    50% {
+        padding-left: calc(var(--padding-button) + 3px);
+        padding-right: calc(var(--padding-button) - 3px);
+    }
+    60% {
+        padding-left: calc(var(--padding-button) - 2px);
+        padding-right: calc(var(--padding-button) + 2px);
+    }
+    70% {
+        padding-left: calc(var(--padding-button) + 1px);
+        padding-right: calc(var(--padding-button) - 1px);
+    }
+    80% {
+        padding-left: var(--padding-button);
+        padding-right: var(--padding-button);
+    }
 }
