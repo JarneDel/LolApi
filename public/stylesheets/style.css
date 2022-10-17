@@ -183,8 +183,8 @@ html {
     align-items: center;
 }
 .c-row__role--icon{
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 4rem;
+    height: 4rem;
     fill: #D0A85C;
 }
 .c-role__box{
@@ -201,6 +201,7 @@ html {
     font-size: 1.25rem;
     text-transform: uppercase;
     font-family: "open-sans", sans-serif;
+    margin-top: 10px;
 }
 
 .c-row__role--roles{

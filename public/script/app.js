@@ -84,23 +84,14 @@ function showPopup(e) {
   htmlElements.popup.image.src = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${e.id}_0.jpg`;
   htmlElements.popup.name.textContent = e.name;
   htmlElements.popup.title.textContent = e.title;
-  let count = 0;
   for (const icon of htmlElements.popup.tagIconAll) {
     const tag = icon.dataset.name;
     console.log(tag, e.tags);
     if (e.tags.includes(tag)) {
       console.log("Tag found");
       icon.classList.remove("u-hidden");
-      count += 1;
     }
   }
-  let text;
-  if (count > 1) {
-    text = "roles";
-  } else {
-    text = "role";
-  }
-  document.querySelector(".c-row__role--name").textContent = text;
 }
 
 function hidePopup() {
