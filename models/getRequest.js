@@ -17,7 +17,7 @@ const get = function (url, extraHeaders) {
         console.log("Status Code:", res.statusCode);
         console.log("Date in Response header:", headerDate);
         if(res.statusCode === 429){
-          console.log("Too many requests, waiting 60 seconds");
+          console.log("Too many requests");
           reject({status: 429})
         }
         res.on("data", (chunk) => {

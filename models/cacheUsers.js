@@ -24,13 +24,21 @@ async function checkIfUserExitsByPuuid(puuid) {
 async function cacheUser(username, region) {
   try {
     let result = await checkIfCached(username, region);
-    if (!result) {
-      let summonerInfo = await getMatch.getSummonerInfo(username, region);
-      summonerInfo.region = region;
-      return await db.addUser(summonerInfo);
-    } else {
+    if (result) {
       console.log(`User ${username} already cached, returning cached user`);
       return result[0];
+    } else {
+      let summonerInfo = await getMatch.getSummonerInfo(username, region);
+      if (summonerInfo.status.status_code === 404) {
+        console.warn(`User ${username} not found`);
+        return false;
+      }else{
+        summonerInfo.region = region;
+        const user =  await db.addUser(summonerInfo);
+        user.firstTime = true;
+        return user;
+      }
+
     }
   } catch (e) {
     console.warn(e);

@@ -1,24 +1,13 @@
-const db = require("../../models/db");
-const getMatch = require("../../models/getMatch");
-const calculator = require("../../models/calculator");
-const cacheUsers = require("../../models/cacheUsers");
-const { getAndResolveMatch } = require("../../models/cacheMatchHistory");
-const { getMatchIdList } = require("../../models/db");
+const cacheUsers = require("./cacheUsers");
+const { getAndResolveMatch } = require("./cacheMatchHistory");
 
 
-async function newUser(username, region, callbackDoSomething) {
+async function newUser(user, matchList) {
   // list of matches
   let outMatches = [];
-
-  // test performace
-  // let start = performance.now()
-  // const getUser = await db.getUser(username, region);
-  // let end = performance.now()
-  // console.log("getUser: " + (end - start) + "ms");
-  // will contain the matchList of the cached matches
-  const user = await cacheUsers.cacheUser(username, region); // 450 ms when user is cached, 650 ms when user is not cached
-  // get recent matches from league api
-  const matchList = await getMatch.getMatchID(user.puuid, "europe", 100); // 190 ms
+  // const user = await cacheUsers.cacheUser(username, region); // 450 ms when user is cached, 650 ms when user is not cached
+  // // get recent matches from league api
+  // const matchList = await getMatch.getMatchID(user.puuid, "europe", 100); // 190 ms
   // check if new matches can be cached
 
   // check if any matches are cached at all
@@ -30,7 +19,7 @@ async function newUser(username, region, callbackDoSomething) {
       getAndResolveMatch(matchID, "europe", (matchObject) => {
         outMatches.push(matchObject);
         if (outMatches.length === matchList.length) {
-          callbackDoSomething(outMatches, user);
+          callbackCoupleMachToUser(outMatches, user);
         }
       });
       // wait 60 ms to not exceed the rate limit
@@ -46,7 +35,7 @@ async function newUser(username, region, callbackDoSomething) {
       getAndResolveMatch(matchID, "europe", (matchObject) => {
         outMatches.push(matchObject);
         if (outMatches.length === newMatches.length) {
-          callbackDoSomething(outMatches, user);
+          callbackCoupleMachToUser(outMatches, user);
         }
       });
       // wait 60 ms to not exceed the rate limit
@@ -68,7 +57,7 @@ const callbackCoupleMachToUser = function(matchObjectList, userObject) {
 };
 
 // newUser("JungleDiffAt0m", "euw1");
+module.exports = { newUser }
 
-
-newUser("JungleDiffAt0m", "euw1", callbackCoupleMachToUser);
-console.log("done");
+// newUser("JungleDiffAt0m", "euw1", callbackCoupleMachToUser);
+// console.log("done");
