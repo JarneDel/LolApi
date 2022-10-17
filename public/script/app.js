@@ -1,5 +1,5 @@
 let htmlElements = {
-  popup: { },
+  popup: {}
 };
 const backend = window.location.origin;
 let version = "12.19.1";
@@ -23,6 +23,7 @@ listenToEvents = () => {
       document.querySelector(".js-search-username").textContent = `${res.username} found!`;
     }
   });
+  htmlElements.popup.overlay.addEventListener("click", hidePopup);
 };
 
 
@@ -78,13 +79,37 @@ function createBodyElement(champion) {
 
 function showPopup(e) {
   console.log(e);
-  htmlElements.popup.container.classList.remove('u-hidden');
+  htmlElements.popup.container.classList.remove("u-hidden");
   document.documentElement.style.overflow = "hidden";
+  htmlElements.popup.image.src = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${e.id}_0.jpg`;
+  htmlElements.popup.name.textContent = e.name;
+  htmlElements.popup.title.textContent = e.title;
+  let count = 0;
+  for (const icon of htmlElements.popup.tagIconAll) {
+    const tag = icon.dataset.name;
+    console.log(tag, e.tags);
+    if (e.tags.includes(tag)) {
+      console.log("Tag found");
+      icon.classList.remove("u-hidden");
+      count += 1;
+    }
+  }
+  let text;
+  if (count > 1) {
+    text = "roles";
+  } else {
+    text = "role";
+  }
+  document.querySelector(".c-row__role--name").textContent = text;
 }
 
 function hidePopup() {
-  htmlElements.popup.container.classList.add('u-hidden');
+  htmlElements.popup.container.classList.add("u-hidden");
   document.documentElement.style.overflow = "auto";
+  htmlElements.popup.image.src = "";
+  for (const icon of htmlElements.popup.tagIconAll) {
+    icon.classList.add("u-hidden");
+  }
 }
 
 function fillChampions(champions) {
@@ -99,7 +124,7 @@ function fillChampions(champions) {
     }
     const imgUrl = `https://ddragon.leagueoflegends.com/cdn/img/champion/centered/${champName}_0.jpg`;
     const img = createImageElement(imgUrl, champName);
-    const title = createTitleElement(champName);
+    const title = createTitleElement(champion.name);
     const card_body = createBodyElement(champion);
     const card = createCardElement(img, title, card_body);
     card.addEventListener("click", (e) => {
@@ -132,6 +157,10 @@ document.addEventListener("DOMContentLoaded", function() {
   htmlElements.popup.container = document.querySelector(".js-popup-container");
   htmlElements.popup.content = document.querySelector(".js-popup-content");
   htmlElements.popup.image = document.querySelector(".js-popup-img");
+  htmlElements.popup.overlay = document.querySelector(".js-popup-overlay");
+  htmlElements.popup.name = document.querySelector(".js-champ-name");
+  htmlElements.popup.title = document.querySelector(".js-champ-title");
+  htmlElements.popup.tagIconAll = document.querySelectorAll(".js-role-icon");
 
   listenToEvents();
   // fill cards with champions

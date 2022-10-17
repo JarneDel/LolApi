@@ -92,12 +92,13 @@ html {
     top: 50%;
     transform: translate(-50%, -50%);
     min-width: 68vw;
-    min-height: 80vh;
+    max-height: 80vh;
     /*center this item*/
     background: white;
     z-index: 100;
-    overflow: scroll;
+    overflow: auto;
 }
+
 /* darken the page when popup is shown*/
 .c-popup__overlay {
     position: fixed;
@@ -109,12 +110,120 @@ html {
     z-index: 99;
 }
 
+.c-popup__content {
+    padding: 0;
+    margin: 0;
+}
+
+.c-popup__header {
+    position: relative;
+}
+
+.c-popup__champ--img {
+    object-fit: cover;
+    top: 0;
+    z-index: -1;
+    width: 100%;
+    aspect-ratio: 16/9;
+    padding: 0;
+    margin: 0;
+}
+
+.c-champ__title {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translatex(-50%);
+    font-family: 'beaufort-pro', serif;
+    font-weight: 700;
+    font-style: italic;
+    text-transform: uppercase;
+    letter-spacing: .2rem;
+    text-align: center;
+}
+
+.c-popup__champ--name {
+    color: #67471f;
+    font-size: 7rem;
+    line-height: 1;
+    text-shadow: 0 0 10px black;
+}
+
+.c-popup__champ--description {
+    color: #c4b998;
+
+    font-size: 2rem;
+    line-height: 1.5;
+}
+
+.c-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #707070;
+    padding: 3.75rem 1rem;
+}
+
+.c-row__lore{
+    flex-basis: 65%;
+    font-size:  1.25rem;
+    line-height: 1.2;
+    font-family: "open-sans", sans-serif;
+    color: #707070;
+    font-weight: normal;
+    padding-left: 2rem;
+    border-left: 1px solid #707070;
+}
+.c-row__role{
+    flex-basis: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.c-row__role--icon{
+    width: 2.5rem;
+    height: 2.5rem;
+    fill: #D0A85C;
+}
+.c-role__box{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+
+}
+
+.c-row__role--tag{
+    color: #D0A85C;
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    font-family: "open-sans", sans-serif;
+}
+
+.c-row__role--roles{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+
+
+}
+
+.c-row__role--name {
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    font-family: "open-sans", sans-serif;
+}
 
 /* utilities */
 .u-hidden {
     display: none;
 }
-
 
 
 @keyframes error {
