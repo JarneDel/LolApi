@@ -1,3 +1,3 @@
-1. make sure the page isnt scrollable when the popup is open
-2. make sure the popup is scrollable when shown
-3. show the popup content
+1. js- make sure that the selected spell image has .u-selected-icon class
+2. style the selected spell image
+3. DARK THEME

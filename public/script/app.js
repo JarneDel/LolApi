@@ -1,5 +1,6 @@
 let htmlElements = {
-  popup: {}
+  popup: {},
+  abilities: {}
 };
 const backend = window.location.origin;
 let version = "12.19.1";
@@ -33,12 +34,13 @@ const getRequest = async function(url) {
     .catch((err) => console.log(err));
 };
 
-const createImageElement = (src, alt) => {
+const createImageElement = (src, alt, classes = []) => {
   let img = document.createElement("img");
   img.src = src;
   img.alt = alt;
-  img.classList.add("js-champ-img");
-  img.classList.add("c-card__img");
+  for (const classI of classes) {
+    img.classList.add(classI);
+  }
   return img;
 };
 
@@ -77,6 +79,93 @@ function createBodyElement(champion) {
   return body;
 }
 
+function AbilityVideo(champion, type) {
+  type = type.toUpperCase();
+  let id = champion.key
+  for (let i = 0; i <  3 - id.toString().length; i++) {
+    id = "0" + id;
+  }
+  const webm = `https://d28xe8vt774jo5.cloudfront.net/champion-abilities/0${id}/ability_0${id}_${type}1.webm`
+  const mp4 = `https://d28xe8vt774jo5.cloudfront.net/champion-abilities/0${id}/ability_0${id}_${type}1.mp4`
+  const video = document.querySelector('.js-ability-video');
+  video.pause();
+  document.querySelector('.js-webm-source').src = webm
+  document.querySelector('.js-mp4-source').src = mp4
+  video.load();
+  video.play();
+}
+
+
+function displayAndQsAbilityImg(champion) {
+  // nesting the functions to use the champion variable
+  function showAbilityInfo(e) {
+    console.log(e);
+    console.log(this);
+    const ability = this.dataset.type;
+    if (ability === "passive") {
+      const spell = champion.passive;
+      htmlElements.abilities.name.textContent = spell.name;
+      htmlElements.abilities.description.innerHTML = spell.description;
+      htmlElements.abilities.type.textContent = "PASSIVE";
+      AbilityVideo(champion, "P")
+      // show passive description
+    } else {
+      const id = this.dataset.id;
+      for (const spell of champion.spells) {
+        if (spell.id === id) {
+          console.log(spell);
+          htmlElements.abilities.name.textContent = spell.name;
+          htmlElements.abilities.description.innerHTML = spell.description;
+          // get the last character of the id: [q, w, e, r]
+          // scrapped because of kennen who dislikes naming conventions
+          // htmlElements.abilities.type.textContent = spell.id.substring(spell.id.length -1).toUpperCase();
+          htmlElements.abilities.type.textContent = this.dataset.spellButton;
+          AbilityVideo(champion, this.dataset.spellButton)
+        }
+      }
+    }
+  }
+
+  // erase the other champ abilities
+  htmlElements.abilities.imgContainer.innerHTML = "";
+
+  htmlElements.abilities.name.textContent = champion.passive.name;
+  htmlElements.abilities.description.innerHTML = champion.passive.description;
+  htmlElements.abilities.type.textContent = "PASSIVE";
+  let p = champion.passive.image.full;
+  let pName = champion.passive.name;
+  // load passive on popup load
+  AbilityVideo(champion, "P")
+  // create spell elements
+  const pImg = createImageElement(`https://ddragon.leagueoflegends.com/cdn/${version}/img/passive/${p}`, pName, ["c-abilities__icon"]);
+  pImg.addEventListener("click", showAbilityInfo);
+  pImg.dataset.type = "passive";
+  htmlElements.abilities.imgContainer.appendChild(pImg);
+  const spellButtons = ["Q", "W", "E", "R"];
+  let i = 0;
+  for (const spellElement of champion.spells) {
+    let spell = spellElement.image.full;
+    let spellName = spellElement.name;
+    const spellImg = createImageElement(`https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/${spell}`, spellName, ["c-abilities__icon"]);
+    spellImg.addEventListener("click", showAbilityInfo);
+    spellImg.dataset.type = "spell";
+    spellImg.dataset.id = spellElement.id;
+    // required because KENNEN does not follow the naming conventions.........
+    spellImg.dataset.spellButton = spellButtons[i];
+    htmlElements.abilities.imgContainer.appendChild(spellImg);
+    i+=1;
+  }
+
+}
+
+
+function showAbilities(e) {
+
+  displayAndQsAbilityImg(e);
+
+
+}
+
 function showPopup(e) {
   console.log(e);
   htmlElements.popup.container.classList.remove("u-hidden");
@@ -84,6 +173,7 @@ function showPopup(e) {
   htmlElements.popup.image.src = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${e.id}_0.jpg`;
   htmlElements.popup.name.textContent = e.name;
   htmlElements.popup.title.textContent = e.title;
+  htmlElements.popup.lore.textContent = e.lore;
   for (const icon of htmlElements.popup.tagIconAll) {
     const tag = icon.dataset.name;
     console.log(tag, e.tags);
@@ -92,6 +182,7 @@ function showPopup(e) {
       icon.classList.remove("u-hidden");
     }
   }
+  showAbilities(e);
 }
 
 function hidePopup() {
@@ -114,7 +205,7 @@ function fillChampions(champions) {
       champName = "FiddleSticks";
     }
     const imgUrl = `https://ddragon.leagueoflegends.com/cdn/img/champion/centered/${champName}_0.jpg`;
-    const img = createImageElement(imgUrl, champName);
+    const img = createImageElement(imgUrl, champName, ["js-champ-img", "c-card__img"]);
     const title = createTitleElement(champion.name);
     const card_body = createBodyElement(champion);
     const card = createCardElement(img, title, card_body);
@@ -128,10 +219,11 @@ function fillChampions(champions) {
   }
 
 }
-
+let championsTest = {};
 async function getChampions() {
   const champions = await getRequest(`https://ddragon.leagueoflegends.com/cdn/${version}/data/en_GB/championFull.json`);
   console.log(champions);
+  championsTest = champions;
   fillChampions(champions);
 }
 
@@ -151,7 +243,12 @@ document.addEventListener("DOMContentLoaded", function() {
   htmlElements.popup.overlay = document.querySelector(".js-popup-overlay");
   htmlElements.popup.name = document.querySelector(".js-champ-name");
   htmlElements.popup.title = document.querySelector(".js-champ-title");
+  htmlElements.popup.lore = document.querySelector(".js-champ-lore");
   htmlElements.popup.tagIconAll = document.querySelectorAll(".js-role-icon");
+  htmlElements.abilities.imgContainer = document.querySelector(".js-ability-img-container");
+  htmlElements.abilities.name = document.querySelector(".js-ability-name");
+  htmlElements.abilities.description = document.querySelector(".js-ability-description");
+  htmlElements.abilities.type = document.querySelector(".js-ability-type");
 
   listenToEvents();
   // fill cards with champions

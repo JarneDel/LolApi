@@ -91,8 +91,8 @@ html {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    min-width: 68vw;
-    max-height: 80vh;
+    min-width: 80vw;
+    max-height: 90vh;
     /*center this item*/
     background: white;
     z-index: 100;
@@ -143,15 +143,16 @@ html {
 }
 
 .c-popup__champ--name {
-    color: #67471f;
+    /*color: #67471f;*/
+    color: white;
     font-size: 7rem;
     line-height: 1;
     text-shadow: 0 0 10px black;
 }
 
 .c-popup__champ--description {
-    color: #c4b998;
-
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 0 10px black;
     font-size: 2rem;
     line-height: 1.5;
 }
@@ -172,7 +173,7 @@ html {
     font-family: "open-sans", sans-serif;
     color: #707070;
     font-weight: normal;
-    padding-left: 2rem;
+    padding:0 2rem;
     border-left: 1px solid #707070;
 }
 .c-row__role{
@@ -220,6 +221,103 @@ html {
     text-transform: uppercase;
     font-family: "open-sans", sans-serif;
 }
+
+.c-popup__abilities{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    padding: 0 1rem;
+    margin-top: 1rem;
+}
+
+
+
+.c-abilities_video {
+    flex-basis: 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1rem;
+    margin: 1rem 0;
+}
+
+.c-abilities__text{
+    flex-basis: 55%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0 1rem;
+    margin-top: 1rem;
+}
+
+.c-abilities_video video {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.c-abilities__title{
+    font-size: 3.75rem;
+    font-family: "beaufort-pro", serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-style: italic;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.c-abilities__icon-container{
+    width: 80%;
+    gap: 2.5rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.c-abilities__description{
+    font-size: 1.25rem;
+    color: #585858;
+}
+
+
+.c-abilities__description h4{
+    color: #585858;
+    font-size: .75rem;
+    font-family: "beaufort-pro", serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-bottom: 0;
+}
+.c-abilities__description h3 {
+    font-family: "beaufort-pro", serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+.c-abilities__description p {
+    font-family: "open-sans", sans-serif;
+    margin: 1rem 0;
+}
+
+.c-abilities__icon {
+    transition: transform .2s ease-in-out;
+
+}
+.c-abilities__icon:hover {
+    transform: translateY(-5px);
+}
+
+.c-abilities__icon-container .u-selected-icon {
+    transform: translateY(-10px);
+}
+
 
 /* utilities */
 .u-hidden {
