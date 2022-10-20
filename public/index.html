@@ -3,6 +3,8 @@
 
 <head>
   <title>League Stats</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://use.typekit.net/lhq3vgm.css">
   <link rel="stylesheet" href="/stylesheets/style.css">
   <link rel="stylesheet" href="/stylesheets/normalize.css">
@@ -52,6 +54,7 @@
                     d="M60.18 54c-1.2-5.27-1.44-4.55-5.75-4.79L40.78 48v-3.87h5.51A4.09 4.09 0 0050.36 41l1-3.35L32.4 35l-5 12.22 11.74 17-5.54 18.47L49.88 98l16.53-15.07s-6.23-28.5-6.23-29M49.88 2.23l-4.79 10.29 4.79 3.83 4.79-3.83zM62.1 9.41l1.43 6h6l2.87-11zM30.25 15.4h6l.24-.72 1.2-5.27-10.3-5z">
                   </path>
                 </svg>
+
                 <p class="c-row__role--tag">Fighter</p>
               </div>
               <div class="js-role-icon c-role__box u-hidden" data-name="Mage">
@@ -103,41 +106,76 @@
               </div>
             </div>
           </div>
-          <div class="c-row__lore js-champ-lore">
-            Once honored defenders of Shurima against the Void, Aatrox and his brethren would eventually become an even
-            greater threat to Runeterra, and were defeated only by cunning mortal sorcery. But after centuries of
-            imprisonment, Aatrox was the first to find freedom once more, corrupting and transforming those foolish
-            enough to try and wield the magical weapon that contained his essence. Now, with stolen flesh, he walks
-            Runeterra in a brutal approximation of his previous form, seeking an apocalyptic and long overdue vengeance.
+          <div class="c-row__lore">
+            <p class="c-row__lore--text js-champ-lore">
+              Once honored defenders of Shurima against the Void, Aatrox and his brethren would eventually become an
+              even
+              greater threat to Runeterra, and were defeated only by cunning mortal sorcery. But after centuries of
+              imprisonment, Aatrox was the first to find freedom once more, corrupting and transforming those foolish
+              enough to try and wield the magical weapon that contained his essence. Now, with stolen flesh, he walks
+              Runeterra in a brutal approximation of his previous form, seeking an apocalyptic and long overdue
+              vengeance.
+            </p>
           </div>
 
         </div>
         <div class="c-popup__abilities">
-          <div class="c-abilities__text">
-            <h2 class="c-abilities__title">Abilities</h2>
-            <div class="c-abilities__icon-container js-ability-img-container">
-              <img class="c-abilities__icon js-ability-p-img"
-                   src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/passive/Aatrox_Passive.png" alt="Aatrox p">
-              <img class="c-abilities__icon js-ability-q-img"
-                   src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/spell/AatroxQ.png" alt="Aatrox q">
-              <img class="c-abilities__icon js-ability-w-img"
-                   src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/spell/AatroxW.png" alt="Aatrox w">
-              <img class="c-abilities__icon js-ability-e-img"
-                   src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/spell/AatroxE.png" alt="Aatrox e">
-              <img class="c-abilities__icon js-ability-r-img"
-                   src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/spell/AatroxR.png" alt="Aatrox r">
+          <div class="c-popup__abilities--text-container">
+            <div class="u-side-fill"></div>
+            <div class="c-abilities__text">
+              <h2 class="c-abilities__title">Abilities</h2>
+              <div class="c-abilities__icon-container js-ability-img-container">
+                <img class="c-abilities__icon js-ability-p-img"
+                     src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/passive/Aatrox_Passive.png"
+                     alt="Aatrox p">
+                <canvas class="style__Canvas-sc-1c9bc3r-1 hsvRhV"
+                        style="width: 74px; height: 74px; left: -2px; top: -2px;" width="74" height="74"></canvas>
+                <img class="c-abilities__icon js-ability-q-img"
+                     src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/spell/AatroxQ.png" alt="Aatrox q">
+                <img class="c-abilities__icon js-ability-w-img"
+                     src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/spell/AatroxW.png" alt="Aatrox w">
+                <img class="c-abilities__icon js-ability-e-img"
+                     src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/spell/AatroxE.png" alt="Aatrox e">
+                <img class="c-abilities__icon js-ability-r-img"
+                     src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/spell/AatroxR.png" alt="Aatrox r">
+              </div>
+              <div class="c-abilities__description">
+                <h4 class="js-ability-type">PASSIVE</h4>
+                <h3 class="js-ability-name">Blood Well</h3>
+                <p class="js-ability-description c-ability-description">periodically ... </p>
+              </div>
             </div>
-            <div class="c-abilities__description">
-              <h4 class="js-ability-type">PASSIVE</h4>
-              <h3 class="js-ability-name">Blood Well</h3>
-              <p class="js-ability-description">periodically ... </p>
-            </div>
+            <div class="u-side-fill"></div>
           </div>
           <div class="c-abilities_video">
-            <video muted autoplay loop class="js-ability-video">
-              <source src="https://d28xe8vt774jo5.cloudfront.net/champion-abilities/0266/ability_0266_P1.webm"
+            <video muted autoplay loop class="js-ability-video" data-name="P">
+              <source src=""
                       type="video/webm" class="js-webm-source">
-              <source src="https://d28xe8vt774jo5.cloudfront.net/champion-abilities/0266/ability_0266_P1.mp4"
+              <source src=""
+                      type="video/mp4" class="js-mp4-source">
+            </video>
+            <video muted autoplay loop class="js-ability-video u-hidden" data-name="Q">
+              <source src=""
+                      type="video/webm" class="js-webm-source">
+              <source src=""
+                      type="video/mp4" class="js-mp4-source">
+            </video>
+            <video muted autoplay loop class="js-ability-video u-hidden" data-name="W">
+              <source src=""
+                      type="video/webm" class="js-webm-source">
+              <source src=""
+                      type="video/mp4" class="js-mp4-source">
+            </video>
+            <video muted autoplay loop class="js-ability-video u-hidden" data-name="E">
+              <source src=""
+                      type="video/webm" class="js-webm-source">
+              <source src=""
+                      type="video/mp4" class="js-mp4-source">
+            </video>
+            <video muted autoplay loop class="js-ability-video u-hidden" data-name="R">
+              <source src=""
+                      type="video/webm" class="js-webm-source">
+              <source src=""
                       type="video/mp4" class="js-mp4-source">
             </video>
           </div>

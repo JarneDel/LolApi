@@ -79,21 +79,50 @@ function createBodyElement(champion) {
   return body;
 }
 
-function AbilityVideo(champion, type) {
-  type = type.toUpperCase();
-  let id = champion.key
-  for (let i = 0; i <  3 - id.toString().length; i++) {
-    id = "0" + id;
+
+function loadAllVideo(champion){
+  const elements = htmlElements.abilities.videos;
+  for (const element of elements) {
+    element.pause();
+    if (element.dataset.name === "P") {
+      // remove hidden class
+      element.classList.remove("u-hidden");
+    }else{
+        element.classList.add("u-hidden");
+    }
+    let id = champion.key;
+    const length = id.toString().length;
+    // add 0 to id so that it is 4 digits long
+    for (let i = 0; i < 4 - length; i++) {
+      id = "0" + id;
+    }
+    const webm = `https://d28xe8vt774jo5.cloudfront.net/champion-abilities/${id}/ability_${id}_${element.dataset.name}1.webm`;
+    const mp4 = `https://d28xe8vt774jo5.cloudfront.net/champion-abilities/${id}/ability_${id}_${element.dataset.name}1.mp4`;
+    element.children[0].src = webm;
+    element.children[1].src = mp4;
+    element.load();
+    if(element.dataset.name === "P"){
+      element.play();
+    }
   }
-  const webm = `https://d28xe8vt774jo5.cloudfront.net/champion-abilities/0${id}/ability_0${id}_${type}1.webm`
-  const mp4 = `https://d28xe8vt774jo5.cloudfront.net/champion-abilities/0${id}/ability_0${id}_${type}1.mp4`
-  const video = document.querySelector('.js-ability-video');
-  video.pause();
-  document.querySelector('.js-webm-source').src = webm
-  document.querySelector('.js-mp4-source').src = mp4
-  video.load();
-  video.play();
 }
+
+
+function toggleVideo(type){
+  for (let video of htmlElements.abilities.videos) {
+    if (type === video.dataset.name) {
+      video.classList.remove("u-hidden");
+      video.currentTime = 0;
+      video.play();
+    }else{
+      video.classList.add("u-hidden");
+      // stop the video, so that it starts from the beginning when it is played again
+      video.pause();
+      video.currentTime= 0;
+    }
+  }
+}
+
 
 
 function displayAndQsAbilityImg(champion) {
@@ -115,7 +144,7 @@ function displayAndQsAbilityImg(champion) {
       htmlElements.abilities.name.textContent = spell.name;
       htmlElements.abilities.description.innerHTML = spell.description;
       htmlElements.abilities.type.textContent = "PASSIVE";
-      AbilityVideo(champion, "P")
+      toggleVideo("P");
       // show passive description
     } else {
       const id = this.dataset.id;
@@ -128,7 +157,7 @@ function displayAndQsAbilityImg(champion) {
           // scrapped because of kennen who dislikes naming conventions
           // htmlElements.abilities.type.textContent = spell.id.substring(spell.id.length -1).toUpperCase();
           htmlElements.abilities.type.textContent = this.dataset.spellButton;
-          AbilityVideo(champion, this.dataset.spellButton)
+          toggleVideo(this.dataset.spellButton);
         }
       }
     }
@@ -143,7 +172,7 @@ function displayAndQsAbilityImg(champion) {
   let p = champion.passive.image.full;
   let pName = champion.passive.name;
   // load passive on popup load
-  AbilityVideo(champion, "P")
+  loadAllVideo(champion);
   // create spell elements
   const pImg = createImageElement(`https://ddragon.leagueoflegends.com/cdn/${version}/img/passive/${p}`, pName, ["c-abilities__icon", "u-selected-icon"]);
   pImg.addEventListener("click", abilityImgClicked);
@@ -257,6 +286,7 @@ document.addEventListener("DOMContentLoaded", function() {
   htmlElements.abilities.name = document.querySelector(".js-ability-name");
   htmlElements.abilities.description = document.querySelector(".js-ability-description");
   htmlElements.abilities.type = document.querySelector(".js-ability-type");
+  htmlElements.abilities.videos = document.querySelectorAll(".js-ability-video");
 
   listenToEvents();
   // fill cards with champions

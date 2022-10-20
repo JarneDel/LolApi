@@ -1,3 +1,13 @@
+:root{
+    --dark-background-color: #000913;
+    --dark-neutral-text-color: #fff;
+    --seriffont: "beaufort-pro", serif;
+    --sans-font: "open-sans", sans-serif;
+    --dark-line-color: rgba(255, 255, 255, 0.2);
+}
+
+
+
 body {
     padding: 50px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -35,6 +45,19 @@ html {
     align-items: center;
 }
 
+
+
+/*
+ *   Remove double break and random elements
+*/
+
+
+.c-ability-description br:nth-child(2n + 2) { display: none; }
+
+/*For white theme*/
+/*.c-ability-description * {*/
+/*    color: var(--dark-neutral-text-color);*/
+/*}*/
 
 
 
@@ -104,7 +127,7 @@ html {
     min-width: 80vw;
     max-height: 90vh;
     /*center this item*/
-    background: white;
+    background: #000913;
     z-index: 100;
     overflow: auto;
 }
@@ -144,7 +167,7 @@ html {
     bottom: 5%;
     left: 50%;
     transform: translatex(-50%);
-    font-family: 'beaufort-pro', serif;
+    font-family: var(--seriffont);
     font-weight: 700;
     font-style: italic;
     text-transform: uppercase;
@@ -167,27 +190,35 @@ html {
     line-height: 1.5;
 }
 
+
+
 .c-row{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #707070;
+    border-bottom: 1px solid var(--dark-line-color);
     padding: 3.75rem 1rem;
 }
 
 .c-row__lore{
-    flex-basis: 65%;
-    font-size:  1.25rem;
-    line-height: 1.2;
-    font-family: "open-sans", sans-serif;
-    color: #707070;
+    flex-basis: 50%;
     font-weight: normal;
-    padding:0 2rem;
-    border-left: 1px solid #707070;
+    border-left: 1px solid var(--dark-line-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.c-row__lore--text{
+    max-width: 30rem;
+    font-size:  1.1rem;
+    line-height: 1.2;
+    font-family: var(--sans-font);
+    color: var(--dark-neutral-text-color);
 }
 .c-row__role{
-    flex-basis: 35%;
+    flex-basis: 50%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -209,9 +240,9 @@ html {
 
 .c-row__role--tag{
     color: #D0A85C;
-    font-size: 1.25rem;
+    font-size: .8rem;
     text-transform: uppercase;
-    font-family: "open-sans", sans-serif;
+    font-family: var(--sans-font);
     margin-top: 10px;
 }
 
@@ -229,7 +260,7 @@ html {
 .c-row__role--name {
     font-size: 1.25rem;
     text-transform: uppercase;
-    font-family: "open-sans", sans-serif;
+    font-family: var(--sans-font);
 }
 
 .c-popup__abilities{
@@ -237,15 +268,28 @@ html {
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: space-between;
-    padding: 0 1rem;
+    padding: 0 2rem;
     margin-top: 1rem;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid var(--dark-line-color);
+}
+
+.c-popup__abilities--text-container{
+    flex-grow: 2;
+    flex-shrink: 1;
+    flex-basis: 120%;
+    display:flex;
+}
+
+.c-abilities__text{
+    display: inline-flex;
+    flex-direction: column;
 }
 
 
-
 .c-abilities_video {
-    flex-basis: 45%;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -266,60 +310,63 @@ html {
 
 .c-abilities_video video {
     width: 100%;
-    max-height: 400px;
+    aspect-ratio: 16/9;
     object-fit: cover;
     border-radius: 5px;
 }
 
 .c-abilities__title{
     font-size: 3.75rem;
-    font-family: "beaufort-pro", serif;
+    font-family: var(--seriffont);
     font-weight: 700;
     text-transform: uppercase;
     font-style: italic;
     margin-top: 0;
     margin-bottom: 1rem;
+    color: var(--dark-neutral-text-color);
 }
 
 .c-abilities__icon-container{
-    width: 80%;
-    gap: 2.5rem;
+    width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     flex-wrap: nowrap;
 }
 
 .c-abilities__description{
-    font-size: 1.25rem;
-    color: #585858;
+    font-size: 1rem;
+    color: var(--dark-neutral-text-color)
 }
 
 
 .c-abilities__description h4{
-    color: #585858;
+    color: var(--dark-neutral-text-color);
     font-size: .75rem;
-    font-family: "beaufort-pro", serif;
+    font-family: var(--seriffont);
     font-weight: 400;
     text-transform: uppercase;
     margin-bottom: 0;
 }
 .c-abilities__description h3 {
-    font-family: "beaufort-pro", serif;
+    font-family: var(--seriffont);
     font-weight: 700;
     text-transform: uppercase;
     margin-top: 0;
     margin-bottom: 1rem;
 }
 .c-abilities__description p {
-    font-family: "open-sans", sans-serif;
+    font-family: var(--sans-font);
     margin: 1rem 0;
 }
 
 .c-abilities__icon {
     transition: transform .2s ease-in-out;
-
+    padding: 12px;
+}
+.c-abilities__icon:first-child {
+    padding-left: 0;
 }
 .c-abilities__icon:hover {
     transform: translateY(-5px);
@@ -335,6 +382,12 @@ html {
     display: none;
 }
 
+
+.u-side-fill{
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+}
 
 @keyframes error {
 
