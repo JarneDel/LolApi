@@ -98,9 +98,17 @@ function AbilityVideo(champion, type) {
 
 function displayAndQsAbilityImg(champion) {
   // nesting the functions to use the champion variable
-  function showAbilityInfo(e) {
+  function abilityImgClicked(e) {
     console.log(e);
     console.log(this);
+    // remove the u-selected-icon class from the selected icon
+    try {
+      document.querySelector(".u-selected-icon").classList.remove("u-selected-icon");
+    } catch (e) {
+      console.log("No icon selected");
+    }
+    // add the u-selected-icon class to the clicked icon
+    this.classList.add("u-selected-icon")
     const ability = this.dataset.type;
     if (ability === "passive") {
       const spell = champion.passive;
@@ -137,8 +145,8 @@ function displayAndQsAbilityImg(champion) {
   // load passive on popup load
   AbilityVideo(champion, "P")
   // create spell elements
-  const pImg = createImageElement(`https://ddragon.leagueoflegends.com/cdn/${version}/img/passive/${p}`, pName, ["c-abilities__icon"]);
-  pImg.addEventListener("click", showAbilityInfo);
+  const pImg = createImageElement(`https://ddragon.leagueoflegends.com/cdn/${version}/img/passive/${p}`, pName, ["c-abilities__icon", "u-selected-icon"]);
+  pImg.addEventListener("click", abilityImgClicked);
   pImg.dataset.type = "passive";
   htmlElements.abilities.imgContainer.appendChild(pImg);
   const spellButtons = ["Q", "W", "E", "R"];
@@ -147,7 +155,7 @@ function displayAndQsAbilityImg(champion) {
     let spell = spellElement.image.full;
     let spellName = spellElement.name;
     const spellImg = createImageElement(`https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/${spell}`, spellName, ["c-abilities__icon"]);
-    spellImg.addEventListener("click", showAbilityInfo);
+    spellImg.addEventListener("click", abilityImgClicked);
     spellImg.dataset.type = "spell";
     spellImg.dataset.id = spellElement.id;
     // required because KENNEN does not follow the naming conventions.........

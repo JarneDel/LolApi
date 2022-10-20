@@ -28,6 +28,16 @@ html {
 }
 
 
+/*component user search bar*/
+.userForm{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+
 .c-container {
     margin: 0 auto;
     display: grid;
@@ -229,6 +239,7 @@ html {
     justify-content: space-between;
     padding: 0 1rem;
     margin-top: 1rem;
+    border-bottom: 1px solid black;
 }
 
 
@@ -240,7 +251,7 @@ html {
     justify-content: center;
     align-items: center;
     padding: 0 1rem;
-    margin: 1rem 0;
+    margin: 3rem 0;
 }
 
 .c-abilities__text{
