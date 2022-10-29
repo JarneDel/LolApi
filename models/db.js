@@ -191,6 +191,16 @@ async function getUserByPuuid(puuid) {
   return resources[0];
 }
 
+async function getMatchesByIDList(matchList) {
+  const { resources } = await matchContainer
+    .items.query({
+      query: "SELECT * FROM c WHERE ARRAY_CONTAINS(@param1, c.matchid)", parameters: [{ name: "@param1", value: matchList }]
+    })
+    .fetchAll();
+  return resources;
+}
+
+
 
 /**
  * exit the app with a prompt
@@ -217,5 +227,6 @@ module.exports = {
   addMatchToUser,
   checkIfUserExits,
   checkIfUserExitsByPuuid,
-  getUser
+  getUser,
+  getMatchesByIDList,
 };

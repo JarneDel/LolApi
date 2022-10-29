@@ -1,7 +1,9 @@
 let htmlElements = {
   popup: {},
-  abilities: {}
+  abilities: {},
+  filters: {}
 };
+let allChampions = {};
 const backend = window.location.origin;
 let version = "12.19.1";
 
@@ -25,6 +27,39 @@ listenToEvents = () => {
     }
   });
   htmlElements.popup.overlay.addEventListener("click", hidePopup);
+
+  // filters
+  htmlElements.filters.itemAll.forEach((item) => {
+    function tagClicked(e) {
+      htmlElements.filters.itemAll.forEach((item) => {
+        item.classList.remove("u-selected");
+      });
+      item.classList.add("u-selected");
+      // show the champions that have the tag
+      document.querySelectorAll('.c-card').forEach((card) => {
+        let tags = card.dataset.tags.split(',');
+        // console.log(tags);
+        if (tags.includes(item.dataset.tag) || item.dataset.tag === "All") {
+          card.classList.remove("u-hidden");
+        }else {
+          card.classList.add('u-hidden');
+        }
+      });
+    }
+
+    // two events for accessibility
+    item.addEventListener("click", (e) => {
+      tagClicked(e);
+    });
+    // so that the element is selectable with the keyboard
+    item.addEventListener("keyup", (e) => {
+      if (a11yClick(e)) {
+        console.log("a11y click");
+        tagClicked(e);
+      }
+    });
+  });
+
 };
 
 
@@ -48,11 +83,14 @@ const createImageElement = (src, alt, classes = []) => {
 function createTitleElement(Title) {
   let title = document.createElement("h2");
   title.classList.add("c-card__title");
+  title.classList.add("u-italic");
+  title.classList.add("u-uppercase");
+  title.classList.add("u-serif");
   title.textContent = Title;
   return title;
 }
 
-function createCardElement(img, title, card_body) {
+function createCardElement(img, title, card_body, tags) {
   let card = document.createElement("div");
   card.classList.add("c-card");
   card.appendChild(img);
@@ -64,18 +102,19 @@ function createCardElement(img, title, card_body) {
 function createBodyElement(champion) {
   const body = document.createElement("div");
   body.classList.add("c-card__body");
-  const p = document.createElement("p");
-  p.classList.add("c-card__text");
-  let text = "";
-  for (let i = 0; i < champion.tags.length; i++) {
-    if (i === 0) {
-      text += champion.tags[i];
-    } else {
-      text += `, ${champion.tags[i]}`;
-    }
-  }
-  p.textContent = text;
-  body.appendChild(p);
+  // - todo: decide if i want to show the roles or not
+  // const p = document.createElement("p");
+  // p.classList.add("c-card__text");
+  // let text = "";
+  // for (let i = 0; i < champion.tags.length; i++) {
+  //   if (i === 0) {
+  //     text += champion.tags[i];
+  //   } else {
+  //     text += `, ${champion.tags[i]}`;
+  //   }
+  // }
+  // p.textContent = text;
+  // body.appendChild(p);
   return body;
 }
 
@@ -203,6 +242,10 @@ function showAbilities(e) {
 
 }
 
+function statCalculator(e) {
+  const stats = e.stats;
+}
+
 function showPopup(e) {
   console.log(e);
   htmlElements.popup.container.classList.remove("u-hidden");
@@ -220,6 +263,7 @@ function showPopup(e) {
     }
   }
   showAbilities(e);
+  statCalculator(e);
 }
 
 function hidePopup() {
@@ -246,6 +290,10 @@ function fillChampions(champions) {
     const title = createTitleElement(champion.name);
     const card_body = createBodyElement(champion);
     const card = createCardElement(img, title, card_body);
+    card.dataset.tags = champion.tags.join(",");
+    card.dataset.difficulty = champion.info.difficulty;
+    card.dataset.champion = champion.name;
+    card.classList.add('u-notched-content');
     card.addEventListener("click", (e) => {
       console.log("clicked");
       showPopup(champion);
@@ -256,11 +304,11 @@ function fillChampions(champions) {
   }
 
 }
-let championsTest = {};
+
 async function getChampions() {
   const champions = await getRequest(`https://ddragon.leagueoflegends.com/cdn/${version}/data/en_GB/championFull.json`);
   console.log(champions);
-  championsTest = champions;
+  allChampions = champions;
   fillChampions(champions);
 }
 
@@ -287,6 +335,7 @@ document.addEventListener("DOMContentLoaded", function() {
   htmlElements.abilities.description = document.querySelector(".js-ability-description");
   htmlElements.abilities.type = document.querySelector(".js-ability-type");
   htmlElements.abilities.videos = document.querySelectorAll(".js-ability-video");
+  htmlElements.filters.itemAll = document.querySelectorAll(".js-filter-item");
 
   listenToEvents();
   // fill cards with champions

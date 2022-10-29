@@ -1,7 +1,26 @@
-1. js- make sure that the selected spell image has .u-selected-icon class
-2. style the selected spell image
-3. DARK THEME
-4. Make video transitions smoother by preloading all the ability videos
-5. filter by class
-6. Add structure to the css
-7. nice to have: Add a transition when textContent changes
+- [x] js- make sure that the selected spell image has .u-selected-icon class
+- [ ] style the selected spell image
+- [x] DARK THEME
+- [x] Make video transitions smoother by preloading all the ability videos
+- [x] filter by class
+- [ ] Add structure to the css
+- [ ] nice to have: Add a transition when textContent changes
+- [x] add padding to the lore text
+- [ ] add difficulty to champion
+- [ ] ![visualisatie](https://i.imgur.com/72k9JMM.png "Difficulty")
+- [ ] add a visualise attack, defence, magic,... (radarplot?)  
+- ![](https://i.imgur.com/ml3FnqB.png)
+- [ ] add animation to switching types
+- [ ] make popup take in full width on mobile
+- [ ] make cards a bit smaller
+- [ ] idea for graphing: stat calculator
+  - hp
+  - armor
+  - mr
+  - ad
+  - ap
+  - as
+  - cdr
+  - per level
+- [ ] skin selector
+- [ ] spell tooltip
