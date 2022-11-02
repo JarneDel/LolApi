@@ -15,23 +15,23 @@ const get = function (url, extraHeaders) {
             ? res.headers.date
             : "no response date";
         console.log("Status Code:", res.statusCode);
-        console.log("Date in Response header:", headerDate);
+        console.debug("Date in Response header:", headerDate);
         if(res.statusCode === 429){
-          console.log("Too many requests");
+          console.warn("Too many requests");
           reject({status: 429})
         }
         res.on("data", (chunk) => {
           data.push(chunk);
         });
         res.on("end", () => {
-          console.log("response ended");
+          console.debug("response ended");
           const result = JSON.parse(Buffer.concat(data).toString());
-          console.log(result);
+          console.debug(result);
           resolve(result);
         });
       })
       .on("error", (err) => {
-        console.log("Error: " + err.message);
+        console.warn("Error: " + err.message);
         reject(err);
       });
   });

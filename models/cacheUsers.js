@@ -1,5 +1,5 @@
 const db = require("../models/db");
-const getMatch = require("../models/getMatch");
+const getMatch = require("./LolApiRequest");
 const calculator = require("../models/calculator");
 const { checkIfUserExits, getUser } = require("./db");
 

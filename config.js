@@ -9,7 +9,7 @@ config.key = process.env.COSMOS_KEY;
 
 config.databaseId = "lolmatchhistory";
 
-config.containerId = "matchhistory";
+config.containerId = "match";
 
 config.userContainerId = "userContainer2";
 

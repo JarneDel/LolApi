@@ -2,12 +2,11 @@
 
 const express = require('express');
 const router = express.Router();
-const { getSummonerInfo, getMatchID, getMatchInfo, getMatchTimeline, getMatchInfoAsync } = require('../../models/getMatch');
+const { getSummonerInfo, getMatchID, getMatchInfo, getMatchTimeline, getMatchInfoAsync } = require('../../models/LolApiRequest');
 const db = require('../../models/db');
 const calculator = require('../../models/calculator');
-const { cacheUser, cacheMatchIds } = require("../../models/cacheUsers");
-const getMatch = require("../../models/getMatch");
-const { getAndResolveMatch } = require("../../models/cacheMatchHistory");
+const { cacheUser } = require("../../models/cacheUsers");
+const getMatch = require("../../models/LolApiRequest");
 const { newUser } = require("../../models/newUser");
 
 /* GET home page. */
@@ -24,10 +23,15 @@ router.get('/:region/winrate/:username', function(req, res, next) {
   });
 });
 
-router.get('/:region/cacheMatches/:username', function(req, res, next) {
-  const { username, region } = req.params;
-  calculator.CreateMatchesWithCache(username, region).then((puuid) => {
-    res.send(puuid);
+// cache the matches for real
+router.post('/cacheMatches/', async function (req, res, next) {
+  const body = req.body;
+  // get matches from api
+  console.info("Caching matches for user: ", body.username, "body: ",body);
+  const matchList = await getMatchID(body.puuid, "europe", 100);
+  newUser(body, matchList, res).catch((err) => {
+    console.error("Error while caching users: getRoutes >"+ err);
+    res.status(404);
   });
 });
 
@@ -40,7 +44,7 @@ router.get('/:region/cacheMatches/:username/count', function(req, res, next) {
   });
 });
 
-
+// user login
 router.get('/user/:username/:region/', async function(req, res, next) {
   const { username, region } = req.params;
   const user = await cacheUser(username, region);
@@ -50,7 +54,7 @@ router.get('/user/:username/:region/', async function(req, res, next) {
       console.log("New user created");
     });
   }
-  console.log(user);
+  console.log("getRoutes/user: userObject:", user);
   res.send(user);
 });
 

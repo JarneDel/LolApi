@@ -1,5 +1,5 @@
 "use strict";
-const getMatch = require("./getMatch");
+const getMatch = require("./LolApiRequest");
 const { cacheMatchHistory } = require("./cacheMatchHistory");
 const db = require("./db");
 

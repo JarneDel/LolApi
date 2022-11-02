@@ -1,1 +1,2 @@
-GET http://localhost:3000/api/v2/matches/euw1/JungleDiffAt0m/Mokai
+GET http://localhost:3000/api/v2/matches/raMMCxnYkKhsa40jF32jQjtndgeSrBVCp15GoRIyWv7tj51uoTkyEF789NJICQ0Omo-_nat5gM3bew
+content-type: application/json

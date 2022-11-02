@@ -7,14 +7,91 @@ let allChampions = {};
 const backend = window.location.origin;
 let version = "12.19.1";
 
-function invalidateUserForm() {
+let userIsLoaded = false;
+
+
+// region api
+
+const getRequest = async function(url) {
+  return await fetch(url)
+      .then((res) => res.json())
+      .catch((err) => console.warn(err));
+};
+const postRequest = async function(url, data) {
+  return await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+      .then((res) => res.json())
+      .catch((err) => console.warn(err));
+}
+const getChampions = async () => {
+  const champions = await getRequest(`https://ddragon.leagueoflegends.com/cdn/${version}/data/en_GB/championFull.json`);
+  console.log(champions);
+  allChampions = champions;
+  fillChampions(champions);
+};
+const getApiVersion = async () => {
+  let res = await getRequest("https://ddragon.leagueoflegends.com/api/versions.json");
+  return res[0];
+};
+
+
+// endregion
+
+// region userInput
+
+const invalidateUserForm = () => {
   htmlElements.submitUser.classList.add("is-invalid");
   htmlElements.submitUser.addEventListener("animationend", () => {
     htmlElements.submitUser.classList.remove("is-invalid");
   });
-}
+};
 
-listenToEvents = () => {
+const filterChampionsByPlayed = out => {
+  document.querySelector('#orderChampion').classList.add('u-hidden');
+
+  const selector = element => element.querySelector()
+
+
+};
+
+const loadUser = async userObject => {
+  // cache the user
+  let url = backend + "/api/cacheMatches/";
+  const res = await postRequest(url, userObject)
+  console.info(url, res)
+
+  // get the matches per champion
+  url = backend + "/api/v2/matches/" + userObject.puuid;
+  const out = await getRequest(url);
+  console.info(url, out);
+  userIsLoaded = true;
+  // todo show sorted champions by matches played or by winrate
+  // add the data to the cards
+    document.querySelectorAll('.c-card').forEach((card) => {
+        userObject.forEach((champion) => {
+          if (card.dataset.champion === champion.champion) {
+            card.querySelector('.c-card__played').innerText = champion.matches;
+            card.querySelector('.c-card__winrate').innerText = champion.winrate;
+            card.querySelector('.c-card__kda').innerText = champion.kda;
+          }
+        });
+    });
+
+
+  // filterChampionsByPlayed(out);
+};
+
+// endregion
+
+// region eventListeners
+
+const listenToEvents = () => {
+  // user form
   htmlElements.searchForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     let username = document.querySelector(".js-search-username").value;
@@ -23,101 +100,57 @@ listenToEvents = () => {
     if (!res) {
       invalidateUserForm();
     } else {
+      userIsLoaded = false;
       document.querySelector(".js-search-username").textContent = `${res.username} found!`;
+      loadUser(res);
     }
   });
+
+  // close popup via click on the background
   htmlElements.popup.overlay.addEventListener("click", hidePopup);
 
   // filters
   htmlElements.filters.itemAll.forEach((item) => {
-    function tagClicked(e) {
-      htmlElements.filters.itemAll.forEach((item) => {
-        item.classList.remove("u-selected");
-      });
-      item.classList.add("u-selected");
-      // show the champions that have the tag
-      document.querySelectorAll('.c-card').forEach((card) => {
-        let tags = card.dataset.tags.split(',');
-        // console.log(tags);
-        if (tags.includes(item.dataset.tag) || item.dataset.tag === "All") {
-          card.classList.remove("u-hidden");
-        }else {
-          card.classList.add('u-hidden');
-        }
-      });
-    }
-
     // two events for accessibility
     item.addEventListener("click", (e) => {
-      tagClicked(e);
+      tagClicked(e, item);
     });
     // so that the element is selectable with the keyboard
     item.addEventListener("keyup", (e) => {
       if (a11yClick(e)) {
         console.log("a11y click");
-        tagClicked(e);
+        tagClicked(e, item);
       }
     });
   });
 
 };
 
+// endregion
 
-const getRequest = async function(url) {
-  return await fetch(url)
-    .then((res) => res.json())
-    .catch((err) => console.log(err));
+// region filters
+
+const tagClicked = (e, item) => {
+  htmlElements.filters.itemAll.forEach((filter) => {
+    filter.classList.remove("u-selected");
+  });
+  item.classList.add("u-selected");
+  // show the champions that have the tag
+  document.querySelectorAll('.c-card').forEach((card) => {
+    let tags = card.dataset.tags.split(',');
+    // console.log(tags);
+    if (tags.includes(item.dataset.tag) || item.dataset.tag === "All") {
+      card.classList.remove("u-hidden");
+    }else {
+      card.classList.add('u-hidden');
+    }
+  });
 };
 
-const createImageElement = (src, alt, classes = []) => {
-  let img = document.createElement("img");
-  img.src = src;
-  img.alt = alt;
-  for (const classI of classes) {
-    img.classList.add(classI);
-  }
-  return img;
-};
 
+// endregion
 
-function createTitleElement(Title) {
-  let title = document.createElement("h2");
-  title.classList.add("c-card__title");
-  title.classList.add("u-italic");
-  title.classList.add("u-uppercase");
-  title.classList.add("u-serif");
-  title.textContent = Title;
-  return title;
-}
-
-function createCardElement(img, title, card_body, tags) {
-  let card = document.createElement("div");
-  card.classList.add("c-card");
-  card.appendChild(img);
-  card.appendChild(title);
-  card.appendChild(card_body);
-  return card;
-}
-
-function createBodyElement(champion) {
-  const body = document.createElement("div");
-  body.classList.add("c-card__body");
-  // - todo: decide if i want to show the roles or not
-  // const p = document.createElement("p");
-  // p.classList.add("c-card__text");
-  // let text = "";
-  // for (let i = 0; i < champion.tags.length; i++) {
-  //   if (i === 0) {
-  //     text += champion.tags[i];
-  //   } else {
-  //     text += `, ${champion.tags[i]}`;
-  //   }
-  // }
-  // p.textContent = text;
-  // body.appendChild(p);
-  return body;
-}
-
+// region video
 
 function loadAllVideo(champion){
   const elements = htmlElements.abilities.videos;
@@ -127,7 +160,7 @@ function loadAllVideo(champion){
       // remove hidden class
       element.classList.remove("u-hidden");
     }else{
-        element.classList.add("u-hidden");
+      element.classList.add("u-hidden");
     }
     let id = champion.key;
     const length = id.toString().length;
@@ -163,8 +196,11 @@ function toggleVideo(type){
 }
 
 
+// endregion
 
-function displayAndQsAbilityImg(champion) {
+// region popup
+
+const displayAndQsAbilityImg = function (champion) {
   // nesting the functions to use the champion variable
   function abilityImgClicked(e) {
     console.log(e);
@@ -232,21 +268,15 @@ function displayAndQsAbilityImg(champion) {
     i+=1;
   }
 
-}
+};
 
-
-function showAbilities(e) {
-
-  displayAndQsAbilityImg(e);
-
-
-}
-
-function statCalculator(e) {
+const statCalculator = e => {
   const stats = e.stats;
-}
+  console.info(stats);
+  // todo: figure out what to do with the stats
+};
 
-function showPopup(e) {
+const showPopup = e => {
   console.log(e);
   htmlElements.popup.container.classList.remove("u-hidden");
   document.documentElement.style.overflow = "hidden";
@@ -262,18 +292,78 @@ function showPopup(e) {
       icon.classList.remove("u-hidden");
     }
   }
-  showAbilities(e);
-  statCalculator(e);
-}
+  displayAndQsAbilityImg(e);
+  if (userIsLoaded) {
+    statCalculator(e);
+  }
+};
 
-function hidePopup() {
+const hidePopup = () => {
   htmlElements.popup.container.classList.add("u-hidden");
   document.documentElement.style.overflow = "auto";
   htmlElements.popup.image.src = "";
   for (const icon of htmlElements.popup.tagIconAll) {
     icon.classList.add("u-hidden");
   }
+};
+
+// endregion
+
+// region card
+
+
+// region createElements
+
+const createImageElement = (src, alt, classes = []) => {
+  let img = document.createElement("img");
+  img.src = src;
+  img.alt = alt;
+  for (const classI of classes) {
+    img.classList.add(classI);
+  }
+  return img;
+};
+
+
+function createTitleElement(Title) {
+  let title = document.createElement("h2");
+  title.classList.add("c-card__title");
+  title.classList.add("u-italic");
+  title.classList.add("u-uppercase");
+  title.classList.add("u-serif");
+  title.textContent = Title;
+  return title;
 }
+
+function createCardElement(img, title, card_body, tags) {
+  let card = document.createElement("div");
+  card.classList.add("c-card");
+  card.appendChild(img);
+  card.appendChild(title);
+  card.appendChild(card_body);
+  return card;
+}
+
+function createBodyElement(champion) {
+  const body = document.createElement("div");
+  body.classList.add("c-card__body");
+  // - todo: decide if i want to show the roles or not
+  // const p = document.createElement("p");
+  // p.classList.add("c-card__text");
+  // let text = "";
+  // for (let i = 0; i < champion.tags.length; i++) {
+  //   if (i === 0) {
+  //     text += champion.tags[i];
+  //   } else {
+  //     text += `, ${champion.tags[i]}`;
+  //   }
+  // }
+  // p.textContent = text;
+  // body.appendChild(p);
+  return body;
+}
+
+// endregion
 
 function fillChampions(champions) {
   console.log("fillChampions");
@@ -302,21 +392,12 @@ function fillChampions(champions) {
     htmlElements.championsContainer.appendChild(card);
     i += 1;
   }
-
 }
 
-async function getChampions() {
-  const champions = await getRequest(`https://ddragon.leagueoflegends.com/cdn/${version}/data/en_GB/championFull.json`);
-  console.log(champions);
-  allChampions = champions;
-  fillChampions(champions);
-}
 
-function getApiVersion() {
-  return getRequest("https://ddragon.leagueoflegends.com/api/versions.json")
-    .then((res) => res[0]);
-}
+// endregion
 
+// region init
 document.addEventListener("DOMContentLoaded", function() {
   console.log("DOM fully loaded and parsed");
   htmlElements.searchForm = document.querySelector(".userForm");
@@ -345,3 +426,4 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
 });
+// endregion

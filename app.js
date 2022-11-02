@@ -11,6 +11,9 @@ const usersRouter = require("./routes/users");
 const getMatchRouter = require("./routes/api/getMatchPerPlayer");
 const fs = require("fs");
 const getRouter = require("./routes/api/getRoutes");
+const testRouter = require("./routes/api/testRoutes")
+
+
 // const { cacheMatchHistory } = require("./models/cacheMatchHistory");
 // const { calculateWinrateNormal } = require("./models/calculator");
 
@@ -23,6 +26,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/api/", getRouter);
 app.use("/api/v2/", getMatchRouter);
+app.use("/api/dev/", testRouter)
 // calculator.CreateMatchesWithCache("JungleDiffAt0m").then((puuid) => {
 //   console.log("This should be the puuid: > ", puuid);
 //   db.getMatchesByPuuid(puuid).then((matches) => {
