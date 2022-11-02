@@ -79,8 +79,14 @@ const loadUser = async userObject => {
             console.info(i, champion);
             card.style.order = 0 - out.length + i;
             const body = card.querySelector('.c-card__body');
-            body.querySelector('.c-card__played').innerText = champion.matches;
-            body.querySelector('.c-card__winrate').innerText = champion.winrate;
+            body.querySelector('.c-card__played').innerText = champion.matches + " games";
+            const winrateElement = body.querySelector('.c-card__winrate');
+            winrateElement.innerText = Math.round(champion.winrate * 100) + "%";
+            if(champion.winrate > .5){
+              winrateElement.classList.add("u-positive-color")
+            }else{
+              winrateElement.classList.add("u-negative-color")
+            }
             body.querySelector('.c-card__kda').innerText = champion.kda;
           }
         }

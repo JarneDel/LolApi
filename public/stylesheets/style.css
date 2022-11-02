@@ -91,15 +91,35 @@ html {
 
 .c-card__body {
     padding: 0 1rem;
-    margin-top: 0;
+    margin-top: -8px;
+    margin-bottom: 1rem;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.c-card__body p {
+
+.c-card__winrate{
+    position: absolute;
+    /*color: hotpink !important;*/
+    top: -44px;
+    right: .5rem;
+}
+.c-card__kda {
+    display: inline;
+    margin: 0;
+    padding: 0;
     color: #707070;
 }
+.c-card__played {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    color: #707070;
 
-.c-card__body p:first-child {
-    margin-top: 0;
 }
 
 .c-card__title {
@@ -565,7 +585,12 @@ html {
 .u-fs-small {
     font-size: 0.8rem;
 }
-
+.u-negative-color{
+    color: #ff4e50;
+}
+.u-positive-color{
+    color: green;
+}
 
 @keyframes error {
 
