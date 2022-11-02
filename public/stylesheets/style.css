@@ -400,8 +400,8 @@ html {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
-
+    max-width: 90rem;
+    margin: 0 auto 1rem;
 
 }
 

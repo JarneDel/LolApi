@@ -72,10 +72,12 @@ const loadUser = async userObject => {
   userIsLoaded = true;
   // todo show sorted champions by matches played or by winrate
   // add the data to the cards
-    document.querySelectorAll('.c-card').forEach((card) => {
+  console.info("About to add the values to the cards");
+  document.querySelectorAll('.c-card').forEach((card) => {
         for (const [i, champion] of out.entries()) {
-          if (card.dataset.champion === champion.champion) {
-            card.style.order = out.length - i;
+          if (parseInt(card.dataset.championId) === champion.championId) {
+            console.info(i, champion);
+            card.style.order = 0 - out.length + i;
             const body = card.querySelector('.c-card__body');
             body.querySelector('.c-card__played').innerText = champion.matches;
             body.querySelector('.c-card__winrate').innerText = champion.winrate;
@@ -385,6 +387,7 @@ function fillChampions(champions) {
   let i = 0;
   for (const dataKey in champions.data) {
     const champion = champions.data[dataKey];
+    const championId = champion.key;
     let champName = championsName[i];
     if (champName === "Fiddlesticks") {
       champName = "FiddleSticks";
@@ -397,6 +400,7 @@ function fillChampions(champions) {
     card.dataset.tags = champion.tags.join(",");
     card.dataset.difficulty = champion.info.difficulty;
     card.dataset.champion = champion.name;
+    card.dataset.championId = championId;
     card.classList.add('u-notched-content');
     card.addEventListener("click", (e) => {
       console.log("clicked");
