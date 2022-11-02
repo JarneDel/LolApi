@@ -55,10 +55,8 @@ async function newUser(userObject, matchList, res) {
                 getAndResolveMatch(matchID, userObject.puuid, (matchObject) => {
                     outMatches.push(matchObject);
                     if (outMatches.length === newMatches.length) {
-                        const success = callbackCoupleMachToUser(outMatches, userObject);
-                        if (success) {
-                            res.status(201).send(userObject);
-                        }
+                        res.status(201).send(userObject);
+                        callbackCoupleMachToUser(outMatches, userObject);
                     }
                 });
                 // wait 60 ms to not exceed the rate limit
@@ -75,8 +73,8 @@ async function newUser(userObject, matchList, res) {
 
 const callbackCoupleMachToUser = async function (matchObjectList, userObject) {
     try {
-        const listMatchIds = matchObjectList.map((matchObject) => matchObject.id);
-        const res = await cacheUsers.cacheMatchIds(userObject, listMatchIds);
+        const listMatchIds = matchObjectList.map((matchObject) => matchObject.matchid);
+        const res = await cacheUsers.cacheMatchIds(userObject.puuid, listMatchIds);
         console.log("New matches cached for user: ", userObject.username, "response: ", res);
         return true;
     } catch (e) {

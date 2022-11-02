@@ -17,7 +17,7 @@
 
 body {
     padding: 50px;
-    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    font: 14px "open-sans", Helvetica, Arial, sans-serif;
 }
 
 a {
@@ -106,7 +106,7 @@ html {
     position: absolute;
     /*color: hotpink !important;*/
     top: -44px;
-    right: .5rem;
+    right: 1rem;
 }
 .c-card__kda {
     display: inline;

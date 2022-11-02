@@ -20,6 +20,9 @@ router.get('/:region/winrate/:username', function(req, res, next) {
       winRates.urf=calculator.calculateWinRateURF(matches, summonerInfo.puuid);
       res.send(winRates);
     });
+  }).catch(err => {
+    console.log(err);
+    res.status(429).send(err);
   });
 });
 

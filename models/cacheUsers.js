@@ -16,7 +16,7 @@ async function checkIfCached(username, region) {
 
 async function checkIfUserExitsByPuuid(puuid) {
   return db.checkIfUserExitsByPuuid(puuid).then((result) => {
-    return Object.values(result[0])[0] !== 0;
+    return result["$1"] !== 0;
   });
 }
 
@@ -56,9 +56,9 @@ async function getUserByUsername(username, region) {
   }
 }
 
-async function cacheMatchIds(puuid,region , matchList) {
-  if (await checkIfUserExitsByPuuid(puuid, region)) {
-    return await db.addMatchToUser(puuid, region, matchList);
+async function cacheMatchIds(puuid, matchList) {
+  if (await checkIfUserExitsByPuuid(puuid)) {
+    return await db.addMatchToUser(puuid, matchList);
   } else
     console.warn("User not cached");
     return false;

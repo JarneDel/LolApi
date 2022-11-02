@@ -35,7 +35,10 @@ router.get("/matches/:region/:username/:champion", async function (req, res, nex
 router.get("/matches/:puuid", async function (req, res, next) {
     // get matched per champion and their winrates
     const {puuid} = req.params;
+    const startTime = performance.now()
     const matches = await db.getMatchesByPuuid(puuid);
+    const endTime = performance.now()
+    console.info("Time to get matches from db", endTime - startTime)
     let outmatches = {};
     for (const match of matches) {
         let userIndex = match.userIndex;
