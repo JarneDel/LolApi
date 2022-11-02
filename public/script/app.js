@@ -73,13 +73,15 @@ const loadUser = async userObject => {
   // todo show sorted champions by matches played or by winrate
   // add the data to the cards
     document.querySelectorAll('.c-card').forEach((card) => {
-        userObject.forEach((champion) => {
+        for (const [i, champion] of out.entries()) {
           if (card.dataset.champion === champion.champion) {
-            card.querySelector('.c-card__played').innerText = champion.matches;
-            card.querySelector('.c-card__winrate').innerText = champion.winrate;
-            card.querySelector('.c-card__kda').innerText = champion.kda;
+            card.style.order = out.length - i;
+            const body = card.querySelector('.c-card__body');
+            body.querySelector('.c-card__played').innerText = champion.matches;
+            body.querySelector('.c-card__winrate').innerText = champion.winrate;
+            body.querySelector('.c-card__kda').innerText = champion.kda;
           }
-        });
+        }
     });
 
 
@@ -360,6 +362,18 @@ function createBodyElement(champion) {
   // }
   // p.textContent = text;
   // body.appendChild(p);
+  let kda = document.createElement("p");
+  kda.classList.add("c-card__text");
+  kda.classList.add('c-card__kda');
+  let winrate = document.createElement("p");
+  winrate.classList.add("c-card__text");
+  winrate.classList.add('c-card__winrate');
+  let games = document.createElement("p");
+  games.classList.add("c-card__text");
+  games.classList.add('c-card__played');
+  body.appendChild(kda);
+  body.appendChild(winrate);
+  body.appendChild(games);
   return body;
 }
 
