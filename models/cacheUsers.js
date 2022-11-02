@@ -1,108 +1,112 @@
 const db = require("../models/db");
 const getMatch = require("./LolApiRequest");
 const calculator = require("../models/calculator");
-const { checkIfUserExits, getUser } = require("./db");
+const {checkIfUserExits, getUser} = require("./db");
 
 
 async function checkIfCached(username, region) {
-  return db.checkIfUserExits(username, region).then((result) => {
-    if (result.length === 0) {
-      return false;
-    } else {
-      return result
-    }
-  });
+    return db.checkIfUserExits(username, region).then((result) => {
+        if (result.length === 0) {
+            return false;
+        } else {
+            return result
+        }
+    });
 }
 
 async function checkIfUserExitsByPuuid(puuid) {
-  return db.checkIfUserExitsByPuuid(puuid).then((result) => {
-    return result["$1"] !== 0;
-  });
+    return db.checkIfUserExitsByPuuid(puuid).then((result) => {
+        return result["$1"] !== 0;
+    });
 }
 
 
 async function cacheUser(username, region) {
-  try {
-    let result = await checkIfCached(username, region);
-    if (result) {
-      console.log(`User ${username} already cached, returning cached user`);
-      return result[0];
-    } else {
-      let summonerInfo = await getMatch.getSummonerInfo(username, region);
-      if (summonerInfo.status.status_code === 404) {
-        console.warn(`User ${username} not found`);
-        return false;
-      }else{
-        summonerInfo.region = region;
-        const user =  await db.addUser(summonerInfo);
-        user.firstTime = true;
-        return user;
-      }
+    try {
+        let result = await checkIfCached(username, region);
+        if (result) {
+            console.log(`User ${username} already cached, returning cached user`);
+            return result[0];
+        } else {
+            let summonerInfo = await getMatch.getSummonerInfo(username, region);
 
+            const hasStatus = "status" in summonerInfo;
+            if (hasStatus) {
+                if (summonerInfo.status.status_code === 404) {
+                    console.warn(`User ${username} not found`);
+                    return false;
+                }
+            }
+            summonerInfo.region = region;
+            const user = await db.addUser(summonerInfo);
+            user.firstTime = true;
+            return user;
+
+
+        }
+    } catch (e) {
+        console.warn(e);
+        return false;
     }
-  } catch (e) {
-    console.warn(e);
-    return false;
-  }
 }
 
 async function getUserByUsername(username, region) {
-  if (await cacheUser(username, region)) {
-    return await db.getUser(username, region);
-  }
-  else {
-    console.warn("Error occured while caching user");
-    return false;
-  }
+    if (await cacheUser(username, region)) {
+        return await db.getUser(username, region);
+    } else {
+        console.warn("Error occured while caching user");
+        return false;
+    }
 }
 
 async function cacheMatchIds(puuid, matchList) {
-  if (await checkIfUserExitsByPuuid(puuid)) {
-    return await db.addMatchToUser(puuid, matchList);
-  } else
-    console.warn("User not cached");
+    if (await checkIfUserExitsByPuuid(puuid)) {
+        return await db.addMatchToUser(puuid, matchList);
+    } else
+        console.warn("User not cached");
     return false;
 }
 
 async function test(username, region, puuid) {
-  // checkIfCached(username, region).then((result) => {
-  //   console.log(`User ${username} is cached: ${result}`);
-  // });
-  //
-  // cacheUser(username, region).then(
-  //   (result) => {
-  //     console.log(`caching user ${username} is ${result}`);
-  //   }
-  // );
-  //
-  // getUserByUsername(username, region).then(
-  //   (result) => {
-  //     console.log(`user: ${username} ${result}`);
-  //   }
-  // );
-  //
-  // checkIfUserExitsByPuuid(puuid).then(
-  //   (result) => {
-  //     console.log(`user with puuid ${puuid} is cached: ${result}`);
-  //   });
-  // getUser(username, region).then(
-  //   (result) => {
-  //     console.log(`user: ${username} ${result}`);
-  //   });
+    // checkIfCached(username, region).then((result) => {
+    //   console.log(`User ${username} is cached: ${result}`);
+    // });
+    //
+    // cacheUser(username, region).then(
+    //   (result) => {
+    //     console.log(`caching user ${username} is ${result}`);
+    //   }
+    // );
+    //
+    // getUserByUsername(username, region).then(
+    //   (result) => {
+    //     console.log(`user: ${username} ${result}`);
+    //   }
+    // );
+    //
+    // checkIfUserExitsByPuuid(puuid).then(
+    //   (result) => {
+    //     console.log(`user with puuid ${puuid} is cached: ${result}`);
+    //   });
+    // getUser(username, region).then(
+    //   (result) => {
+    //     console.log(`user: ${username} ${result}`);
+    //   });
 
-  let matchList = await db.getMatchIDsByPuuid(puuid)
-  console.log(matchList);
-  const outputList = [];
-  for (const matchObject of matchList) {
-    outputList.push(matchObject.matchid);
-  }
-  console.log(outputList);
-  console.log(await cacheMatchIds(puuid, outputList));
+    let matchList = await db.getMatchIDsByPuuid(puuid)
+    console.log(matchList);
+    const outputList = [];
+    for (const matchObject of matchList) {
+        outputList.push(matchObject.matchid);
+    }
+    console.log(outputList);
+    console.log(await cacheMatchIds(puuid, outputList));
 }
+
 module.exports = {
-  cacheUser,
-  checkIfCached,
-  cacheMatchIds
+    cacheUser,
+    checkIfCached,
+    cacheMatchIds
 }
 // flow:
 // 1. Incoming request from client with username and region

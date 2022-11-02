@@ -55,6 +55,9 @@ router.get('/user/:username/:region/', async function(req, res, next) {
     const matchList = await getMatch.getMatchID(user.puuid, "europe", 100);
     newUser(user, matchList).then((result) => {
       console.log("New user created");
+    }).catch((err)=>{
+      console.warn(err)
+      res.status(429).send("To many requests")
     });
   }
   console.log("getRoutes/user: userObject:", user);

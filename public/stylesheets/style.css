@@ -50,12 +50,68 @@ html {
     display: flex;
     justify-content: center;
     align-items: center;
+    max-width: 35rem;
+    margin: 0 auto;
 }
 
 
 /*
  *   Remove double break and random elements
 */
+
+
+/*
+* searchbar
+*/
+
+.c-searchBar{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+}
+
+.c-searchBar__query{
+    width: 100%;
+    height: 2.8rem;
+    background: transparent;
+    outline: none;
+    border: none;
+    padding: 0 3.5rem 0 1.5rem;
+    font-size: 1rem;
+}
+
+.c-searchBar__submit{
+    position: absolute;
+    width: 3.5rem;
+    height: 2.8rem;
+    right: 0;
+    background: none;
+    border: none;
+    outline: none;
+}
+.c-searchBar__region{
+    position: absolute;
+    width: 3.5rem;
+    height: 2.8rem;
+    right: 3.5rem;
+    background: none;
+    border: none;
+    outline: none;
+}
+
+:where(.c-searchBar__submit, .c-searchBar__region):hover{
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
 
 
 .c-ability-description br:nth-child(3n + 3) {
