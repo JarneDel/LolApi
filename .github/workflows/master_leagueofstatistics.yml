@@ -53,4 +53,4 @@ jobs:
           app-name: 'LeagueOfstatistics'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_07CF8041F65342938573713D2702D2E8 }}
-          package: ./bin/www
+          package: .
