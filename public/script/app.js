@@ -105,7 +105,7 @@ const listenToEvents = () => {
   // user form
   htmlElements.searchForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    let username = document.querySelector(".js-search-username").value;
+    let username = document.querySelector(".js-search-username").value.trim();
     let region = document.querySelector(".js-search-region").value;
     const res = await getRequest(`${backend}/api/user/${username}/${region}`);
     if (!res) {
