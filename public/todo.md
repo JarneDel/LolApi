@@ -7,20 +7,9 @@
 - [ ] nice to have: Add a transition when textContent changes
 - [x] add padding to the lore text
 - [ ] add difficulty to champion
-- [ ] ![visualisatie](https://i.imgur.com/72k9JMM.png "Difficulty")
-- [ ] add a visualise attack, defence, magic,... (radarplot?)  
-- ![](https://i.imgur.com/ml3FnqB.png)
+- [ ] ![visualisation](https://i.imgur.com/72k9JMM.png "Difficulty")
 - [ ] add animation to switching types
 - [ ] make popup take in full width on mobile
-- [ ] make cards a bit smaller
-- [ ] idea for graphing: stat calculator
-  - hp
-  - armor
-  - mr
-  - ad
-  - ap
-  - as
-  - cdr
-  - per level
 - [ ] skin selector
 - [ ] spell tooltip
+- [ ] inputvalidation: on change: remove the c-form-valid class

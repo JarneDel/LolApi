@@ -99,19 +99,50 @@ html {
     background: none;
     border: none;
     outline: none;
+    /* isolate z-index */
+    isolation: isolate;
+
 }
 
 :where(.c-searchBar__submit, .c-searchBar__region):hover{
     cursor: pointer;
 }
 
+.c-searchBar.c-form-valid{
+    --filter-border-color: green;
+    --filter-border-width: .15em;
+}
+
+.c-searchBar__search-icon{
+    opacity: 1;
+    transition: rotate 500ms ease, opacity 500ms ease;
+}
+.c-searchBar__valid{
+    opacity: 0;
+    position: relative;
+    top: -42px;
+    z-index: 2;
+    transition: rotate 500ms ease, opacity 500ms ease;
+
+}
+
+.c-searchBar__submit svg{
+    display: block;
+    padding: 9px;
+    fill: #666;
+}
 
 
-
-
-
-
-
+.c-form-valid .c-searchBar__valid{
+    rotate: 360deg;
+    /*animation-fill-mode: forwards;*/
+    opacity: 1;
+}
+.c-form-valid .c-searchBar__search-icon{
+    rotate: 360deg;
+    /*animation-fill-mode: forwards;*/
+    opacity: 0;
+}
 
 
 .c-ability-description br:nth-child(3n + 3) {
@@ -487,8 +518,10 @@ html {
     justify-content: space-between;
     align-items: center;
     margin: 0;
+    padding: 0 1rem;
     gap: 1rem;
     user-select: none;
+    overflow: scroll;
 }
 
 
@@ -566,6 +599,7 @@ html {
                     0 100%,
                         /* top left  1*/
                     0 var(--edge-size));
+
 }
 
 .u-notched-border:before,
@@ -577,11 +611,13 @@ html {
 }
 
 .u-notched-border:before{
+    transition: background-color .5s;
     background: var(--filter-border-color);
     z-index: -2;
 }
 
 .u-notched-border:after{
+    transition: clip-path .5s ease;
     background: var(--filter-background-color);
     z-index: -1;
     clip-path:

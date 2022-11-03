@@ -112,10 +112,23 @@ const listenToEvents = () => {
       invalidateUserForm();
     } else {
       userIsLoaded = false;
+      document.querySelector(".c-searchBar").classList.add("c-form-valid")
       document.querySelector(".js-search-username").textContent = `${res.username} found!`;
       loadUser(res);
     }
   });
+
+  const searchInput = htmlElements.searchForm.querySelector('.js-search-username')
+  const searchBar = document.querySelector('.c-searchBar')
+
+  searchInput.addEventListener('keyup',(e) => {
+    console.log("change")
+    console.info(searchBar)
+    searchBar.classList.remove('c-form-valid')
+    console.info(searchBar)
+  })
+
+
 
   // close popup via click on the background
   htmlElements.popup.overlay.addEventListener("click", hidePopup);
