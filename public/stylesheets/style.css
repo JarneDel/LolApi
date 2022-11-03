@@ -279,13 +279,20 @@ html {
     z-index: 100;
     overflow-y: auto;
     overflow-x: hidden;
-
-
 }
 
 .c-popup__content {
     padding: 0;
     margin: 0;
+}
+
+.c-popup__close{
+    display: block;
+    height: 4rem;
+    fill: white;
+    margin-left: auto;
+    margin-right: .5rem;
+    border: 1px solid var(--dark-line-color);
 }
 
 .c-popup__header {
@@ -370,17 +377,17 @@ html {
     .c-card__body {
         font-size: 1rem;
         padding: 0 1rem;
-        margin-bottom: .5rem;
+        margin-bottom: 1rem;
         /*margin-top: .5rem;*/
         margin-top: -8px;
     }
     .c-card__title{
-        font-size: 1.6rem;
+        font-size: 1.2rem;
         padding: 0 1rem;
         margin: 1rem 0;
     }
     .c-card__winrate{
-        top: -44px;
+        top: -3em;
         right: 1rem;
     }
 }
