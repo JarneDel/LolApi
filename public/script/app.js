@@ -276,7 +276,12 @@ const displayAndQsAbilityImg = function (champion) {
   const pImg = createImageElement(`https://ddragon.leagueoflegends.com/cdn/${version}/img/passive/${p}`, pName, ["c-abilities__icon", "u-selected-icon"]);
   pImg.addEventListener("click", abilityImgClicked);
   pImg.dataset.type = "passive";
-  htmlElements.abilities.imgContainer.appendChild(pImg);
+  const imgContainer = document.createElement('div');
+  imgContainer.classList.add("c-abilities__img-container");
+  // imgContainer.classList.add("u-notched-border");
+  imgContainer.appendChild(pImg);
+
+  htmlElements.abilities.imgContainer.appendChild(imgContainer);
   const spellButtons = ["Q", "W", "E", "R"];
   let i = 0;
   for (const spellElement of champion.spells) {
@@ -286,9 +291,14 @@ const displayAndQsAbilityImg = function (champion) {
     spellImg.addEventListener("click", abilityImgClicked);
     spellImg.dataset.type = "spell";
     spellImg.dataset.id = spellElement.id;
-    // required because KENNEN does not follow the naming conventions.........
     spellImg.dataset.spellButton = spellButtons[i];
-    htmlElements.abilities.imgContainer.appendChild(spellImg);
+    const imgContainer = document.createElement('div');
+    imgContainer.classList.add("c-abilities__img-container");
+    // imgContainer.classList.add("u-notched-border");
+    imgContainer.appendChild(spellImg);
+
+    htmlElements.abilities.imgContainer.appendChild(imgContainer);
+    // required because KENNEN does not follow the naming conventions.........
     i+=1;
   }
 

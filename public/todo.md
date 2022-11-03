@@ -13,3 +13,6 @@
 - [ ] skin selector
 - [ ] spell tooltip
 - [ ] inputvalidation: on change: remove the c-form-valid class
+- [ ] hamburgermenu class selection voor mobile
+- [ ] cards in twee colommen op mobile
+- 

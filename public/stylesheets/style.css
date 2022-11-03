@@ -306,6 +306,13 @@ html {
     line-height: 1.5;
 }
 
+.c-popup .u-notched-border{
+    --filter-background-color: #000913;
+    --filter-border-color: white;
+}
+
+
+
 
 .c-row {
     display: flex;
