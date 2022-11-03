@@ -34,7 +34,6 @@
         </button>
     </div>
 </form>
-<h1 class="js-user-found-msg"></h1>
 
 <div class="c-popup__container js-popup-container u-hidden">
     <div class="c-popup__overlay js-popup-overlay"></div>
@@ -137,7 +136,7 @@
                 <div class="c-popup__abilities">
                     <div class="c-popup__abilities--text-container">
                         <div class="u-side-fill"></div>
-                        <div class="c-abilities__text">
+                        <div class="c-abilities__text u-1-of-1-bp-1">
                             <h2 class="c-abilities__title">Abilities</h2>
                             <div class="c-abilities__icon-container js-ability-img-container">
                                 <img class="c-abilities__icon js-ability-p-img"
@@ -193,32 +192,35 @@
                     </div>
                 </div>
             </div>
+            <div class="u-mb-lg"></div>
             <div class="c-popup__close">&times;</div>
             <div class="c-popup__champ--stats">test</div>
         </div>
     </article>
 </div>
-<div class="c-filter-by-class u-notched-border u-uppercase u-sans">
-    <!-- this should be on one line, like a header-->
-    <div class="search-container">
-        <!--      show a search list-->
-    </div>
-    <ul class="c-filter__classes u-gray-text u-fs-small">
-        <li tabindex="0" class="c-filter__class js-filter-item u-selected" data-tag="All">all</li>
-        <li tabindex="0" class="c-filter__class js-filter-item" data-tag="Assassin">assassins</li>
-        <li tabindex="0" class="c-filter__class js-filter-item" data-tag="Fighter">fighters</li>
-        <li tabindex="0" class="c-filter__class js-filter-item" data-tag="Mage">mages</li>
-        <li tabindex="0" class="c-filter__class js-filter-item" data-tag="Marksman">marksmen</li>
-        <li tabindex="0" class="c-filter__class js-filter-item" data-tag="Support">supports</li>
-        <li tabindex="0" class="c-filter__class js-filter-item" data-tag="Tank">tanks</li>
-    </ul>
-    <div class="c-order--played">
-        <select name="order" id="orderChampion" class="u-hidden">
-            <option value="played">Matches played ⬇</option>
-        </select>
-        <!--      difficulties container-->
-    </div>
+<div class="u-center u-mt-md">
+    <div class="c-filter-by-class u-notched-border u-uppercase u-sans">
+        <!-- this should be on one line, like a header-->
+        <div class="search-container">
+            <!--      show a search list-->
+        </div>
+        <ul class="c-filter__classes u-gray-text u-fs-small">
+            <li tabindex="0" class="c-filter__class js-filter-item u-selected" data-tag="All">all</li>
+            <li tabindex="0" class="c-filter__class js-filter-item" data-tag="Assassin">assassins</li>
+            <li tabindex="0" class="c-filter__class js-filter-item" data-tag="Fighter">fighters</li>
+            <li tabindex="0" class="c-filter__class js-filter-item" data-tag="Mage">mages</li>
+            <li tabindex="0" class="c-filter__class js-filter-item" data-tag="Marksman">marksmen</li>
+            <li tabindex="0" class="c-filter__class js-filter-item" data-tag="Support">supports</li>
+            <li tabindex="0" class="c-filter__class js-filter-item" data-tag="Tank">tanks</li>
+        </ul>
+        <div class="c-order--played">
+            <select name="order" id="orderChampion" class="u-hidden">
+                <option value="played">Matches played ⬇</option>
+            </select>
+            <!--      difficulties container-->
+        </div>
 
+    </div>
 </div>
 <article class="c-container js-champ-card-container"></article>
 </body>
