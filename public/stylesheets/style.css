@@ -14,10 +14,18 @@
     --edge-size: 1em;
 }
 
+html{
+    /*eventjes een comment uit frustratie, maar zonder width 100vw, kan je op mobile een klein beetje naar rechts scrollen 🤯🤯*/
+}
+
 
 body {
-    padding: 50px;
-    font: 14px "open-sans", Helvetica, Arial, sans-serif;
+    padding: 1rem;
+    font: 14px var(--sans-font)
+}
+html, body{
+    width: 100%;
+    overflow-x: hidden;
 }
 
 a {
@@ -108,6 +116,7 @@ html {
     cursor: pointer;
 }
 
+
 .c-searchBar.c-form-valid{
     --filter-border-color: green;
     --filter-border-width: .15em;
@@ -163,6 +172,17 @@ html {
     justify-content: center;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 
+}
+
+@media(max-width: 576px){
+    .c-container{
+        grid-template-columns: 50% 50%;
+        gap: 1rem;
+        max-width: calc(100vw - 1rem)
+    }
+    .c-card {
+        /*max-width: 45vw;*/
+    }
 }
 
 
@@ -234,30 +254,25 @@ html {
 
 }
 
+
+
+
 /* create a popup card that is scrollable */
 .c-popup {
     position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    min-width: 80vw;
-    max-height: 90vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    /*max-width: 100vw;*/
+    /*min-height: 100vh;1*/
     /*center this item*/
     background: #000913;
     z-index: 100;
     overflow: auto;
 }
 
-/* darken the page when popup is shown*/
-.c-popup__overlay {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 99;
-}
+
+
 
 .c-popup__content {
     padding: 0;
@@ -294,15 +309,15 @@ html {
 .c-popup__champ--name {
     /*color: #67471f;*/
     color: white;
-    font-size: 7rem;
+    font-size: 3.5rem;
     line-height: 1;
-    text-shadow: 0 0 10px black;
+    text-shadow: 0 0 .31em black;
 }
 
 .c-popup__champ--description {
     color: rgba(255, 255, 255, 0.9);
-    text-shadow: 0 0 10px black;
-    font-size: 2rem;
+    text-shadow: 0 0 .31em black;
+    font-size: 1rem;
     line-height: 1.5;
 }
 
@@ -311,7 +326,35 @@ html {
     --filter-border-color: white;
 }
 
-
+@media(min-width: 576px){
+    .c-popup{
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        min-width: 80vw;
+        max-height: 90vh;
+        /*min-height: unset;*/
+    }
+    /* darken the page when popup is shown*/
+    .c-popup__overlay {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 99;
+    }
+    .c-popup__champ--description {
+        font-size: 2rem;
+        line-height: 1.5;
+        text-shadow: 0 0 10px black;
+    }
+    .c-popup__champ--name{
+        font-size: 7rem;
+        text-shadow: 0 0 10px black;
+    }
+}
 
 
 .c-row {
@@ -323,6 +366,15 @@ html {
     padding: 3.75rem 1rem;
 }
 
+@media(max-width: 576px){
+    .c-row{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+
+
 .c-row__lore {
     flex-basis: 50%;
     font-weight: normal;
@@ -330,8 +382,8 @@ html {
     display: flex;
     align-items: center;
     justify-content: center;
-
 }
+
 
 .c-row__lore--text {
     max-width: 30rem;
@@ -389,6 +441,15 @@ html {
     text-transform: uppercase;
     font-family: var(--sans-font);
 }
+
+
+@media(max-width: 576px){
+    .c-row__lore--text{
+        max-width: 100%;
+    }
+}
+
+
 
 .c-popup__abilities {
     display: flex;
@@ -528,7 +589,7 @@ html {
     padding: 0 1rem;
     gap: 1rem;
     user-select: none;
-    overflow: scroll;
+    overflow: auto;
 }
 
 
@@ -690,6 +751,14 @@ html {
 .u-positive-color{
     color: green;
 }
+
+@media (max-width: 576px) {
+    .u-1-of-1-bp-1{
+        flex-basis: 100%;
+    }
+}
+
+
 
 @keyframes error {
 
