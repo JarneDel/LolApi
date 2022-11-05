@@ -247,6 +247,7 @@ html {
     padding: 0 .5rem;
     margin: .5rem 0;
     font-size: 1rem;
+    max-width: 80%;
 }
 
 .c-card__img {
@@ -281,18 +282,37 @@ html {
     overflow-x: hidden;
 }
 
+
+
+
+
 .c-popup__content {
     padding: 0;
     margin: 0;
 }
 
 .c-popup__close{
-    display: block;
-    height: 4rem;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 3rem;
+    margin: .5rem;
+    z-index: 1000;
     fill: white;
-    margin-left: auto;
-    margin-right: .5rem;
-    border: 1px solid var(--dark-line-color);
+
+}
+
+.c-popup__close--svg-container{
+    cursor: pointer;
+}
+
+
+.c-popup__close svg{
+    padding: .5rem;
+
 }
 
 .c-popup__header {
@@ -593,16 +613,44 @@ html {
 }
 
 .c-abilities__icon {
-    transition: transform .2s ease-in-out;
+
     aspect-ratio: 1/1;
     max-width: 100%;
 }
+.c-abilities__img-container{
+    transition: transform .2s ease-in-out;
+    position: relative;
+}
+.c-abilities__icon__border{
+    position: absolute;
+    stroke: #D0A85C;
+    stroke-width: 2px;
+    fill: transparent;
+    inset: -6px;
+}
+.c-abilities__icon__border path{
+    stroke: #D0A85C;
+    stroke-width: 2px;
+    fill: transparent;
+    inset: -6px;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: dash 2s ease-in-out forwards;
+
+}
+
+@keyframes dash {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
 
 .c-abilities__icon:first-child {
     /*padding-left: 0;*/
 }
 
-.c-abilities__icon:hover {
+.c-abilities__img-container:hover {
     transform: translateY(-5px);
 }
 
@@ -626,8 +674,12 @@ html {
         padding: 0 1rem;
     }
     .c-abilities__icon {
-        padding: 12px;
+        /*padding: 12px;*/
     }
+    .c-abilities__img-container:first-child .c-abilities__icon{
+        /*padding-left: 0;*/
+    }
+
 }
 
 
@@ -725,24 +777,24 @@ html {
                 /* bottom-right 2*/ calc(100% - var(--edge-size)) 100%,
                 /* bottom left */ 0 100%,
                 /* top left  1*/ 0 var(--edge-size));
-
+    transition: clip-path 250ms ease-in-out;
 }
 
-.u-notched-border:before,
-.u-notched-border:after {
+.u-notched-border::before,
+.u-notched-border::after {
     content: "";
     position: absolute;
     /*shorthand of top, right, ...*/
     inset: 0;
 }
 
-.u-notched-border:before {
+.u-notched-border::before {
     transition: background-color .5s;
     background: var(--filter-border-color);
     z-index: -2;
 }
 
-.u-notched-border:after {
+.u-notched-border::after {
     transition: clip-path .5s ease;
     background: var(--filter-background-color);
     z-index: -1;
@@ -765,9 +817,27 @@ html {
 
 .u-notched-content:hover {
     clip-path: polygon(100% 0%, 100% 0, 100% 100%, 0 100%, 0 0);
-
 }
 
+.u-notched-to-square:where(:hover, :focus-visible).u-notched-border{
+    clip-path: polygon(
+        /*top left 2*/ 0 0,
+        /*top right*/ 100% 0,
+        /*bottom 1*/ 100% 100% ,
+        /* bottom-right 2*/100%  100%,
+        /* bottom left */ 0 100%,
+        /* top left  1*/ 0 0) !important;
+}
+.u-notched-to-square:where(:hover, :focus-visible).u-notched-border::after {
+    clip-path: polygon(
+        /*top left 2*/      var(--filter-border-width) var(--filter-border-width),
+        /*top right*/       calc(100% - var(--filter-border-width)) var(--filter-border-width),
+        /*bottom 1*/        calc(100% - var(--filter-border-width)) calc(100% - var(--filter-border-width)) ,
+        /* bottom-right 2*/ calc(100% - var(--filter-border-width)) calc(100% - var(--filter-border-width)),
+        /* bottom left */   var(--filter-border-width) calc(100% - var(--filter-border-width)),
+        /* top left  1*/    var(--filter-border-width) var(--filter-border-width));
+    /*margin: 1px;*/
+}
 
 .u-hidden {
     display: none;
@@ -811,6 +881,7 @@ html {
 .u-mg-md{
     margin: 1rem;
 }
+
 
 
 @media (max-width: 576px) {

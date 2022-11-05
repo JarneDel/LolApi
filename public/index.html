@@ -40,8 +40,12 @@
     <article class="c-popup">
         <div class="c-popup__content js-popup-content">
             <div class="c-popup__close">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 15" width="24px" height="24px"><path d="M12.8 8.4V4.8S13 1.1 7 0h-.1c-6 1.1-5.8 4.8-5.8 4.8v3.6c0 1.9-.8 2.5-.8 2.5C1.5 15.3 4.5 15 4.5 15c-1.6-2.1 0-5.8 0-5.8-2.3-.3-1.9-2.7-1.7-3.4 0 0 2.2-.1 3.3 1.6v4.2l.9.9.8-.8V7.5c1.2-1.8 3.3-1.7 3.3-1.6.2.7.6 3.1-1.7 3.3 0 0 1.6 3.8 0 5.8 0 0 3 .3 4.2-4.1.1 0-.8-.6-.8-2.5z"></path></svg>            </div>
-            <div class="c-popup__header">
+                <div class="c-popup__close--svg-container u-notched-border u-notched-to-square js-popup-close" tabindex="0">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 15" width="20px" height="20px">
+                        <path d="M12.8 8.4V4.8S13 1.1 7 0h-.1c-6 1.1-5.8 4.8-5.8 4.8v3.6c0 1.9-.8 2.5-.8 2.5C1.5 15.3 4.5 15 4.5 15c-1.6-2.1 0-5.8 0-5.8-2.3-.3-1.9-2.7-1.7-3.4 0 0 2.2-.1 3.3 1.6v4.2l.9.9.8-.8V7.5c1.2-1.8 3.3-1.7 3.3-1.6.2.7.6 3.1-1.7 3.3 0 0 1.6 3.8 0 5.8 0 0 3 .3 4.2-4.1.1 0-.8-.6-.8-2.5z"></path>
+                    </svg>
+                </div>
+            </div>            <div class="c-popup__header">
                 <img class="c-popup__champ--img js-popup-img"/>
                 <div class="c-champ__title">
                     <div class="c-popup__champ--description js-champ-title">
@@ -144,9 +148,6 @@
                                 <img class="c-abilities__icon js-ability-p-img"
                                      src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/passive/Aatrox_Passive.png"
                                      alt="Aatrox p"/>
-                                <canvas class="style__Canvas-sc-1c9bc3r-1 hsvRhV"
-                                        style="width: 74px; height: 74px; left: -2px; top: -2px" width="74"
-                                        height="74"></canvas>
                                 <img class="c-abilities__icon js-ability-q-img"
                                      src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/spell/AatroxQ.png"
                                      alt="Aatrox q"/>
@@ -171,23 +172,23 @@
                         <div class="u-side-fill"></div>
                     </div>
                     <div class="c-abilities_video">
-                        <video muted autoplay loop class="js-ability-video" data-name="P">
+                        <video muted autoplay loop class="js-ability-video" data-name="P" tabindex="-1">
                             <source src="" type="video/webm" class="js-webm-source"/>
                             <source src="" type="video/mp4" class="js-mp4-source"/>
                         </video>
-                        <video muted autoplay loop class="js-ability-video u-hidden" data-name="Q">
+                        <video muted autoplay loop class="js-ability-video u-hidden" data-name="Q" tabindex="-1">
                             <source src="" type="video/webm" class="js-webm-source"/>
                             <source src="" type="video/mp4" class="js-mp4-source"/>
                         </video>
-                        <video muted autoplay loop class="js-ability-video u-hidden" data-name="W">
+                        <video muted autoplay loop class="js-ability-video u-hidden" data-name="W" tabindex="-1">
                             <source src="" type="video/webm" class="js-webm-source"/>
                             <source src="" type="video/mp4" class="js-mp4-source"/>
                         </video>
-                        <video muted autoplay loop class="js-ability-video u-hidden" data-name="E">
+                        <video muted autoplay loop class="js-ability-video u-hidden" data-name="E" tabindex="-1">
                             <source src="" type="video/webm" class="js-webm-source"/>
                             <source src="" type="video/mp4" class="js-mp4-source"/>
                         </video>
-                        <video muted autoplay loop class="js-ability-video u-hidden" data-name="R">
+                        <video muted autoplay loop class="js-ability-video u-hidden" data-name="R" tabindex="-1">
                             <source src="" type="video/webm" class="js-webm-source"/>
                             <source src="" type="video/mp4" class="js-mp4-source"/>
                         </video>
