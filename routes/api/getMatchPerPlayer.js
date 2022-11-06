@@ -26,6 +26,7 @@ router.get("/matches/:puuid/:champion", async function (req, res, next) {
         }
     }
     console.info("Matches found: ", outmatches.length);
+    outmatches.sort((a, b) => b.info.gameCreation - a.info.gameCreation);
     res.send(outmatches);
 
 });

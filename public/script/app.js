@@ -8,6 +8,7 @@ let version = "12.19.1";
 let userIsLoaded = false;
 let user;
 let ddragon = `https://ddragon.leagueoflegends.com/cdn/${version}`;
+const ddragonImg = "https://ddragon.leagueoflegends.com/cdn/img/";
 let summonerSpells = {};
 let runes = {};
 
@@ -412,7 +413,7 @@ function calculateRunes(firstTree, mainRune, secondTree) {
 }
 
 const statCalculator = async e => {
-    console.info(e);
+    console.debug(e);
     // todo: figure out what to do with the stats
     const url = backend + `/api/v2/matches/${user.puuid}/${e.id}`
     const matchList = await getRequest(url)
@@ -424,16 +425,18 @@ const statCalculator = async e => {
         const matchId = match.matchid;
         const puuidUser = match.puuid;
         const userIndex = match.userIndex;
-        const timeAgo = timeDifference(new Date(), new Date(match.gameEndTimestamp));
-        const win = match.win ? "WIN" : "LOSS";
+        const timeAgo = timeDifference(new Date(), new Date(match.info.gameEndTimestamp));
+
         const card = document.createElement('div');
-        const gameDuration = secondsToMinutes(match.gameDuration);
+        const gameDuration = secondsToMinutes(match.info.gameDuration);
         const participant = match.info.participants[userIndex];
+        const win = participant.win ? "WIN" : "LOSS";
         const champion = participant.championName;
         const firstTree = participant.perks.styles[0].style;
         const mainRune = participant.perks.styles[0].selections[0].perk;
         const secondTree = participant.perks.styles[1].style;
         const runes = calculateRunes(firstTree, mainRune, secondTree);
+        console.info(participant.summoner1Id, participant.summoner2Id);
         // rune stuff
 
         card.classList.add('c-match-card');
@@ -456,13 +459,13 @@ const statCalculator = async e => {
                         <span class="js-level">${participant.champLevel}</span>
                     </div>
                     <div class="c-match-card__header--summoners-runes-container">
-                        <img src="${ddragon}/img/spell/${summonerSpells.summoner1Id}.png"
-                             alt="${summonerSpells.summoner1Id}"/>
-                        <img src="${ddragon}/img/spell/${summonerSpells.summoner2Id}.png"
-                             alt="${summonerSpells.summoner2Id}"/>
-                        <img src="${ddragon}img/${runes.firstTree.icon}"
+                        <img src="${ddragon}/img/spell/${summonerSpells[participant.summoner1Id]}.png"
+                             alt="${participant.summoner1Id}"/>
+                        <img src="${ddragon}/img/spell/${summonerSpells[participant.summoner2Id]}.png"
+                             alt="${participant.summoner2Id}"/>
+                        <img src="${ddragonImg + runes.firstTree.icon}"
                              alt="${runes.firstTree.name}"/>
-                        <img src="${ddragon}/img/${runes.secondTree.icon}"
+                        <img src="${ddragonImg + runes.secondTree.icon}"
                              alt="${runes.secondTree.name}"/>
                     </div>
                     <div class="c-match-card__header--result">
