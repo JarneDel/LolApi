@@ -3,13 +3,11 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../models/db');
 
-router.get("/matches/:region/:username/:champion", async function (req, res, next) {
-    const {region, username, champion} = req.params;
-    const user = await db.getUser(username, region);
-    const matches = await db.getMatchesByPuuid(user.puuid);
+router.get("/matches/:puuid/:champion", async function (req, res, next) {
+    const {puuid, champion} = req.params;
+    const matches = await db.getMatchesByPuuid(puuid);
     let outmatches = [];
     const idOrName = isNaN(champion) ? "championName" : "championId";
-    const puuid = user.puuid;
     console.log("Puuid of user: ", puuid);
     for (const match of matches) {
         let userIndex = match.userIndex;

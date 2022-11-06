@@ -38,14 +38,16 @@
 <div class="c-popup__container js-popup-container u-hidden">
     <div class="c-popup__overlay js-popup-overlay"></div>
     <article class="c-popup">
-        <div class="c-popup__content js-popup-content">
+        <div class="c-popup__container js-popup-content">
             <div class="c-popup__close">
-                <div class="c-popup__close--svg-container u-notched-border u-notched-to-square js-popup-close" tabindex="0">
+                <div class="c-popup__close--svg-container u-notched-border u-notched-to-square js-popup-close"
+                     tabindex="0">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 15" width="20px" height="20px">
                         <path d="M12.8 8.4V4.8S13 1.1 7 0h-.1c-6 1.1-5.8 4.8-5.8 4.8v3.6c0 1.9-.8 2.5-.8 2.5C1.5 15.3 4.5 15 4.5 15c-1.6-2.1 0-5.8 0-5.8-2.3-.3-1.9-2.7-1.7-3.4 0 0 2.2-.1 3.3 1.6v4.2l.9.9.8-.8V7.5c1.2-1.8 3.3-1.7 3.3-1.6.2.7.6 3.1-1.7 3.3 0 0 1.6 3.8 0 5.8 0 0 3 .3 4.2-4.1.1 0-.8-.6-.8-2.5z"></path>
                     </svg>
                 </div>
-            </div>            <div class="c-popup__header">
+            </div>
+            <div class="c-popup__header">
                 <img class="c-popup__champ--img js-popup-img"/>
                 <div class="c-champ__title">
                     <div class="c-popup__champ--description js-champ-title">
@@ -55,7 +57,7 @@
                 </div>
             </div>
             <div class="c-popup__content">
-                <div class="c-row">
+                <div class="c-row c-row__abilities">
                     <div class="c-row__role u-1-of-1-bp-1">
                         <div class="c-row__role--roles">
                             <div class="js-role-icon c-role__box u-hidden" data-name="Fighter">
@@ -126,7 +128,7 @@
                         </div>
                     </div>
                     <div class="c-row__lore u-1-of-1-bp-1">
-                        <p class="c-row__lore--text js-champ-lore">
+                        <p class="c-row__lore--text c-popup__text js-champ-lore">
                             Once honored defenders of Shurima against the Void, Aatrox and
                             his brethren would eventually become an even greater threat to
                             Runeterra, and were defeated only by cunning mortal sorcery.
@@ -143,7 +145,7 @@
                     <div class="c-popup__abilities--text-container">
                         <div class="u-side-fill"></div>
                         <div class="c-abilities__text u-1-of-1-bp-1">
-                            <h2 class="c-abilities__title">Abilities</h2>
+                            <h2>Abilities</h2>
                             <div class="c-abilities__icon-container js-ability-img-container">
                                 <img class="c-abilities__icon js-ability-p-img"
                                      src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/passive/Aatrox_Passive.png"
@@ -192,6 +194,132 @@
                             <source src="" type="video/webm" class="js-webm-source"/>
                             <source src="" type="video/mp4" class="js-mp4-source"/>
                         </video>
+                    </div>
+                </div>
+                <div class="c-popup__match-history c-row">
+                    <h2>Match History</h2>
+                    <p class="js-no-user">You need to search for a user in to see your match history</p>
+                    <div class="c-match-card__container js-card-container">
+                        <div class="c-match-card js-match-card">
+                            <div class="c-match-card__header u-notched-border">
+                                <div class="c-match-card__header--metadata">
+                                    <h3 class="js-game-type">URF</h3>
+                                    <p class="js-game-date">14h ago</p>
+                                    <p>
+                                        <span class="js-outcome u-negative-color">LOSS</span>
+                                        <span class="c-match-card__header--metadata--game-duration">20:00</span>
+                                    </p>
+                                </div>
+
+                                <div class="c-match-card__header--champ js-champion-played">
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/champion/Aatrox.png"
+                                         alt="Aatrox"/>
+                                    <span class="js-level">18</span>
+                                </div>
+                                <div class="c-match-card__header--summoners-runes-container">
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/spell/SummonerFlash.png"
+                                         alt="Flash"/>
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/spell/SummonerDot.png"
+                                         alt="Ignite"/>
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/DarkHarvest/DarkHarvest.png"
+                                         alt="Dark Harvest"/>
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/7201_Precision.png"
+                                         alt="Precision"/>
+                                </div>
+                                <div class="c-match-card__header--result">
+                                    <p class="c-match-card__header--result--kda">
+                                        <span class="js-kills">6</span> /
+                                        <span class="js-deaths u-negative-color">7</span> /
+                                        <span class="js-assists">8</span>
+                                    </p>
+                                    <p class="c-match-card__header--result--kda-number"><span class="js-kda">2.00</span>
+                                        KDA</p>
+                                    <p class="c-match-card__header--result--cs">
+                                        <span class="js-minions-killed">200</span> CS
+                                        (<span class="js-minions-killed-per-minute">10.00</span>)
+                                    </p>
+                                    <p class="c-match-card__header--result--vision"><span class="js-vision">22</span>
+                                        vision</p>
+                                </div>
+                                <div class="c-match-card__header--items">
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/item/3153.png"
+                                         alt="Blade of the Ruined King">
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/item/3078.png"
+                                         alt="Trinity Force">
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/item/3071.png"
+                                         alt="The Black Cleaver">
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/item/3142.png"
+                                         alt="Youmuu's Ghostblade">
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/item/3135.png"
+                                         alt="Void Staff">
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/item/3193.png"
+                                         alt="Gargoyle Stoneplate">
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/item/3340.png"
+                                         alt="Warding Totem (Trinket)">
+                                </div>
+                                <div class="js-expand">⬇</div>
+                            </div>
+                        </div>
+                        <div class="c-match-card js-match-card">
+                            <div class="c-match-card__header u-notched-border">
+                                <div class="c-match-card__header--metadata ">
+                                    <h3 class="js-game-type">URF</h3>
+                                    <p class="js-game-date">14h ago</p>
+                                    <p>
+                                        <span class="js-outcome u-negative-color">LOSS</span>
+                                        <span class="c-match-card__header--metadata--game-duration">20:00</span>
+                                    </p>
+                                </div>
+
+                                <div class="c-match-card__header--champ js-champion-played">
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/champion/Aatrox.png"
+                                         alt="Aatrox"/>
+                                    <span class="js-level">18</span>
+                                </div>
+                                <div class="c-match-card__header--summoners-runes-container">
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/spell/SummonerFlash.png"
+                                         alt="Flash"/>
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/spell/SummonerDot.png"
+                                         alt="Ignite"/>
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/DarkHarvest/DarkHarvest.png"
+                                         alt="Dark Harvest"/>
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/7201_Precision.png"
+                                         alt="Precision"/>
+                                </div>
+                                <div class="c-match-card__header--result">
+                                    <p class="c-match-card__header--result--kda">
+                                        <span class="js-kills">6</span> /
+                                        <span class="js-deaths u-negative-color">7</span> /
+                                        <span class="js-assists">8</span>
+                                    </p>
+                                    <p class="c-match-card__header--result--kda-number"><span class="js-kda">2.00</span>
+                                        KDA</p>
+                                    <p class="c-match-card__header--result--cs">
+                                        <span class="js-minions-killed">200</span> CS
+                                        (<span class="js-minions-killed-per-minute">10.00</span>)
+                                    </p>
+                                    <p class="c-match-card__header--result--vision"><span class="js-vision">22</span>
+                                        vision</p>
+                                </div>
+                                <div class="c-match-card__header--items">
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/item/3153.png"
+                                         alt="Blade of the Ruined King">
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/item/3078.png"
+                                         alt="Trinity Force">
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/item/3071.png"
+                                         alt="The Black Cleaver">
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/item/3142.png"
+                                         alt="Youmuu's Ghostblade">
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/item/3135.png"
+                                         alt="Void Staff">
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/item/3193.png"
+                                         alt="Gargoyle Stoneplate">
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.19.1/img/item/3340.png"
+                                         alt="Warding Totem (Trinket)">
+                                </div>
+                                <div class="js-expand">⬇</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

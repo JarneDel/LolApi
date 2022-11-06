@@ -9,8 +9,8 @@
 
     /* notched corner */
     --filter-background-color: white;
-    --filter-border-width: .075em;
-    --filter-border-color: #C1C1C1;
+    --notched-border-width: .075em;
+    --notched-border-color: #C1C1C1;
     --edge-size: 1em;
 }
 
@@ -124,8 +124,8 @@ html {
 
 
 .c-searchBar.c-form-valid {
-    --filter-border-color: green;
-    --filter-border-width: .15em;
+    --notched-border-color: green;
+    --notched-border-width: .15em;
 }
 
 .c-searchBar__search-icon {
@@ -284,12 +284,17 @@ html {
 
 
 
-
-
-.c-popup__content {
+.c-popup__container{
     padding: 0;
     margin: 0;
 }
+
+.c-popup__content {
+    margin: 0 1rem;
+    padding: 0;
+}
+
+
 
 .c-popup__close{
     position: absolute;
@@ -302,7 +307,39 @@ html {
     margin: .5rem;
     z-index: 1000;
     fill: white;
+}
 
+.c-popup p{
+    font-size: 1rem;
+    line-height: 1.2;
+    /*padding: 0 1rem;*/
+    font-family: var(--sans-font);
+    color: var(--dark-neutral-text-color);
+}
+
+.c-popup h2{
+    font-size: 2.75rem;
+    font-family: var(--seriffont);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-style: italic;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--dark-neutral-text-color);
+}
+
+.c-popup h3{
+    font-family: var(--seriffont);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--dark-neutral-text-color);
+}
+.c-popup h4{
+    color: var(--dark-neutral-text-color);
+    font-size: .75rem;
+    font-family: var(--seriffont);
+    font-weight: 400;
+    text-transform: uppercase;
 }
 
 .c-popup__close--svg-container{
@@ -360,8 +397,14 @@ html {
 
 .c-popup .u-notched-border {
     --filter-background-color: #000913;
-    --filter-border-color: white;
+    --notched-border-color: white;
 }
+
+
+.c-popup__match-history{
+}
+
+
 
 @media (min-width: 576px) {
     .c-popup {
@@ -372,7 +415,6 @@ html {
         max-height: 90vh;
         /*min-height: unset;*/
     }
-
     /* darken the page when popup is shown*/
     .c-popup__overlay {
         position: fixed;
@@ -382,6 +424,13 @@ html {
         height: 100%;
         background: rgba(0, 0, 0, 0.5);
         z-index: 99;
+    }
+    .c-popup__content {
+        padding: 0;
+        margin: 0;
+    }
+    .c-popup h2{
+        font-size: 3.75rem;
     }
 
     .c-popup__champ--description {
@@ -412,19 +461,23 @@ html {
     }
 }
 
-
 .c-row {
+    border-bottom: 1px solid var(--dark-line-color);
+    padding: 1rem 0;
+}
+
+
+.c-row__abilities {
     display: flex;
     flex-direction: row;
     justify-content: center;
     flex-wrap: wrap;
     align-items: center;
-    border-bottom: 1px solid var(--dark-line-color);
-    padding: 1rem 0;
+
 }
 
 @media (min-width: 576px) {
-    .c-row {
+    .c-row__abilities {
         flex-wrap: nowrap;
         justify-content: space-between;
         padding: 3.75rem 1rem;
@@ -439,17 +492,11 @@ html {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 1rem
 }
 
 
 .c-row__lore--text {
     max-width: 30rem;
-    font-size: 1.1rem;
-    line-height: 1.2;
-    /*padding: 0 1rem;*/
-    font-family: var(--sans-font);
-    color: var(--dark-neutral-text-color);
 }
 
 .c-row__role {
@@ -520,7 +567,6 @@ html {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
-    padding: 0 1rem;
     margin-top: 1rem;
     border-bottom: 1px solid var(--dark-line-color);
 }
@@ -542,6 +588,7 @@ html {
     justify-content: center;
     align-items: center;
     margin-bottom: 1rem;
+    position: relative;
 }
 
 .c-abilities__text {
@@ -550,8 +597,7 @@ html {
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    /*padding: 0 1rem;*/
-    margin-top: 1rem;
+
 }
 
 .c-abilities_video video {
@@ -561,16 +607,7 @@ html {
     border-radius: 5px;
 }
 
-.c-abilities__title {
-    font-size: 3.75rem;
-    font-family: var(--seriffont);
-    font-weight: 700;
-    text-transform: uppercase;
-    font-style: italic;
-    margin-top: 0;
-    margin-bottom: 1rem;
-    color: var(--dark-neutral-text-color);
-}
+
 
 .c-abilities__icon-container {
     width: 100%;
@@ -600,9 +637,6 @@ html {
 }
 
 .c-abilities__description h3 {
-    font-family: var(--seriffont);
-    font-weight: 700;
-    text-transform: uppercase;
     margin-top: 0;
     margin-bottom: 1rem;
 }
@@ -659,6 +693,9 @@ html {
 }
 
 @media (min-width: 576px){
+
+
+
     .c-abilities_video{
         padding: 0 1rem;
         margin: 3rem 0;
@@ -672,6 +709,7 @@ html {
     }
     .c-abilities__text {
         padding: 0 1rem;
+        margin-top: 1rem;
     }
     .c-abilities__icon {
         /*padding: 12px;*/
@@ -682,6 +720,114 @@ html {
 
 }
 
+/* region statistics*/
+.c-match-card__container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    gap: 1rem;
+}
+.c-match-card__container span{
+    color: var(--dark-neutral-text-color);
+}
+
+
+.c-match-card{
+    display: flex;
+    flex-direction: column;
+}
+.c-match-card__header{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 2rem;
+    align-items: center;
+    padding: 1rem;
+    --notched-border-color: var(--dark-line-color) !important;
+    --notched-border-width: .1em !important;
+}
+
+.c-match-card__header--metadata{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.c-match-card__header--metadata :where(h3, p){
+    margin: 0;
+}
+
+.c-match-card__header--summoners-runes-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+.c-match-card__header--summoners-runes-container img:nth-child(odd){
+    grid-row: 1;
+}
+.c-match-card__header--summoners-runes-container img:nth-child(even){
+    grid-row: 2;
+}
+
+
+
+.c-match-card__header--champ{
+    position: relative;
+}
+
+.c-match-card__header--champ img{
+    width: 4rem;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 5px;
+}
+.c-match-card__header--champ span{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 0 5px;
+    background-color: #000913;
+}
+
+.c-match-card__header--summoners-runes-container img{
+    width: 2rem;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+}
+
+.c-match-card__header--result{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.c-match-card__header--result p{
+    margin: 0;
+}
+.c-match-card__header--items{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 4px;
+}
+
+.c-match-card__header--items img{
+    width: 2rem;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+}
+
+
+.c-match-card__header--items img:nth-child(odd){
+    grid-row: 1;
+}
+.c-match-card__header--items img:nth-child(even){
+    grid-row: 2;
+}
+
+/* endregion */
 
 
 
@@ -790,7 +936,7 @@ html {
 
 .u-notched-border::before {
     transition: background-color .5s;
-    background: var(--filter-border-color);
+    background: var(--notched-border-color);
     z-index: -2;
 }
 
@@ -799,12 +945,12 @@ html {
     background: var(--filter-background-color);
     z-index: -1;
     clip-path: polygon(
-        /*top left 2*/ calc(var(--edge-size) + var(--filter-border-width) * .25) var(--filter-border-width),
-                /*top right*/ calc(100% - var(--filter-border-width)) var(--filter-border-width),
-                /*bottom 1*/ calc(100% - var(--filter-border-width)) calc(100% - calc(var(--edge-size) + var(--filter-border-width) * .25)),
-                /* bottom-right 2*/ calc(100% - calc(var(--edge-size) + var(--filter-border-width) * .25)) calc(100% - var(--filter-border-width)),
-                /* bottom left */ var(--filter-border-width) calc(100% - var(--filter-border-width)),
-                /* top left  1*/ var(--filter-border-width) calc(var(--edge-size) + var(--filter-border-width) * .25)
+        /*top left 2*/ calc(var(--edge-size) + var(--notched-border-width) * .25) var(--notched-border-width),
+                /*top right*/ calc(100% - var(--notched-border-width)) var(--notched-border-width),
+                /*bottom 1*/ calc(100% - var(--notched-border-width)) calc(100% - calc(var(--edge-size) + var(--notched-border-width) * .25)),
+                /* bottom-right 2*/ calc(100% - calc(var(--edge-size) + var(--notched-border-width) * .25)) calc(100% - var(--notched-border-width)),
+                /* bottom left */ var(--notched-border-width) calc(100% - var(--notched-border-width)),
+                /* top left  1*/ var(--notched-border-width) calc(var(--edge-size) + var(--notched-border-width) * .25)
     );
 }
 
@@ -830,12 +976,12 @@ html {
 }
 .u-notched-to-square:where(:hover, :focus-visible).u-notched-border::after {
     clip-path: polygon(
-        /*top left 2*/      var(--filter-border-width) var(--filter-border-width),
-        /*top right*/       calc(100% - var(--filter-border-width)) var(--filter-border-width),
-        /*bottom 1*/        calc(100% - var(--filter-border-width)) calc(100% - var(--filter-border-width)) ,
-        /* bottom-right 2*/ calc(100% - var(--filter-border-width)) calc(100% - var(--filter-border-width)),
-        /* bottom left */   var(--filter-border-width) calc(100% - var(--filter-border-width)),
-        /* top left  1*/    var(--filter-border-width) var(--filter-border-width));
+        /*top left 2*/      var(--notched-border-width) var(--notched-border-width),
+        /*top right*/       calc(100% - var(--notched-border-width)) var(--notched-border-width),
+        /*bottom 1*/        calc(100% - var(--notched-border-width)) calc(100% - var(--notched-border-width)) ,
+        /* bottom-right 2*/ calc(100% - var(--notched-border-width)) calc(100% - var(--notched-border-width)),
+        /* bottom left */   var(--notched-border-width) calc(100% - var(--notched-border-width)),
+        /* top left  1*/    var(--notched-border-width) var(--notched-border-width));
     /*margin: 1px;*/
 }
 
@@ -858,11 +1004,11 @@ html {
 }
 
 .u-negative-color {
-    color: #ff4e50;
+    color: #ff4e50 !important;
 }
 
 .u-positive-color {
-    color: green;
+    color: green !important;
 }
 
 .u-mt-md {

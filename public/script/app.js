@@ -1,14 +1,15 @@
 let htmlElements = {
-    popup: {},
-    abilities: {},
-    filters: {}
+    popup: {}, abilities: {}, filters: {}
 };
 let allChampions = {};
 const backend = window.location.origin;
 let version = "12.19.1";
 
 let userIsLoaded = false;
-
+let user;
+let ddragon = `https://ddragon.leagueoflegends.com/cdn/${version}`;
+let summonerSpells = {};
+let runes = {};
 
 // region api
 
@@ -19,17 +20,15 @@ const getRequest = async function (url) {
 };
 const postRequest = async function (url, data) {
     return await fetch(url, {
-        method: "POST",
-        headers: {
+        method: "POST", headers: {
             "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        }, body: JSON.stringify(data),
     })
         .then((res) => res.json())
         .catch((err) => console.warn(err));
 }
 const getChampions = async () => {
-    const champions = await getRequest(`https://ddragon.leagueoflegends.com/cdn/${version}/data/en_GB/championFull.json`);
+    const champions = await getRequest(`${ddragon}/data/en_GB/championFull.json`);
     console.log(champions);
     allChampions = champions;
     fillChampions(champions);
@@ -64,6 +63,7 @@ const loadUser = async userObject => {
     let url = backend + "/api/cacheMatches/";
     const res = await postRequest(url, userObject)
     console.info(url, res)
+    user = userObject
 
     // get the matches per champion
     url = backend + "/api/v2/matches/" + userObject.puuid;
@@ -122,7 +122,7 @@ const listenToEvents = () => {
     const searchBar = document.querySelector('.c-searchBar')
 
     searchInput.addEventListener('keyup', (e) => {
-        console.log("change")
+        // console.log("change")
         console.info(searchBar)
         searchBar.classList.remove('c-form-valid')
         console.info(searchBar)
@@ -148,7 +148,7 @@ const listenToEvents = () => {
         // so that the element is selectable with the keyboard
         item.addEventListener("keyup", (e) => {
             if (a11yClick(e)) {
-                console.log("a11y click");
+                // console.log("a11y click");
                 tagClicked(e, item);
             }
         });
@@ -234,6 +234,8 @@ const createSvg = (name) => {
     // create polygon
     const svgPathElement = document.createElementNS("http://www.w3.org/2000/svg", 'path');
     svgPathElement.setAttribute("d", "M 0 0 53 0 74 22 75 75 0 75 0 0z")
+
+
     // animate polygon
     const svgAnimateElement = document.createElementNS("http://www.w3.org/2000/svg", 'animate');
     svgAnimateElement.setAttribute("from", "1000");
@@ -255,12 +257,11 @@ const createSvg = (name) => {
 }
 
 
-
 const displayAndQsAbilityImg = function (champion) {
     // nesting the functions to use the champion variable
     function abilityImgClicked(e) {
-        console.log(e);
-        console.log(this);
+        // console.log(e);
+        // console.log(this);
         // remove the border from all elements
         document.querySelectorAll(".c-abilities__icon__border").forEach((border) => {
             border.classList.add("u-hidden");
@@ -271,12 +272,11 @@ const displayAndQsAbilityImg = function (champion) {
         });
 
 
-
         // remove the u-selected-icon class from the selected icon
         try {
             document.querySelector(".u-selected-icon").classList.remove("u-selected-icon");
         } catch (e) {
-            console.log("No icon selected");
+            console.warn("No icon selected");
         }
         // add the u-selected-icon class to the clicked icon
         this.classList.add("u-selected-icon")
@@ -292,7 +292,7 @@ const displayAndQsAbilityImg = function (champion) {
             const id = this.dataset.id;
             for (const spell of champion.spells) {
                 if (spell.id === id) {
-                    console.log(spell);
+                    // console.log(spell);
                     htmlElements.abilities.name.textContent = spell.name;
                     htmlElements.abilities.description.innerHTML = spell.description;
                     // get the last character of the id: [q, w, e, r]
@@ -355,10 +355,156 @@ const displayAndQsAbilityImg = function (champion) {
 
 };
 
-const statCalculator = e => {
-    const stats = e.stats;
-    console.info(stats);
+function timeDifference(current, previous) {
+
+    const msPerMinute = 60 * 1000;
+    const msPerHour = msPerMinute * 60;
+    const msPerDay = msPerHour * 24;
+    const msPerMonth = msPerDay * 30;
+    const msPerYear = msPerDay * 365;
+
+    const elapsed = current - previous;
+
+    if (elapsed < msPerMinute) {
+        return Math.round(elapsed / 1000) + ' seconds ago';
+    } else if (elapsed < msPerHour) {
+        return Math.round(elapsed / msPerMinute) + ' minutes ago';
+    } else if (elapsed < msPerDay) {
+        return Math.round(elapsed / msPerHour) + ' hours ago';
+    } else if (elapsed < msPerMonth) {
+        return Math.round(elapsed / msPerDay) + ' days ago';
+    } else if (elapsed < msPerYear) {
+        return Math.round(elapsed / msPerMonth) + ' months ago';
+    } else {
+        return Math.round(elapsed / msPerYear) + ' years ago';
+    }
+}
+
+function secondsToMinutes(gameDuration) {
+    const minutes = Math.floor(gameDuration / 60);
+    const seconds = gameDuration % 60;
+    return `${minutes}m ${seconds}s`;
+}
+
+function calculateRunes(firstTree, mainRune, secondTree) {
+    if (runes == null) throw new Error("Runes not loaded");
+    let out = {
+        firstTree: {}, secondTree: {},
+    };
+    runes.forEach(rune => {
+        if (rune.id === firstTree) {
+            console.info(rune)
+            rune.slots[0].runes.forEach(specificRune => {
+                if (specificRune.id === mainRune) {
+                    out.firstTree.icon = specificRune.icon
+                    out.firstTree.name = specificRune.name
+                    out.firstTree.key = specificRune.key
+                }
+            });
+        }
+        if (rune.id === secondTree) {
+            out.secondTree.name = rune.name;
+            out.secondTree.icon = rune.icon;
+            out.secondTree.key = rune.key;
+        }
+    });
+    return out;
+}
+
+const statCalculator = async e => {
+    console.info(e);
     // todo: figure out what to do with the stats
+    const url = backend + `/api/v2/matches/${user.puuid}/${e.id}`
+    const matchList = await getRequest(url)
+    const cards = document.querySelector('.js-card-container');
+    // clear the cards
+    cards.innerHTML = "";
+    matchList.forEach(match => {
+        console.log(match);
+        const matchId = match.matchid;
+        const puuidUser = match.puuid;
+        const userIndex = match.userIndex;
+        const timeAgo = timeDifference(new Date(), new Date(match.gameEndTimestamp));
+        const win = match.win ? "WIN" : "LOSS";
+        const card = document.createElement('div');
+        const gameDuration = secondsToMinutes(match.gameDuration);
+        const participant = match.info.participants[userIndex];
+        const champion = participant.championName;
+        const firstTree = participant.perks.styles[0].style;
+        const mainRune = participant.perks.styles[0].selections[0].perk;
+        const secondTree = participant.perks.styles[1].style;
+        const runes = calculateRunes(firstTree, mainRune, secondTree);
+        // rune stuff
+
+        card.classList.add('c-match-card');
+        card.classList.add('js-match-card');
+        card.innerHTML = `
+            <div class="c-match-card js-match-card">
+                <div class="c-match-card__header u-notched-border">
+                    <div class="c-match-card__header--metadata">
+                        <h3 class="js-game-type">${match.info.gameMode}</h3>
+                        <p class="js-game-date">${timeAgo}</p>
+                        <p>
+                            <span class="js-outcome u-negative-color">${win}</span>
+                            <span class="c-match-card__header--metadata--game-duration">${gameDuration}</span>
+                        </p>
+                    </div>
+
+                    <div class="c-match-card__header--champ js-champion-played">
+                        <img src="${ddragon}/img/champion/${champion}.png"
+                             alt="${champion}"/>
+                        <span class="js-level">${participant.champLevel}</span>
+                    </div>
+                    <div class="c-match-card__header--summoners-runes-container">
+                        <img src="${ddragon}/img/spell/${summonerSpells.summoner1Id}.png"
+                             alt="${summonerSpells.summoner1Id}"/>
+                        <img src="${ddragon}/img/spell/${summonerSpells.summoner2Id}.png"
+                             alt="${summonerSpells.summoner2Id}"/>
+                        <img src="${ddragon}img/${runes.firstTree.icon}"
+                             alt="${runes.firstTree.name}"/>
+                        <img src="${ddragon}/img/${runes.secondTree.icon}"
+                             alt="${runes.secondTree.name}"/>
+                    </div>
+                    <div class="c-match-card__header--result">
+                        <p class="c-match-card__header--result--kda">
+                            <span class="js-kills">${participant.kills}</span> /
+                            <span class="js-deaths u-negative-color">${participant.deaths}</span> /
+                            <span class="js-assists">${participant.assists}</span>
+                        </p>
+                        <p class="c-match-card__header--result--kda-number"><span class="js-kda">
+                            ${((participant.kills + participant.assists) / participant.deaths).toFixed(2)}</span>
+                            KDA</p>
+                        <p class="c-match-card__header--result--cs">
+                            <span class="js-minions-killed">${participant.neutralMinionsKilled + participant.totalMinionsKilled}</span> CS
+                            (<span class="js-minions-killed-per-minute">${((participant.neutralMinionsKilled + participant.totalMinionsKilled)/(gameDuration/60)).toFixed(2)}</span>)
+                        </p>
+                        <p class="c-match-card__header--result--vision"><span class="js-vision">${participant.visionScore}</span>
+                            vision</p>
+                    </div>
+                    <div class="c-match-card__header--items">
+                        <img src="${ddragon}/img/item/${participant.item0}.png"
+                             alt="item0">
+                        <img src="${ddragon}/img/item/${participant.item1}.png"
+                             alt="item1">
+                        <img src="${ddragon}/img/item/${participant.item2}.png"
+                             alt="item2">
+                        <img src="${ddragon}/img/item/${participant.item3}.png"
+                             alt="item3">
+                        <img src="${ddragon}/img/item/${participant.item4}.png"
+                             alt="item4">
+                        <img src="${ddragon}/img/item/${participant.item5}.png"
+                             alt="item5">
+                        <img src="${ddragon}/img/item/${participant.item6}.png"
+                             alt="item6">
+                    </div>
+                    <div class="js-expand">⬇</div>
+                </div>
+            </div>`
+        cards.appendChild(card);
+
+    });
+
+
 };
 
 const showPopup = e => {
@@ -366,7 +512,7 @@ const showPopup = e => {
     htmlElements.submitUser.tabIndex = -1;
 
 
-    console.log(e);
+    // console.log(e);
     htmlElements.popup.container.classList.remove("u-hidden");
     document.documentElement.style.overflow = "hidden";
     htmlElements.popup.image.src = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${e.id}_0.jpg`;
@@ -375,9 +521,9 @@ const showPopup = e => {
     htmlElements.popup.lore.textContent = e.lore;
     for (const icon of htmlElements.popup.tagIconAll) {
         const tag = icon.dataset.name;
-        console.log(tag, e.tags);
+        // console.log(tag, e.tags);
         if (e.tags.includes(tag)) {
-            console.log("Tag found");
+            // console.log("Tag found");
             icon.classList.remove("u-hidden");
         }
     }
@@ -468,7 +614,7 @@ function createBodyElement(champion) {
 // endregion
 
 function fillChampions(champions) {
-    console.log("fillChampions");
+    // console.log("fillChampions");
     const championsName = Object.keys(champions.data);
     let i = 0;
     for (const dataKey in champions.data) {
@@ -489,7 +635,7 @@ function fillChampions(champions) {
         card.dataset.championId = championId;
         card.classList.add('u-notched-content');
         card.addEventListener("click", (e) => {
-            console.log("clicked");
+            // console.log("clicked");
             showPopup(champion);
         });
         // append child to container element
@@ -500,6 +646,22 @@ function fillChampions(champions) {
 
 
 // endregion
+
+async function getSummonerSpells() {
+    const res = await getRequest(ddragon + "/data/en_GB/summoner.json");
+    console.log(res.data);
+    const data = res.data;
+    for (const key in data) {
+        const name = data[key].id;
+        const id = data[key].key;
+        summonerSpells[id] = name;
+    }
+}
+
+async function getRunes() {
+    runes = await getRequest(ddragon + "/data/en_GB/runesReforged.json");
+
+}
 
 // region init
 document.addEventListener("DOMContentLoaded", function () {
@@ -527,7 +689,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // fill cards with champions
     getApiVersion().then((res) => {
         version = res;
+        ddragon = `https://ddragon.leagueoflegends.com/cdn/${version}`;
         getChampions();
+        getSummonerSpells();
+        getRunes();
     });
 
 });
