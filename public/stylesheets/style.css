@@ -15,18 +15,20 @@
 
 /*    loading icon*/
     --loader-color: #fff;
-    --loader-wheel-color: #000;
+    --loader-wheel-color: var(--dark-background-color);
 }
 
 html {
-    /*eventjes een comment uit frustratie, maar zonder width 100vw, kan je op mobile een klein beetje naar rechts scrollen 🤯🤯*/
-    /*overflow-y: auto !important;*/
+
 }
 
 
 body {
     /*padding: 1rem;*/
-    font: 14px var(--sans-font)
+    font: 14px var(--sans-font);
+    min-height: 100vh;
+    position: relative;
+    padding-bottom: 5rem;
 }
 
 html, body {
@@ -43,6 +45,19 @@ a {
 :root {
     --padding-button: 18px;
 }
+
+
+footer{
+    background-color: var(--dark-background-color);
+    color: var(--dark-gray-text-color);
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+    position: absolute;
+    inset: auto 0 0 0;
+}
+
+
 
 .userForm {
     padding-top: 1rem;
@@ -406,6 +421,10 @@ html {
 
 
 .c-popup__match-history{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 /* region loading icon */
@@ -417,6 +436,12 @@ html {
     height: 80px;
     animation: spin 1s cubic-bezier(.79,.14,.15,.86) infinite
 }
+
+.c-not-logged-in-img{
+    display: block;
+    aspect-ratio: 1/1;
+}
+
 
 @keyframes spin {
     0% { transform: rotate(0deg); }

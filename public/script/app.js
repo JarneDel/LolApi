@@ -155,6 +155,17 @@ const listenToEvents = () => {
         });
     });
 
+    document.querySelector('.js-to-searchbar').addEventListener('click', () => {
+        document.querySelector('.js-search-username').focus()
+        hidePopup();
+    });
+    document.querySelector('.js-to-searchbar').addEventListener('keyup', () => {
+        if (a11yClick(e)) {
+            document.querySelector('.js-search-username').focus()
+            hidePopup();
+        }
+    });
+
 };
 
 // endregion
@@ -412,12 +423,33 @@ function calculateRunes(firstTree, mainRune, secondTree) {
     return out;
 }
 
+function showLoadingIconStatistics(ancestor) {
+    ancestor.querySelector('.c-loader').classList.remove('u-hidden');
+}
+function hideLoadingIconStatistics(ancestor) {
+    ancestor.querySelector('.c-loader').classList.add('u-hidden');
+}
+
+function hideNoUser(ancestor) {
+    ancestor.querySelector('.js-no-user').classList.add('u-hidden');
+    ancestor.querySelector('.js-no-user-img').classList.add('u-hidden');
+}
+function showNoUser(ancestor) {
+    ancestor.querySelector('.js-no-user').classList.remove('u-hidden');
+    ancestor.querySelector('.js-no-user-img').classList.remove('u-hidden');
+}
+
 const statCalculator = async e => {
     console.debug(e);
+    const containerElement = document.querySelector('.js-match-history')
     // todo: figure out what to do with the stats
+    // show loading icon
+    showLoadingIconStatistics(containerElement);
+    // hide notfound
+    hideNoUser(containerElement);
     const url = backend + `/api/v2/matches/${user.puuid}/${e.id}`
     const matchList = await getRequest(url)
-    const cards = document.querySelector('.js-card-container');
+    const cards = containerElement.querySelector('.js-card-container');
     // clear the cards
     cards.innerHTML = "";
     matchList.forEach(match => {
@@ -507,6 +539,8 @@ const statCalculator = async e => {
                 </div>
             </div>`
         cards.appendChild(card);
+        // hide loading icon
+        hideLoadingIconStatistics(containerElement);
 
     });
 
@@ -536,6 +570,8 @@ const showPopup = e => {
     displayAndQsAbilityImg(e);
     if (userIsLoaded) {
         statCalculator(e);
+    }else{
+        showNoUser(htmlElements.popup.content)
     }
 };
 

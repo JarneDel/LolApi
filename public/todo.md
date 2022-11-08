@@ -6,3 +6,5 @@
 
 [//]: # (- [ ] inputvalidation: on change: remove the c-form-valid class)
 - [ ] Loading animation for cards, and for the champion statistics
+- [ ] focus states for the input fields
+- [ ] itemid = 0 -> no item no fetch -> show icon border
