@@ -12,6 +12,10 @@
     --notched-border-width: .075em;
     --notched-border-color: #C1C1C1;
     --edge-size: 1em;
+
+/*    loading icon*/
+    --loader-color: #fff;
+    --loader-wheel-color: #000;
 }
 
 html {
@@ -404,7 +408,22 @@ html {
 .c-popup__match-history{
 }
 
+/* region loading icon */
+.c-loader{
+    border: 8px solid var(--loader-wheel-color); /* Light grey */
+    border-right: 8px solid var(--loader-color); /* Blue */
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: spin 1s cubic-bezier(.79,.14,.15,.86) infinite
+}
 
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* endregion */
 
 @media (min-width: 576px) {
     .c-popup {

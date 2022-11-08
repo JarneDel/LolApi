@@ -431,11 +431,14 @@ const statCalculator = async e => {
         const gameDuration = secondsToMinutes(match.info.gameDuration);
         const participant = match.info.participants[userIndex];
         const win = participant.win ? "WIN" : "LOSS";
+        const winColor = participant.win ? "u-positive-color" : "u-negative-color";
         const champion = participant.championName;
         const firstTree = participant.perks.styles[0].style;
         const mainRune = participant.perks.styles[0].selections[0].perk;
         const secondTree = participant.perks.styles[1].style;
         const runes = calculateRunes(firstTree, mainRune, secondTree);
+        const minionsKilled = participant.totalMinionsKilled + participant.neutralMinionsKilled;
+        const minionsPerMinute = (minionsKilled / match.info.gameDuration * 60).toFixed(2);
         console.info(participant.summoner1Id, participant.summoner2Id);
         // rune stuff
 
@@ -448,7 +451,7 @@ const statCalculator = async e => {
                         <h3 class="js-game-type">${match.info.gameMode}</h3>
                         <p class="js-game-date">${timeAgo}</p>
                         <p>
-                            <span class="js-outcome u-negative-color">${win}</span>
+                            <span class="js-outcome ${winColor}">${win}</span>
                             <span class="c-match-card__header--metadata--game-duration">${gameDuration}</span>
                         </p>
                     </div>
@@ -478,8 +481,8 @@ const statCalculator = async e => {
                             ${((participant.kills + participant.assists) / participant.deaths).toFixed(2)}</span>
                             KDA</p>
                         <p class="c-match-card__header--result--cs">
-                            <span class="js-minions-killed">${participant.neutralMinionsKilled + participant.totalMinionsKilled}</span> CS
-                            (<span class="js-minions-killed-per-minute">${((participant.neutralMinionsKilled + participant.totalMinionsKilled)/(gameDuration/60)).toFixed(2)}</span>)
+                            <span class="js-minions-killed">${minionsKilled}</span> CS
+                            (<span class="js-minions-killed-per-minute">${minionsPerMinute}</span>)
                         </p>
                         <p class="c-match-card__header--result--vision"><span class="js-vision">${participant.visionScore}</span>
                             vision</p>

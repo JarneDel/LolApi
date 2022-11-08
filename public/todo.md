@@ -1,18 +1,8 @@
-- [x] js- make sure that the selected spell image has .u-selected-icon class
-- [ ] style the selected spell image
-- [x] DARK THEME
-- [x] Make video transitions smoother by preloading all the ability videos
-- [x] filter by class
-- [ ] Add structure to the css
-- [ ] nice to have: Add a transition when textContent changes
-- [x] add padding to the lore text
-- [ ] add difficulty to champion
-- [ ] ![visualisation](https://i.imgur.com/72k9JMM.png "Difficulty")
+- [ ] add difficulty to the champion
 - [ ] add animation to switching types
 - [ ] make popup take in full width on mobile
 - [ ] skin selector
 - [ ] spell tooltip
-- [ ] inputvalidation: on change: remove the c-form-valid class
-- [ ] hamburgermenu class selection voor mobile
-- [ ] cards in twee colommen op mobile
-- 
+
+[//]: # (- [ ] inputvalidation: on change: remove the c-form-valid class)
+- [ ] Loading animation for cards, and for the champion statistics
