@@ -568,6 +568,11 @@ const showPopup = e => {
         }
     }
     displayAndQsAbilityImg(e);
+    // hide previous matches
+    document.querySelector('.js-card-container').innerHTML = '';
+    // clear the cards
+
+
     if (userIsLoaded) {
         statCalculator(e);
     }else{
