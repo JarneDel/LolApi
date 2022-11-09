@@ -6,6 +6,7 @@ const backend = window.location.origin;
 let version = "12.19.1";
 
 let userIsLoaded = false;
+let loadedChampion = undefined;
 let user;
 let ddragon = `https://ddragon.leagueoflegends.com/cdn/${version}`;
 const ddragonImg = "https://ddragon.leagueoflegends.com/cdn/img/";
@@ -449,6 +450,7 @@ const statCalculator = async e => {
     hideNoUser(containerElement);
     const url = backend + `/api/v2/matches/${user.puuid}/${e.id}`
     const matchList = await getRequest(url)
+    loadedChampion = e.id
     const cards = containerElement.querySelector('.js-card-container');
     // clear the cards
     cards.innerHTML = "";
@@ -569,6 +571,10 @@ const showPopup = e => {
     }
     displayAndQsAbilityImg(e);
     // hide previous matches
+
+    console.info("showPopup", e);
+    // shouldn't reload the matches if they are already loaded
+    if (e.id === loadedChampion) return;
     document.querySelector('.js-card-container').innerHTML = '';
     // clear the cards
 
@@ -684,6 +690,7 @@ function fillChampions(champions) {
         card.addEventListener("click", (e) => {
             // console.log("clicked");
             showPopup(champion);
+            document.querySelector('.c-popup').scrollTo(0, 0);
         });
         // append child to container element
         htmlElements.championsContainer.appendChild(card);
