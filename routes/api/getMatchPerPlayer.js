@@ -2,8 +2,11 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../models/db');
+const cors = require("cors");
+const { getMatchTimeline } = require("../../models/LolApiRequest");
+const cache = require("../../models/cache");
 
-router.get("/matches/:puuid/:champion", async function (req, res, next) {
+router.get("/matches/:puuid/:champion", cors(), cache(), async function (req, res, next) {
     const {puuid, champion} = req.params;
     const matches = await db.getMatchesByPuuid(puuid);
     let outmatches = [];
@@ -31,7 +34,7 @@ router.get("/matches/:puuid/:champion", async function (req, res, next) {
 
 });
 
-router.get("/matches/:puuid", async function (req, res, next) {
+router.get("/matches/:puuid", cors(), cache(), async function (req, res, next) {
     // get matched per champion and their winrates
     const {puuid} = req.params;
     const startTime = performance.now()
@@ -91,6 +94,10 @@ router.get("/matches/:puuid", async function (req, res, next) {
     res.send(outmatches);
 });
 
-
+router.get("/match/:matchId/timeline", cors(), cache(), async function (req, res, next) {
+    const {matchId} = req.params;
+    let timeLine = await getMatchTimeline(matchId);
+    res.send(timeLine);
+});
 
 module.exports = router;

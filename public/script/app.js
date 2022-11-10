@@ -2,7 +2,12 @@ let htmlElements = {
     popup: {}, abilities: {}, filters: {}
 };
 let allChampions = {};
-const backend = window.location.origin;
+let backend = window.location.origin;
+// for development only (live server)
+if (backend === "http://127.0.0.1:3000") {
+    // set backend to 8080
+    backend = "http://127.0.0.1:8080";
+}
 let version = "12.19.1";
 
 let userIsLoaded = false;
@@ -66,7 +71,6 @@ const loadUser = async userObject => {
     const res = await postRequest(url, userObject)
     console.info(url, res)
     user = userObject
-
     // get the matches per champion
     url = backend + "/api/v2/matches/" + userObject.puuid;
     const out = await getRequest(url);
@@ -449,6 +453,26 @@ function showNoUser(ancestor) {
     ancestor.querySelector('.js-no-user').classList.remove('u-hidden');
     ancestor.querySelector('.js-no-user-img').classList.remove('u-hidden');
 }
+function noItem(item){
+    console.log("Item: ", item)
+    if (item) {
+        return `<img src="${ddragon}/img/item/${item}.png" alt="item">`
+    }
+    else{
+        return `<div class="no-item"></div> `
+    }
+}
+
+const loadMatchDetails = async (matchId, match ,card) => {
+    // toggle up and down arrow
+    card.querySelector('.js-expand').querySelector('svg').classList.toggle('u-rotate-180');
+
+    const url = `${backend}/api/v2/match/${matchId}/timeline`;
+    const timeLine = await getRequest(url)
+    console.info(timeLine)
+
+
+};
 
 const statCalculator = async e => {
     console.debug(e);
@@ -532,29 +556,33 @@ const statCalculator = async e => {
                             vision</p>
                     </div>
                     <div class="c-match-card__header--items">
-                        <img src="${ddragon}/img/item/${participant.item0}.png"
-                             alt="item0">
-                        <img src="${ddragon}/img/item/${participant.item1}.png"
-                             alt="item1">
-                        <img src="${ddragon}/img/item/${participant.item2}.png"
-                             alt="item2">
-                        <img src="${ddragon}/img/item/${participant.item3}.png"
-                             alt="item3">
-                        <img src="${ddragon}/img/item/${participant.item4}.png"
-                             alt="item4">
-                        <img src="${ddragon}/img/item/${participant.item5}.png"
-                             alt="item5">
-                        <img src="${ddragon}/img/item/${participant.item6}.png"
-                             alt="item6">
+                        ${noItem(participant.item0)}
+                        ${noItem(participant.item1)}
+                        ${noItem(participant.item2)}
+                        ${noItem(participant.item3)}
+                        ${noItem(participant.item4)}
+                        ${noItem(participant.item5)}
+                        ${noItem(participant.item6)}
                     </div>
-                    <div class="js-expand">⬇</div>
+                    <div class="c-expand-container">
+                        <button class="js-expand">
+                          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
+                            <path d="M24 24H0V0h24v24z" fill="none" opacity=".87"/>
+                            <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z"/>
+                          </svg>
+                        </button>
+                    </div>
                 </div>
             </div>`
+        card.querySelector('.js-expand').addEventListener('click', () => {
+            loadMatchDetails(matchId,match ,card)
+        });
         cards.appendChild(card);
         // hide loading icon
-        hideLoadingIconStatistics(containerElement);
+
 
     });
+    hideLoadingIconStatistics(containerElement);
 
 
 };

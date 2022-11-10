@@ -26,6 +26,7 @@ async function getMatchInfoAsync(matchID, region = "europe"){
   return get(url)
 }
 
+
 module.exports = {
   getSummonerInfo,
   getMatchID,
