@@ -114,6 +114,14 @@ html {
     font-size: 1rem;
 }
 
+.c-focus-border:where(:focus-visible, :active){
+    border-bottom: 1px solid #00B7FF !important;
+    border-top: 1px solid #00B7FF !important;
+    outline: 1px solid #00B7FF !important;
+}
+
+
+
 .c-searchBar__submit {
     position: absolute;
     width: 3.5rem;
@@ -1005,8 +1013,11 @@ html {
     transition: clip-path .5s;
 }
 
-.u-notched-content:hover {
+.u-notched-content:where(:hover, :focus, :active) {
     clip-path: polygon(100% 0%, 100% 0, 100% 100%, 0 100%, 0 0);
+}
+.c-card:where(:active, :focus){
+            outline: 4px solid #00B7FF !important;
 }
 
 .u-notched-to-square:where(:hover, :focus-visible).u-notched-border{

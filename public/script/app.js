@@ -72,14 +72,16 @@ const loadUser = async userObject => {
     const out = await getRequest(url);
     console.info(url, out);
     userIsLoaded = true;
-    // todo show sorted champions by matches played or by winrate
     // add the data to the cards
     console.info("About to add the values to the cards");
     document.querySelectorAll('.c-card').forEach((card) => {
+        let found = false
         for (const [i, champion] of out.entries()) {
             if (parseInt(card.dataset.championId) === champion.championId) {
+                found = true;
                 console.info(i, champion);
                 card.style.order = 0 - out.length + i;
+                card.tabIndex = 1+ i;
                 const body = card.querySelector('.c-card__body');
                 body.classList.remove("u-hidden")
                 body.querySelector('.c-card__played').innerText = `${champion.matches}${champion.matches > 1 ? " games" : " game"}`;
@@ -93,6 +95,10 @@ const loadUser = async userObject => {
                 body.querySelector('.c-card__kda').innerText = champion.kda;
             }
         }
+        if (!found){
+            console.info("not found", card.dataset.championId, out.length);
+            card.tabIndex = out.length + 1;
+        }
     });
 
 
@@ -105,6 +111,13 @@ const loadUser = async userObject => {
 
 const listenToEvents = () => {
     // user form
+    const usernameInput = document.querySelector('.js-search-username')
+    usernameInput.addEventListener("focus", (e) => {document.querySelector('.c-searchBar').style.setProperty("--notched-border-color", "#00B7FF")
+    });
+    usernameInput.addEventListener('blur', (e) => {
+        document.querySelector('.c-searchBar').style.removeProperty("--notched-border-color")
+    })
+
     htmlElements.searchForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         let username = document.querySelector(".js-search-username").value.trim();
@@ -125,10 +138,7 @@ const listenToEvents = () => {
 
     searchInput.addEventListener('keyup', (e) => {
         // console.log("change")
-        console.info(searchBar)
-        searchBar.classList.remove('c-form-valid')
-        console.info(searchBar)
-    })
+        searchBar.classList.remove('c-form-valid')})
 
 
     // close popup via click on the background
@@ -624,7 +634,8 @@ function createTitleElement(Title) {
 }
 
 function createCardElement(img, title, card_body, tags) {
-    let card = document.createElement("div");
+    let card = document.createElement("a");
+    card.tabIndex = 0;
     card.classList.add("c-card");
     card.appendChild(img);
     card.appendChild(title);
