@@ -480,7 +480,8 @@ html {
         top: 50%;
         transform: translate(-50%, -50%);
         min-width: 80vw;
-        max-height: 90vh;
+        max-width: 90rem;
+        max-height: 95vh;
         /*min-height: unset;*/
     }
     /* darken the page when popup is shown*/
@@ -912,6 +913,169 @@ html {
 
 /*endregion*/
 
+
+/*region match-details*/
+
+.c-team__grid{
+    display: grid;
+    grid-template-columns: 4fr 1fr 1fr 1fr 1fr 1fr 2fr;
+    color: white;
+    padding: .5rem 0;
+    gap: 6px;
+    border-bottom: var(--global-border);
+    margin: 0 1rem;
+}
+
+
+
+
+.c-participant__general{
+    grid-column: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr 3fr;
+    grid-template-rows: 1fr;
+    gap: .3rem;
+}
+
+.c-participant__general .c-match-card__header--summoners-runes-container{
+    gap: 0;
+
+}
+.c-participant__general .c-match-card__header--summoners-runes-container img{
+    width: 1.25rem;
+
+}
+.c-participant__general .c-match-card__header--champ img{
+    width: 2.5rem;
+}
+.c-participant__general .c-match-card__header--champ span{
+    font-size: .6rem;
+}
+.c-match-card__header--summoner{
+    grid-column: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    font-size: .75rem;
+    color: #C1C1C1;
+}
+.c-match-card__header--summoner .js-summoner-name{
+    font-size: .9rem;
+    color: white;
+}
+.c-participant__kda{
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.c-team__header-item:not(:first-child){
+    text-align: center;
+}
+
+.c-participant__damage{
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    align-items: center;
+    /*justify-content: center;*/
+}
+.c-participant__damage-value{
+    text-align: center;
+}
+
+.c-participant__damage-ratio{
+    width: 90%;
+    margin: 0 auto;
+    border-radius: 4px;
+    background-color: var(--dark-line-color);
+}
+.c-participant__damage-progress-bar{
+    height: .4em;
+    border-radius: 5px;
+    /* set background width equal to progress*/
+    background-color: #E84057;
+}
+.c-participant__cs, .c-participant__gold, .c-participant__vision{
+    justify-self: center;
+    align-self: center;
+}
+.c-match__team--enemy{
+    margin-top: 16px;
+}
+
+
+.c-participant__items{
+    grid-column: 7;
+    display: grid;
+    justify-self: center;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr 1fr;
+    gap: 2px;
+    align-items: center;
+    height: 40px;
+    width: 90px;
+}
+.c-participant__item img{
+    height: 1.25rem;
+}
+.c-participant__items :nth-child(odd){
+    grid-row: 1;
+}
+.c-participant__items :nth-child(even){
+    grid-row: 2;
+}
+.c-progress-bar{
+    width: calc(100% - 2rem);
+    height: 1.3em;
+    border-radius: 5px;
+    /* set background width equal to progress*/
+    position: relative;
+    margin-top: .5rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+.c-progress-bar.blueTeam,
+.c-progress-bar--progress.redTeam{
+    background-color: cornflowerblue;
+}
+.c-progress-bar.redTeam,
+.c-progress-bar--progress.blueTeam{
+    background-color: #E84057;
+}
+
+.c-progress-bar--progress{
+    height: 100%;
+    border-radius: 5px;
+
+}
+.c-progress-bar--text{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    font-size: .8rem;
+}
+
+.c-match-card__container .u-notched-border{
+    --notched-border-color: var(--dark-line-color) !important;
+    --notched-border-width: .1em !important;
+}
+.c-match__title{
+    margin: 0 1rem;
+    padding: .5rem 0;
+    border-bottom: var(--global-border);
+}
+
+
+/*endregion*/
 /* Filter bar*/
 /* region filter by class */
 

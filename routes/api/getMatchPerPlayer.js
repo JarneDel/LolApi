@@ -6,7 +6,7 @@ const cors = require("cors");
 const { getMatchTimeline } = require("../../models/LolApiRequest");
 const cache = require("../../models/cache");
 
-router.get("/matches/:puuid/:champion", cors(), cache(), async function (req, res, next) {
+router.get("/matches/:puuid/:champion", cors(), cache(10), async function (req, res, next) {
     const {puuid, champion} = req.params;
     const matches = await db.getMatchesByPuuid(puuid);
     let outmatches = [];
@@ -34,7 +34,7 @@ router.get("/matches/:puuid/:champion", cors(), cache(), async function (req, re
 
 });
 
-router.get("/matches/:puuid", cors(), cache(), async function (req, res, next) {
+router.get("/matches/:puuid", cors(), cache(10), async function (req, res, next) {
     // get matched per champion and their winrates
     const {puuid} = req.params;
     const startTime = performance.now()
@@ -94,7 +94,7 @@ router.get("/matches/:puuid", cors(), cache(), async function (req, res, next) {
     res.send(outmatches);
 });
 
-router.get("/match/:matchId/timeline", cors(), cache(), async function (req, res, next) {
+router.get("/match/:matchId/timeline", cors(), cache(10), async function (req, res, next) {
     const {matchId} = req.params;
     let timeLine = await getMatchTimeline(matchId);
     res.send(timeLine);
