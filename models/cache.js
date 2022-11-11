@@ -9,7 +9,7 @@ const cache = () => {
     } else {
       res.sendResponse = res.send;
       res.send = (body) => {
-        mcache.put(key, body, 120 * 1000);
+        mcache.put(key, body, 300 * 1000);
         res.sendResponse(body);
       };
       next();

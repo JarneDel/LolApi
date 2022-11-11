@@ -1,3 +1,5 @@
+
+// region Globals
 let htmlElements = {
     popup: {}, abilities: {}, filters: {}
 };
@@ -17,6 +19,7 @@ let ddragon = `https://ddragon.leagueoflegends.com/cdn/${version}`;
 const ddragonImg = "https://ddragon.leagueoflegends.com/cdn/img/";
 let summonerSpells = {};
 let runes = {};
+// endregion
 
 // region api
 
@@ -78,14 +81,16 @@ const loadUser = async userObject => {
     userIsLoaded = true;
     // add the data to the cards
     console.info("About to add the values to the cards");
-    document.querySelectorAll('.c-card').forEach((card) => {
+    const cards = document.querySelectorAll('.c-card')
+    cards.forEach((card) => {
         let found = false
         for (const [i, champion] of out.entries()) {
             if (parseInt(card.dataset.championId) === champion.championId) {
                 found = true;
                 console.info(i, champion);
-                card.style.order = 0 - out.length + i;
-                card.tabIndex = 1+ i;
+                card.dataset.order = out.length - i;
+                // card.style.order = 0 - out.length + i;
+                // card.tabIndex = 1+ i;
                 const body = card.querySelector('.c-card__body');
                 body.classList.remove("u-hidden")
                 body.querySelector('.c-card__played').innerText = `${champion.matches}${champion.matches > 1 ? " games" : " game"}`;
@@ -101,9 +106,24 @@ const loadUser = async userObject => {
         }
         if (!found){
             console.info("not found", card.dataset.championId, out.length);
-            card.tabIndex = out.length + 1;
+            // card.tabIndex = out.length + 1;
+            card.dataset.order = "0";
         }
     });
+    // sort the cards
+    console.log(cards)
+    const cardsArray = Array.prototype.slice.call(cards);
+    cardsArray.sort((a, b) => {
+        return parseInt(b.dataset.order) - parseInt(a.dataset.order);
+    });
+    console.log(cardsArray)
+    let fragment = document.createDocumentFragment();
+    cardsArray.forEach((card) => {
+        fragment.appendChild(card);
+    });
+    const container = document.querySelector('.js-champ-card-container')
+    container.innerHTML = "";
+    container.appendChild(fragment);
 
 
     // filterChampionsByPlayed(out);
