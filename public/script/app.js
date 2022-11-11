@@ -1,8 +1,15 @@
+
+// region Globals
 let htmlElements = {
     popup: {}, abilities: {}, filters: {}
 };
 let allChampions = {};
-const backend = window.location.origin;
+let backend = window.location.origin;
+// for development only (live server)
+if (backend === "http://127.0.0.1:3000") {
+    // set backend to 8080
+    backend = "http://127.0.0.1:8080";
+}
 let version = "12.19.1";
 
 let userIsLoaded = false;
@@ -12,6 +19,7 @@ let ddragon = `https://ddragon.leagueoflegends.com/cdn/${version}`;
 const ddragonImg = "https://ddragon.leagueoflegends.com/cdn/img/";
 let summonerSpells = {};
 let runes = {};
+// endregion
 
 // region api
 
@@ -66,20 +74,23 @@ const loadUser = async userObject => {
     const res = await postRequest(url, userObject)
     console.info(url, res)
     user = userObject
-
     // get the matches per champion
     url = backend + "/api/v2/matches/" + userObject.puuid;
     const out = await getRequest(url);
     console.info(url, out);
     userIsLoaded = true;
-    // todo show sorted champions by matches played or by winrate
     // add the data to the cards
     console.info("About to add the values to the cards");
-    document.querySelectorAll('.c-card').forEach((card) => {
+    const cards = document.querySelectorAll('.c-card')
+    cards.forEach((card) => {
+        let found = false
         for (const [i, champion] of out.entries()) {
             if (parseInt(card.dataset.championId) === champion.championId) {
+                found = true;
                 console.info(i, champion);
-                card.style.order = 0 - out.length + i;
+                card.dataset.order = out.length - i;
+                // card.style.order = 0 - out.length + i;
+                // card.tabIndex = 1+ i;
                 const body = card.querySelector('.c-card__body');
                 body.classList.remove("u-hidden")
                 body.querySelector('.c-card__played').innerText = `${champion.matches}${champion.matches > 1 ? " games" : " game"}`;
@@ -93,7 +104,26 @@ const loadUser = async userObject => {
                 body.querySelector('.c-card__kda').innerText = champion.kda;
             }
         }
+        if (!found){
+            console.info("not found", card.dataset.championId, out.length);
+            // card.tabIndex = out.length + 1;
+            card.dataset.order = "0";
+        }
     });
+    // sort the cards
+    console.log(cards)
+    const cardsArray = Array.prototype.slice.call(cards);
+    cardsArray.sort((a, b) => {
+        return parseInt(b.dataset.order) - parseInt(a.dataset.order);
+    });
+    console.log(cardsArray)
+    let fragment = document.createDocumentFragment();
+    cardsArray.forEach((card) => {
+        fragment.appendChild(card);
+    });
+    const container = document.querySelector('.js-champ-card-container')
+    container.innerHTML = "";
+    container.appendChild(fragment);
 
 
     // filterChampionsByPlayed(out);
@@ -105,6 +135,13 @@ const loadUser = async userObject => {
 
 const listenToEvents = () => {
     // user form
+    const usernameInput = document.querySelector('.js-search-username')
+    usernameInput.addEventListener("focus", (e) => {document.querySelector('.c-searchBar').style.setProperty("--notched-border-color", "#00B7FF")
+    });
+    usernameInput.addEventListener('blur', (e) => {
+        document.querySelector('.c-searchBar').style.removeProperty("--notched-border-color")
+    })
+
     htmlElements.searchForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         let username = document.querySelector(".js-search-username").value.trim();
@@ -125,10 +162,7 @@ const listenToEvents = () => {
 
     searchInput.addEventListener('keyup', (e) => {
         // console.log("change")
-        console.info(searchBar)
-        searchBar.classList.remove('c-form-valid')
-        console.info(searchBar)
-    })
+        searchBar.classList.remove('c-form-valid')})
 
 
     // close popup via click on the background
@@ -439,6 +473,26 @@ function showNoUser(ancestor) {
     ancestor.querySelector('.js-no-user').classList.remove('u-hidden');
     ancestor.querySelector('.js-no-user-img').classList.remove('u-hidden');
 }
+function noItem(item){
+    console.log("Item: ", item)
+    if (item) {
+        return `<img src="${ddragon}/img/item/${item}.png" alt="item">`
+    }
+    else{
+        return `<div class="no-item"></div> `
+    }
+}
+
+const loadMatchDetails = async (matchId, match ,card) => {
+    // toggle up and down arrow
+    card.querySelector('.js-expand').querySelector('svg').classList.toggle('u-rotate-180');
+
+    const url = `${backend}/api/v2/match/${matchId}/timeline`;
+    const timeLine = await getRequest(url)
+    console.info(timeLine)
+
+
+};
 
 const statCalculator = async e => {
     console.debug(e);
@@ -522,29 +576,33 @@ const statCalculator = async e => {
                             vision</p>
                     </div>
                     <div class="c-match-card__header--items">
-                        <img src="${ddragon}/img/item/${participant.item0}.png"
-                             alt="item0">
-                        <img src="${ddragon}/img/item/${participant.item1}.png"
-                             alt="item1">
-                        <img src="${ddragon}/img/item/${participant.item2}.png"
-                             alt="item2">
-                        <img src="${ddragon}/img/item/${participant.item3}.png"
-                             alt="item3">
-                        <img src="${ddragon}/img/item/${participant.item4}.png"
-                             alt="item4">
-                        <img src="${ddragon}/img/item/${participant.item5}.png"
-                             alt="item5">
-                        <img src="${ddragon}/img/item/${participant.item6}.png"
-                             alt="item6">
+                        ${noItem(participant.item0)}
+                        ${noItem(participant.item1)}
+                        ${noItem(participant.item2)}
+                        ${noItem(participant.item3)}
+                        ${noItem(participant.item4)}
+                        ${noItem(participant.item5)}
+                        ${noItem(participant.item6)}
                     </div>
-                    <div class="js-expand">⬇</div>
+                    <div class="c-expand-container">
+                        <button class="js-expand">
+                          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
+                            <path d="M24 24H0V0h24v24z" fill="none" opacity=".87"/>
+                            <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z"/>
+                          </svg>
+                        </button>
+                    </div>
                 </div>
             </div>`
+        card.querySelector('.js-expand').addEventListener('click', () => {
+            loadMatchDetails(matchId,match ,card)
+        });
         cards.appendChild(card);
         // hide loading icon
-        hideLoadingIconStatistics(containerElement);
+
 
     });
+    hideLoadingIconStatistics(containerElement);
 
 
 };
@@ -624,7 +682,8 @@ function createTitleElement(Title) {
 }
 
 function createCardElement(img, title, card_body, tags) {
-    let card = document.createElement("div");
+    let card = document.createElement("a");
+    card.tabIndex = 0;
     card.classList.add("c-card");
     card.appendChild(img);
     card.appendChild(title);
@@ -679,9 +738,12 @@ function fillChampions(champions) {
         }
         const imgUrl = `https://ddragon.leagueoflegends.com/cdn/img/champion/centered/${champName}_0.jpg`;
         const img = createImageElement(imgUrl, champName, ["js-champ-img", "c-card__img"]);
+        const imgContainer = document.createElement("div");
+        imgContainer.classList.add("c-card__img-container");
+        imgContainer.appendChild(img);
         const title = createTitleElement(champion.name);
         const card_body = createBodyElement(champion);
-        const card = createCardElement(img, title, card_body);
+        const card = createCardElement(imgContainer, title, card_body);
         card.dataset.tags = champion.tags.join(",");
         card.dataset.difficulty = champion.info.difficulty;
         card.dataset.champion = champion.name;

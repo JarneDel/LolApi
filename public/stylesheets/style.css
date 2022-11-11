@@ -16,13 +16,18 @@
 /*    loading icon*/
     --loader-color: #fff;
     --loader-wheel-color: var(--dark-background-color);
+
+    /* boarders    */
+    --global-border: 1px solid var(--dark-line-color);
+
+    --global-focus-color: #00B7FF;
 }
 
 html {
 
 }
 
-
+/* region elements */
 body {
     /*padding: 1rem;*/
     font: 14px var(--sans-font);
@@ -39,7 +44,7 @@ html, body {
 }
 
 a {
-    color: #00B7FF;
+    color: var(--global-focus-color);
 }
 
 :root {
@@ -75,7 +80,7 @@ html {
     box-sizing: border-box;
     margin: 0 auto;
 }
-
+/* endregion */
 
 /*component user search bar*/
 .userForm {
@@ -96,6 +101,8 @@ html {
 * searchbar
 */
 
+/* region searchbar */
+
 .c-searchBar {
     width: 100%;
     display: flex;
@@ -113,6 +120,14 @@ html {
     padding: 0 3.5rem 0 1.5rem;
     font-size: 1rem;
 }
+
+.c-focus-border:where(:focus-visible, :active){
+    border-bottom: 1px solid var(--global-focus-color) !important;
+    border-top: 1px solid var(--global-focus-color) !important;
+    outline: 1px solid var(--global-focus-color) !important;
+}
+
+
 
 .c-searchBar__submit {
     position: absolute;
@@ -180,15 +195,9 @@ html {
     opacity: 0;
 }
 
+/* endregion */
 
-.c-ability-description br:nth-child(3n + 3) {
-    display: none;
-}
 
-/*For white theme*/
-/*.c-ability-description * {*/
-/*    color: var(--dark-neutral-text-color);*/
-/*}*/
 
 
 .c-container {
@@ -209,12 +218,9 @@ html {
         max-width: calc(100vw - 1rem)
     }
 
-    .c-card {
-        /*max-width: 45vw;*/
-    }
 }
 
-
+/* region cards */
 .c-card {
     background: var(--dark-background-color);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -224,6 +230,10 @@ html {
 
     /*max-width: 18.875rem;*/
 }
+
+
+
+
 
 .c-card__body {
     padding: 0 .5rem;
@@ -267,28 +277,42 @@ html {
     margin: .5rem 0;
     font-size: 1rem;
     max-width: 80%;
+    transition: transform 250ms ease;
+    transform-origin: left;
+
 }
 
 .c-card__img {
     width: 100%;
     /*aspect-ratio: 3/4;*/
-    padding: 0;
-    margin: 0;
-    border-radius: 5px 0 0 5px;
-}
-
-
-.js-champ-img {
-    width: 100%;
     height: 100%;
     object-fit: cover;
     aspect-ratio: 1/1;
-    border-radius: 5px 5px 0 0;
+    padding: 0;
+    margin: 0;
+    transition: transform 250ms, visibility 250ms ease-in;
+    transform-origin: 50% 50% ;
 
+    display: inline-block;
+}
+.c-card__img-container{
+    height: 100%;
+    overflow: hidden;
 }
 
 
+.c-card:where(:hover, :focus-within, :active) .c-card__img {
+    transform: scale(1.1);
+}
+
+.c-card:where(:hover, :focus-within, :active) .c-card__title {
+    transform: translateX(1.5%);
+}
+
+/*endregion */
+
 /* create a popup card that is scrollable */
+/*region popup*/
 .c-popup {
     position: fixed;
     top: 0;
@@ -506,7 +530,7 @@ html {
 }
 
 .c-row {
-    border-bottom: 1px solid var(--dark-line-color);
+    border-bottom: var(--global-border);
     padding: 1rem 0;
 }
 
@@ -532,7 +556,7 @@ html {
 .c-row__lore {
     flex-basis: 50%;
     font-weight: normal;
-    border-left: 1px solid var(--dark-line-color);
+    border-left: var(--global-border);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -596,7 +620,7 @@ html {
     .c-row__lore--text {
         max-width: 100%;
         padding-top: 1rem;
-        border-top: 1px solid var(--dark-line-color);
+        border-top: var(--global-border);
     }
 
     .c-row__lore {
@@ -612,8 +636,9 @@ html {
     flex-wrap: wrap;
     justify-content: space-between;
     margin-top: 1rem;
-    border-bottom: 1px solid var(--dark-line-color);
+    border-bottom: var(--global-border);
 }
+
 
 .c-popup__abilities--text-container {
     flex-grow: 2;
@@ -669,7 +694,9 @@ html {
     font-size: 1rem;
     color: var(--dark-neutral-text-color)
 }
-
+.c-ability-description br:nth-child(3n + 3) {
+    display: none;
+}
 
 .c-abilities__description h4 {
     color: var(--dark-neutral-text-color);
@@ -717,11 +744,7 @@ html {
 
 }
 
-@keyframes dash {
-    to {
-        stroke-dashoffset: 0;
-    }
-}
+
 
 
 .c-abilities__icon:first-child {
@@ -776,8 +799,6 @@ html {
 .c-match-card__container span{
     color: var(--dark-neutral-text-color);
 }
-
-
 .c-match-card{
     display: flex;
     flex-direction: column;
@@ -792,7 +813,6 @@ html {
     --notched-border-color: var(--dark-line-color) !important;
     --notched-border-width: .1em !important;
 }
-
 .c-match-card__header--metadata{
     display: flex;
     flex-direction: column;
@@ -802,25 +822,20 @@ html {
 .c-match-card__header--metadata :where(h3, p){
     margin: 0;
 }
-
 .c-match-card__header--summoners-runes-container{
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
 }
-.c-match-card__header--summoners-runes-container img:nth-child(odd){
+.c-match-card__header--summoners-runes-container :nth-child(2n+1){
     grid-row: 1;
 }
-.c-match-card__header--summoners-runes-container img:nth-child(even){
+.c-match-card__header--summoners-runes-container :nth-child(2n){
     grid-row: 2;
 }
-
-
-
 .c-match-card__header--champ{
     position: relative;
 }
-
 .c-match-card__header--champ img{
     width: 4rem;
     aspect-ratio: 1/1;
@@ -834,13 +849,11 @@ html {
     padding: 0 5px;
     background-color: #000913;
 }
-
 .c-match-card__header--summoners-runes-container img{
     width: 2rem;
     aspect-ratio: 1/1;
     object-fit: contain;
 }
-
 .c-match-card__header--result{
     display: flex;
     flex-direction: column;
@@ -856,26 +869,51 @@ html {
     grid-template-rows: 1fr 1fr;
     gap: 4px;
 }
-
 .c-match-card__header--items img{
     width: 2rem;
     aspect-ratio: 1/1;
     object-fit: contain;
 }
-
-
-.c-match-card__header--items img:nth-child(odd){
+.c-match-card__header--items :nth-child(odd){
     grid-row: 1;
 }
-.c-match-card__header--items img:nth-child(even){
+.c-match-card__header--items :nth-child(even){
     grid-row: 2;
+}
+.c-expand-container{
+    border-left: var(--global-border);
+    padding-left: .5rem;
+}
+.c-expand-container button{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.c-expand-container svg {
+ transition: rotate 0.2s ease-in-out;
+}
+
+.c-expand-container button:hover{
+    background-color: rgba(255, 255, 255, 0.1);
+
+}
+.c-expand-container button:where(:active, :focus-visible){
+    outline: 1px solid var(--global-focus-color);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+
+.c-expand-container svg{
+    fill: white;
 }
 
 /* endregion */
 
-
+/*endregion*/
 
 /* Filter bar*/
+/* region filter by class */
 
 .c-filter-by-class {
     display: flex;
@@ -940,7 +978,9 @@ html {
     width: 120%;
 }
 
-/* utilities */
+/*endregion */
+
+/* region utilities */
 .u-gray-text {
     color: var(--dark-gray-text-color);
 }
@@ -1005,9 +1045,15 @@ html {
     transition: clip-path .5s;
 }
 
-.u-notched-content:hover {
+.u-notched-content:where(:hover, :focus, :active) {
     clip-path: polygon(100% 0%, 100% 0, 100% 100%, 0 100%, 0 0);
 }
+.c-card:focus-visible{
+    outline: 4px solid var(--global-focus-color) !important;
+    clip-path: none;
+}
+
+
 
 .u-notched-to-square:where(:hover, :focus-visible).u-notched-border{
     clip-path: polygon(
@@ -1072,7 +1118,11 @@ html {
     margin: 1rem;
 }
 
+.u-rotate-180{
+    rotate: 180deg;
+}
 
+/*endregion*/
 
 @media (max-width: 576px) {
     .u-1-of-1-bp-1 {
@@ -1093,6 +1143,7 @@ html {
     }
 }
 
+/*region animation keyframes*/
 @keyframes error {
 
     5% {
@@ -1132,3 +1183,9 @@ html {
         padding-right: var(--padding-button);
     }
 }
+@keyframes dash {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+/*endregion*/
