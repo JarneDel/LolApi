@@ -738,9 +738,12 @@ function fillChampions(champions) {
         }
         const imgUrl = `https://ddragon.leagueoflegends.com/cdn/img/champion/centered/${champName}_0.jpg`;
         const img = createImageElement(imgUrl, champName, ["js-champ-img", "c-card__img"]);
+        const imgContainer = document.createElement("div");
+        imgContainer.classList.add("c-card__img-container");
+        imgContainer.appendChild(img);
         const title = createTitleElement(champion.name);
         const card_body = createBodyElement(champion);
-        const card = createCardElement(img, title, card_body);
+        const card = createCardElement(imgContainer, title, card_body);
         card.dataset.tags = champion.tags.join(",");
         card.dataset.difficulty = champion.info.difficulty;
         card.dataset.champion = champion.name;

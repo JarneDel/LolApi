@@ -19,6 +19,8 @@
 
     /* boarders    */
     --global-border: 1px solid var(--dark-line-color);
+
+    --global-focus-color: #00B7FF;
 }
 
 html {
@@ -42,7 +44,7 @@ html, body {
 }
 
 a {
-    color: #00B7FF;
+    color: var(--global-focus-color);
 }
 
 :root {
@@ -120,9 +122,9 @@ html {
 }
 
 .c-focus-border:where(:focus-visible, :active){
-    border-bottom: 1px solid #00B7FF !important;
-    border-top: 1px solid #00B7FF !important;
-    outline: 1px solid #00B7FF !important;
+    border-bottom: 1px solid var(--global-focus-color) !important;
+    border-top: 1px solid var(--global-focus-color) !important;
+    outline: 1px solid var(--global-focus-color) !important;
 }
 
 
@@ -229,6 +231,10 @@ html {
     /*max-width: 18.875rem;*/
 }
 
+
+
+
+
 .c-card__body {
     padding: 0 .5rem;
     margin-top: -4px;
@@ -271,24 +277,36 @@ html {
     margin: .5rem 0;
     font-size: 1rem;
     max-width: 80%;
+    transition: transform 250ms ease;
+    transform-origin: left;
+
 }
 
 .c-card__img {
     width: 100%;
     /*aspect-ratio: 3/4;*/
-    padding: 0;
-    margin: 0;
-    border-radius: 5px 0 0 5px;
-}
-
-
-.js-champ-img {
-    width: 100%;
     height: 100%;
     object-fit: cover;
     aspect-ratio: 1/1;
-    border-radius: 5px 5px 0 0;
+    padding: 0;
+    margin: 0;
+    transition: transform 250ms, visibility 250ms ease-in;
+    transform-origin: 50% 50% ;
 
+    display: inline-block;
+}
+.c-card__img-container{
+    height: 100%;
+    overflow: hidden;
+}
+
+
+.c-card:where(:hover, :focus-within, :active) .c-card__img {
+    transform: scale(1.1);
+}
+
+.c-card:where(:hover, :focus-within, :active) .c-card__title {
+    transform: translateX(1.5%);
 }
 
 /*endregion */
@@ -881,7 +899,7 @@ html {
 
 }
 .c-expand-container button:where(:active, :focus-visible){
-    outline: 1px solid #00B7FF;
+    outline: 1px solid var(--global-focus-color);
     background-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -1030,9 +1048,12 @@ html {
 .u-notched-content:where(:hover, :focus, :active) {
     clip-path: polygon(100% 0%, 100% 0, 100% 100%, 0 100%, 0 0);
 }
-.c-card:where(:active, :focus){
-            outline: 4px solid #00B7FF !important;
+.c-card:focus-visible{
+    outline: 4px solid var(--global-focus-color) !important;
+    clip-path: none;
 }
+
+
 
 .u-notched-to-square:where(:hover, :focus-visible).u-notched-border{
     clip-path: polygon(
