@@ -669,13 +669,21 @@ function createTeamDiff(yourTeam, enemyTeam, teamColor) {
 
 const loadMatchDetails = async (matchId, match ,card) => {
     // toggle up and down arrow
+    // check if match details are already loaded
     card.querySelector('.js-expand').querySelector('svg').classList.toggle('u-rotate-180');
+
+    if (card.classList.contains('loaded')) {
+        card.querySelector('.js-match-body').classList.remove('u-hidden');
+        return;
+    }
+
 
     const url = `${backend}/api/v2/match/${matchId}/timeline`;
     const timeLine = await getRequest(url)
     console.info("matchID: ",matchId , "match: " ,match, "timeLine: ", timeLine)
     const matchBody = document.createElement('div');
     matchBody.classList.add('c-match__body');
+    matchBody.classList.add('js-match-body');
     card.appendChild(matchBody);
     const title = document.createElement('h3')
     title.classList.add('c-match__title')
@@ -724,7 +732,7 @@ const loadMatchDetails = async (matchId, match ,card) => {
     matchBody.appendChild(createTeamDiff(yourTeam, enemyTeam, yourTeamColor));
     matchBody.appendChild(enemyTeamDiv);
     matchBody.appendChild(grid);
-
+    card.classList.add('loaded');
 
 
 };
@@ -829,7 +837,15 @@ const statCalculator = async e => {
                     </div>
                 </div>`
         card.querySelector('.js-expand').addEventListener('click', () => {
-            loadMatchDetails(matchId,match ,card)
+            card.classList.toggle('js-card-expanded');
+            console.log(card.classList.contains('js-card-expanded'));
+            if(card.classList.contains('js-card-expanded')) {
+                loadMatchDetails(matchId, match, card);
+            }
+            else {
+                console.log('remove');
+                card.querySelector('.js-match-body').classList.add('u-hidden')
+            }
         });
         cards.appendChild(card);
         // hide loading icon

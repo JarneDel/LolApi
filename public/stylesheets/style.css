@@ -1285,6 +1285,9 @@ html {
 .u-rotate-180{
     rotate: 180deg;
 }
+.perfect{
+    color: #C2902D !important;
+}
 
 /*endregion*/
 
