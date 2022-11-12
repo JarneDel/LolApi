@@ -19,6 +19,7 @@ let ddragon = `https://ddragon.leagueoflegends.com/cdn/${version}`;
 const ddragonImg = "https://ddragon.leagueoflegends.com/cdn/img/";
 let summonerSpells = {};
 let runes = {};
+let pos = {x: 0, y: 0}
 // endregion
 
 // region api
@@ -133,6 +134,18 @@ const loadUser = async userObject => {
 
 // region eventListeners
 
+function saveCursorPosition(clientX, clientY) {
+    pos.x = (clientX / window.innerWidth).toFixed(2)*100;
+    pos.y = (clientY / window.innerHeight).toFixed(2)*100;
+    // Do not save the cursor position if the animation is already running
+    if (htmlElements.popup.animated.classList.contains('running')) {
+        return;
+    }
+    
+    document.documentElement.style.setProperty('--mouse-pos-x', `${pos.x}%`);
+    document.documentElement.style.setProperty('--mouse-pos-y', `${pos.y}%`);
+}
+
 const listenToEvents = () => {
     // user form
     const usernameInput = document.querySelector('.js-search-username')
@@ -200,6 +213,10 @@ const listenToEvents = () => {
             hidePopup();
         }
     });
+
+    document.addEventListener('mousemove', e => {
+        saveCursorPosition(e.clientX, e.clientY)
+    })
 
 };
 
@@ -670,7 +687,7 @@ function createTeamDiff(yourTeam, enemyTeam, teamColor) {
 const loadMatchDetails = async (matchId, match ,card) => {
     // toggle up and down arrow
     // check if match details are already loaded
-    card.querySelector('.js-expand').querySelector('svg').classList.toggle('u-rotate-180');
+
 
     if (card.classList.contains('loaded')) {
         card.querySelector('.js-match-body').classList.remove('u-hidden');
@@ -838,7 +855,7 @@ const statCalculator = async e => {
                 </div>`
         card.querySelector('.js-expand').addEventListener('click', () => {
             card.classList.toggle('js-card-expanded');
-            console.log(card.classList.contains('js-card-expanded'));
+            card.querySelector('.js-expand').querySelector('svg').classList.toggle('u-rotate-180');
             if(card.classList.contains('js-card-expanded')) {
                 loadMatchDetails(matchId, match, card);
             }
@@ -863,6 +880,7 @@ const showPopup = e => {
 
 
     // console.log(e);
+    htmlElements.popup.animated.classList.add("running");
     htmlElements.popup.container.classList.remove("u-hidden");
     document.documentElement.style.overflow = "hidden";
     htmlElements.popup.image.src = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${e.id}_0.jpg`;
@@ -896,6 +914,7 @@ const showPopup = e => {
 
 const hidePopup = () => {
     htmlElements.popup.container.classList.add("u-hidden");
+    htmlElements.popup.animated.classList.remove("running");
     document.documentElement.style.overflow = "auto";
     htmlElements.popup.image.src = "";
     for (const icon of htmlElements.popup.tagIconAll) {
@@ -1043,6 +1062,7 @@ document.addEventListener("DOMContentLoaded", function () {
     htmlElements.popup.name = document.querySelector(".js-champ-name");
     htmlElements.popup.title = document.querySelector(".js-champ-title");
     htmlElements.popup.lore = document.querySelector(".js-champ-lore");
+    htmlElements.popup.animated = document.querySelector(".js-popup-animate");
     htmlElements.popup.tagIconAll = document.querySelectorAll(".js-role-icon");
     htmlElements.abilities.imgContainer = document.querySelector(".js-ability-img-container");
     htmlElements.abilities.name = document.querySelector(".js-ability-name");

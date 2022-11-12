@@ -21,6 +21,9 @@
     --global-border: 1px solid var(--dark-line-color);
 
     --global-focus-color: #00B7FF;
+
+    --mouse-pos-x: 10%;
+    --mouse-pos-y: 10%;
 }
 
 html {
@@ -208,6 +211,9 @@ html {
     justify-content: center;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     padding: 0 1rem;
+    /*bad performance wise*/
+    /*animation: append-animate-from-left .3s linear;*/
+    /*transform-origin: 50% 0;*/
 
 }
 
@@ -323,13 +329,26 @@ html {
     z-index: 100;
     overflow-y: auto;
     overflow-x: hidden;
+    -webkit-animation: slide-in .3s ease;
+    -o-animation: slide-in .3s ease;
+    animation: slide-in .3s ease;
 }
 
+@media (min-width: 576px) {
+    .c-popup{
+        -webkit-animation: expand .4s ease;
+        -o-animation: expand .4s ease;
+        animation: expand .4s ease;
+        transform-box: border-box;
+        transform-origin: var(--mouse-pos-x) var(--mouse-pos-y);
+    }
+}
 
 
 .c-popup__container{
     padding: 0;
     margin: 0;
+
 }
 
 .c-popup__content {
@@ -1074,6 +1093,11 @@ html {
     border-bottom: var(--global-border);
 }
 
+.c-match__body{
+    animation: append-animate .3s linear;
+    transform-origin: 50% 0;
+}
+
 
 /*endregion*/
 /* Filter bar*/
@@ -1353,6 +1377,49 @@ html {
 @keyframes dash {
     to {
         stroke-dashoffset: 0;
+    }
+}
+
+@keyframes append-animate {
+    from {
+        scale: 1 0;
+        opacity: 0;
+    }
+    to {
+        scale: 1 1;
+        opacity: 1;
+    }
+}
+@keyframes append-animate-from-left {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes expand {
+    from {
+        transform: scale(0);
+        translate: -50% -50%;
+        /*opacity: 0;*/
+    }
+    to {
+        transform: scale(1);
+        translate: -50% -50%;
+        /*opacity: 1;*/
+    }
+}
+
+@keyframes slide-in {
+    from {
+        transform: translatey(100vh);
+    }
+    to {
+        transform: translatey(0);
     }
 }
 /*endregion*/
