@@ -19,6 +19,7 @@ let ddragon = `https://ddragon.leagueoflegends.com/cdn/${version}`;
 const ddragonImg = "https://ddragon.leagueoflegends.com/cdn/img/";
 let summonerSpells = {};
 let runes = {};
+let pos = {x: 0, y: 0}
 // endregion
 
 // region api
@@ -87,7 +88,7 @@ const loadUser = async userObject => {
         for (const [i, champion] of out.entries()) {
             if (parseInt(card.dataset.championId) === champion.championId) {
                 found = true;
-                console.info(i, champion);
+                // console.info(i, champion);
                 card.dataset.order = out.length - i;
                 // card.style.order = 0 - out.length + i;
                 // card.tabIndex = 1+ i;
@@ -105,18 +106,18 @@ const loadUser = async userObject => {
             }
         }
         if (!found){
-            console.info("not found", card.dataset.championId, out.length);
+            // console.info("not found", card.dataset.championId, out.length);
             // card.tabIndex = out.length + 1;
             card.dataset.order = "0";
         }
     });
     // sort the cards
-    console.log(cards)
+    // console.log(cards)
     const cardsArray = Array.prototype.slice.call(cards);
     cardsArray.sort((a, b) => {
         return parseInt(b.dataset.order) - parseInt(a.dataset.order);
     });
-    console.log(cardsArray)
+    // console.log(cardsArray)
     let fragment = document.createDocumentFragment();
     cardsArray.forEach((card) => {
         fragment.appendChild(card);
@@ -132,6 +133,18 @@ const loadUser = async userObject => {
 // endregion
 
 // region eventListeners
+
+function saveCursorPosition(clientX, clientY) {
+    pos.x = (clientX / window.innerWidth).toFixed(2)*100;
+    pos.y = (clientY / window.innerHeight).toFixed(2)*100;
+    // Do not save the cursor position if the animation is already running
+    if (htmlElements.popup.animated.classList.contains('running')) {
+        return;
+    }
+    
+    document.documentElement.style.setProperty('--mouse-pos-x', `${pos.x}%`);
+    document.documentElement.style.setProperty('--mouse-pos-y', `${pos.y}%`);
+}
 
 const listenToEvents = () => {
     // user form
@@ -200,6 +213,10 @@ const listenToEvents = () => {
             hidePopup();
         }
     });
+
+    document.addEventListener('mousemove', e => {
+        saveCursorPosition(e.clientX, e.clientY)
+    })
 
 };
 
@@ -440,7 +457,7 @@ function calculateRunes(firstTree, mainRune, secondTree) {
     };
     runes.forEach(rune => {
         if (rune.id === firstTree) {
-            console.info(rune)
+            // console.info(rune)
             rune.slots[0].runes.forEach(specificRune => {
                 if (specificRune.id === mainRune) {
                     out.firstTree.icon = specificRune.icon
@@ -474,7 +491,7 @@ function showNoUser(ancestor) {
     ancestor.querySelector('.js-no-user-img').classList.remove('u-hidden');
 }
 function noItem(item){
-    console.log("Item: ", item)
+    // console.log("Item: ", item)
     if (item) {
         return `<img src="${ddragon}/img/item/${item}.png" alt="item">`
     }
@@ -483,13 +500,256 @@ function noItem(item){
     }
 }
 
+function createTeamHeader(TeamColor, userWon) {
+    // create grid
+    const header = document.createElement('div');
+    header.classList.add('c-team__header', 'c-team__grid');
+    let victoryText = userWon ? "Victory" : "Defeat";
+    let redTeamBlueTeam = TeamColor === "Red" ? "Blue Team" : "Red Team";
+    const headerList = [`${victoryText} (${redTeamBlueTeam})`, 'KDA', 'Damage', 'Vision', 'Gold', 'CS', 'Items'];
+    for (const headerItem of headerList) {
+        const headerElement = document.createElement('div');
+        headerElement.classList.add('c-team__header-item');
+        headerElement.textContent = headerItem;
+        header.appendChild(headerElement);
+    }
+    return header;
+}
+
+function createColumnGeneral(participant){
+    const champion = participant.championName;
+    const firstTree = participant.perks.styles[0].style;
+    const mainRune = participant.perks.styles[0].selections[0].perk;
+    const secondTree = participant.perks.styles[1].style;
+    const runes = calculateRunes(firstTree, mainRune, secondTree);
+
+    const columnGeneral = document.createElement('div');
+    columnGeneral.innerHTML = `
+            <div class="c-match-card__header--champ js-champion-played">
+            <img src="${ddragon}/img/champion/${champion}.png"
+                 alt="${champion}"/>
+            <span class="js-level">${participant.champLevel}</span>
+            </div>
+            <div class="c-match-card__header--summoners-runes-container">
+                <img src="${ddragon}/img/spell/${summonerSpells[participant.summoner1Id]}.png"
+                     alt="${participant.summoner1Id}"/>
+                <img src="${ddragon}/img/spell/${summonerSpells[participant.summoner2Id]}.png"
+                     alt="${participant.summoner2Id}"/>
+                <img src="${ddragonImg + runes.firstTree.icon}"
+                     alt="${runes.firstTree.name}"/>
+                <img src="${ddragonImg + runes.secondTree.icon}"
+                     alt="${runes.secondTree.name}"/>
+            </div>
+            <div class="c-match-card__header--summoner">
+                <div class="js-summoner-name">${participant.summonerName}</div>
+                <div class="js-summoner-level">Level ${participant.summonerLevel}</div>
+            </div>
+            
+        `
+    columnGeneral.classList.add('c-participant__general');
+    return columnGeneral;
+}
+function createColumnKDA(participant){
+    const columnKDA = document.createElement('div');
+    columnKDA.classList.add('c-participant__kda');
+    let ratio
+    if (participant.deaths !== 0) {
+        ratio = ((participant.kills + participant.assists) / participant.deaths).toFixed(2) + ":1";
+    }else{
+        ratio = `<span class="perfect">Perfect</span>`
+    }
+    columnKDA.innerHTML = `
+        <span class="c-participant__kda-value"><span>${participant.kills}</span>/<span class="u-negative-color">${participant.deaths}</span>/<span>${participant.assists}</span> </span>
+        <span class="c-participant__kda-ratio">${ratio}</span>
+    `
+    return columnKDA;
+}
+function createColumnDamage(participant, maxDamage){
+    const columnDamage = document.createElement('div');
+    columnDamage.classList.add('c-participant__damage');
+    const value = document.createElement('div');
+    value.classList.add('c-participant__damage-value');
+    value.textContent = participant.totalDamageDealtToChampions;
+    const ratio = document.createElement('div');
+    ratio.classList.add('c-participant__damage-ratio');
+    const progressBar = document.createElement('div');
+    progressBar.style.width = `${(participant.totalDamageDealtToChampions / maxDamage) * 100}%`;
+    progressBar.classList.add('c-participant__damage-progress-bar');
+    ratio.appendChild(progressBar);
+
+    columnDamage.appendChild(value);
+    columnDamage.appendChild(ratio);
+
+    return columnDamage;
+}
+
+function createColumnVision(participant){
+    const vision = document.createElement('div');
+    vision.classList.add('c-participant__vision');
+    vision.textContent = participant.visionScore;
+    return vision;
+}
+
+function createColumnGold(participant){
+    const gold = document.createElement('div');
+    gold.classList.add('c-participant__gold');
+    gold.textContent = participant.goldEarned;
+    return gold;
+}
+
+function createColumnCS(participant){
+    const cs = document.createElement('div');
+    cs.classList.add('c-participant__cs');
+    cs.textContent = participant.totalMinionsKilled  + participant.neutralMinionsKilled;
+    return cs;
+}
+
+
+function createColumnItems(participant) {
+    const divItems = document.createElement('div');
+    const ArrayItems = [participant.item0, participant.item1, participant.item2, participant.item3, participant.item4, participant.item5, participant.item6];
+    divItems.classList.add('c-participant__items');
+    for (const item of ArrayItems) {
+        const divItem = document.createElement('div');
+        divItem.classList.add('c-participant__item');
+        divItem.innerHTML = noItem(item);
+        divItems.appendChild(divItem);
+    }
+    return divItems;
+}
+
+function createTeamList(participantsArray){
+    const teamList = document.createElement('div');
+    const maxDamage = Math.max(...participantsArray.map(participant => participant.totalDamageDealtToChampions));
+
+
+    for (const participant of participantsArray) {
+        const grid = document.createElement('div');
+        grid.classList.add('c-team__grid');
+
+        grid.appendChild(createColumnGeneral(participant));
+        grid.appendChild(createColumnKDA(participant));
+        grid.appendChild(createColumnDamage(participant, maxDamage));
+        grid.appendChild(createColumnVision(participant));
+        grid.appendChild(createColumnGold(participant));
+        grid.appendChild(createColumnCS(participant));
+        grid.appendChild(createColumnItems(participant));
+        teamList.appendChild(grid);
+    }
+
+    return teamList;
+}
+
+function createProgressBar(a, b, percentage, type, color){
+    const progressBar = document.createElement('div');
+    progressBar.classList.add('c-progress-bar');
+    progressBar.classList.add(color);
+    const progress = document.createElement('div');
+    progress.classList.add('c-progress-bar--progress');
+    progress.classList.add(color);
+    progress.style.width = `${percentage}%`;
+    const text = document.createElement('div');
+    text.classList.add('c-progress-bar--text');
+    const spanA = document.createElement('span');
+    spanA.textContent = a;
+    const spanType = document.createElement('span');
+    spanType.textContent = type;
+    const spanB = document.createElement('span');
+    spanB.textContent = b;
+    text.appendChild(spanA);
+    text.appendChild(spanType);
+    text.appendChild(spanB);
+    progressBar.appendChild(progress);
+    progressBar.appendChild(text);
+    return progressBar;
+}
+
+function createTeamDiff(yourTeam, enemyTeam, teamColor) {
+    // your team total damage
+    const yourTeamTotalDamage = yourTeam.reduce((previousValue, participant) => previousValue + participant.totalDamageDealtToChampions, 0);
+    // enemy team total damage
+    const enemyTeamTotalDamage = enemyTeam.reduce((previousValue, participant) => previousValue + participant.totalDamageDealtToChampions, 0);
+    // your team total gold
+    const yourTeamTotalGold = yourTeam.reduce((previousValue, participant) => previousValue + participant.goldEarned, 0);
+    // enemy team total gold
+    const enemyTeamTotalGold = enemyTeam.reduce((previousValue, participant) => previousValue + participant.goldEarned, 0);
+    const yourTeamDamageRatio = (yourTeamTotalDamage / (yourTeamTotalDamage + enemyTeamTotalDamage)) * 100;
+    const yourTeamGoldRatio = (yourTeamTotalGold / (yourTeamTotalGold + enemyTeamTotalGold)) * 100;
+    console.info(yourTeamTotalDamage, enemyTeamTotalDamage);
+    const container = document.createElement('div');
+    container.classList.add('c-team-diff');
+    const teamClass = teamColor === 'Blue' ? 'blueTeam' : 'redTeam';
+    container.appendChild(createProgressBar(yourTeamTotalDamage, enemyTeamTotalDamage, yourTeamDamageRatio, 'Total Damage', teamClass));
+    container.appendChild(createProgressBar(yourTeamTotalGold, enemyTeamTotalGold, yourTeamGoldRatio, 'Total Gold', teamClass));
+    return container;
+}
+
 const loadMatchDetails = async (matchId, match ,card) => {
     // toggle up and down arrow
-    card.querySelector('.js-expand').querySelector('svg').classList.toggle('u-rotate-180');
+    // check if match details are already loaded
+
+
+    if (card.classList.contains('loaded')) {
+        card.querySelector('.js-match-body').classList.remove('u-hidden');
+        return;
+    }
+
 
     const url = `${backend}/api/v2/match/${matchId}/timeline`;
     const timeLine = await getRequest(url)
-    console.info(timeLine)
+    console.info("matchID: ",matchId , "match: " ,match, "timeLine: ", timeLine)
+    const matchBody = document.createElement('div');
+    matchBody.classList.add('c-match__body');
+    matchBody.classList.add('js-match-body');
+    card.appendChild(matchBody);
+    const title = document.createElement('h3')
+    title.classList.add('c-match__title')
+    title.innerText = "Match performance"
+    matchBody.appendChild(title)
+    const grid = document.createElement('div');
+    grid.classList.add('c-match__performance-grid');
+
+
+    // team your team:
+    let userWon = match.info.participants[match.userIndex].win;
+    let yourTeam = [], enemyTeam = [], yourTeamColor, enemyTeamColor;
+    if (match.userIndex <= 4) {
+        yourTeam = match.info.participants.slice(0, 5);
+        enemyTeam = match.info.participants.slice(5, 10);
+        yourTeamColor = "Blue";
+        enemyTeamColor = "Red";
+    }
+    else {
+        yourTeam = match.info.participants.slice(5, 10);
+        enemyTeam = match.info.participants.slice(0, 5);
+        yourTeamColor = "Red";
+        enemyTeamColor = "Blue";
+    }
+    // create your team div
+    const yourTeamDiv = document.createElement('div');
+    yourTeamDiv.classList.add('c-match__team');
+    yourTeamDiv.classList.add('c-match__team--your');
+    yourTeamDiv.appendChild(createTeamHeader(yourTeamColor, userWon));
+    // create team body
+    yourTeamDiv.appendChild(createTeamList(yourTeam));
+
+    // create enemy team div
+    const enemyTeamDiv = document.createElement('div');
+    enemyTeamDiv.classList.add('c-match__team');
+    enemyTeamDiv.classList.add('c-match__team--enemy');
+    enemyTeamDiv.appendChild(createTeamHeader(enemyTeamColor, !userWon));
+    // create team body
+    enemyTeamDiv.appendChild(createTeamList(enemyTeam));
+
+
+    // teamDiff.appendChild(createTeamDiff(yourTeam, enemyTeam));
+
+
+    matchBody.appendChild(yourTeamDiv);
+    matchBody.appendChild(createTeamDiff(yourTeam, enemyTeam, yourTeamColor));
+    matchBody.appendChild(enemyTeamDiv);
+    matchBody.appendChild(grid);
+    card.classList.add('loaded');
 
 
 };
@@ -509,7 +769,7 @@ const statCalculator = async e => {
     // clear the cards
     cards.innerHTML = "";
     matchList.forEach(match => {
-        console.log(match);
+        // console.log(match);
         const matchId = match.matchid;
         const puuidUser = match.puuid;
         const userIndex = match.userIndex;
@@ -527,14 +787,14 @@ const statCalculator = async e => {
         const runes = calculateRunes(firstTree, mainRune, secondTree);
         const minionsKilled = participant.totalMinionsKilled + participant.neutralMinionsKilled;
         const minionsPerMinute = (minionsKilled / match.info.gameDuration * 60).toFixed(2);
-        console.info(participant.summoner1Id, participant.summoner2Id);
+        // console.info(participant.summoner1Id, participant.summoner2Id);
         // rune stuff
 
         card.classList.add('c-match-card');
         card.classList.add('js-match-card');
+        card.classList.add('u-notched-border')
         card.innerHTML = `
-            <div class="c-match-card js-match-card">
-                <div class="c-match-card__header u-notched-border">
+                <div class="c-match-card__header">
                     <div class="c-match-card__header--metadata">
                         <h3 class="js-game-type">${match.info.gameMode}</h3>
                         <p class="js-game-date">${timeAgo}</p>
@@ -592,10 +852,17 @@ const statCalculator = async e => {
                           </svg>
                         </button>
                     </div>
-                </div>
-            </div>`
+                </div>`
         card.querySelector('.js-expand').addEventListener('click', () => {
-            loadMatchDetails(matchId,match ,card)
+            card.classList.toggle('js-card-expanded');
+            card.querySelector('.js-expand').querySelector('svg').classList.toggle('u-rotate-180');
+            if(card.classList.contains('js-card-expanded')) {
+                loadMatchDetails(matchId, match, card);
+            }
+            else {
+                console.log('remove');
+                card.querySelector('.js-match-body').classList.add('u-hidden')
+            }
         });
         cards.appendChild(card);
         // hide loading icon
@@ -613,6 +880,7 @@ const showPopup = e => {
 
 
     // console.log(e);
+    htmlElements.popup.animated.classList.add("running");
     htmlElements.popup.container.classList.remove("u-hidden");
     document.documentElement.style.overflow = "hidden";
     htmlElements.popup.image.src = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${e.id}_0.jpg`;
@@ -646,6 +914,7 @@ const showPopup = e => {
 
 const hidePopup = () => {
     htmlElements.popup.container.classList.add("u-hidden");
+    htmlElements.popup.animated.classList.remove("running");
     document.documentElement.style.overflow = "auto";
     htmlElements.popup.image.src = "";
     for (const icon of htmlElements.popup.tagIconAll) {
@@ -765,7 +1034,7 @@ function fillChampions(champions) {
 
 async function getSummonerSpells() {
     const res = await getRequest(ddragon + "/data/en_GB/summoner.json");
-    console.log(res.data);
+    // console.log(res.data);
     const data = res.data;
     for (const key in data) {
         const name = data[key].id;
@@ -793,6 +1062,7 @@ document.addEventListener("DOMContentLoaded", function () {
     htmlElements.popup.name = document.querySelector(".js-champ-name");
     htmlElements.popup.title = document.querySelector(".js-champ-title");
     htmlElements.popup.lore = document.querySelector(".js-champ-lore");
+    htmlElements.popup.animated = document.querySelector(".js-popup-animate");
     htmlElements.popup.tagIconAll = document.querySelectorAll(".js-role-icon");
     htmlElements.abilities.imgContainer = document.querySelector(".js-ability-img-container");
     htmlElements.abilities.name = document.querySelector(".js-ability-name");
