@@ -101,7 +101,15 @@ async function addMatchToUser(puuid, matchList) {
     }
 }
 
-
+async function checkIfUserExits(username, region) {
+    const {resources} = await userContainer
+      .items.query({
+          query: "SELECT * FROM c WHERE c.nameLowerCase = @param1 and c.region = @param2",
+          parameters: [{name: "@param1", value: username.toLowerCase()}, {name: "@param2", value: region}]
+      })
+      .fetchAll();
+    return resources;
+}
 
 
 async function checkIfUserExitsByPuuid(puuid) {
@@ -132,5 +140,6 @@ module.exports = {
     checkIfMatchExists,
     addUser,
     addMatchToUser,
-    checkIfUserExitsByPuuid
+    checkIfUserExitsByPuuid,
+    checkIfUserExits,
 };

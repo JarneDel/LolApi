@@ -7,6 +7,16 @@ async function checkIfUserExitsByPuuid(puuid) {
     });
 }
 
+async function checkIfCached(username, region) {
+    return db.checkIfUserExits(username, region).then((result) => {
+        if (result.length === 0) {
+            return false;
+        } else {
+            return result
+        }
+    });
+}
+
 async function cacheUser(username, region) {
     try {
         let result = await checkIfCached(username, region);
@@ -50,14 +60,3 @@ module.exports = {
     cacheUser,
     cacheMatchIds
 }
-// flow:
-// 1. Incoming request from client with username and region
-// 2. Check if user is cached
-// 3. If not cached, cache user
-// 4.0 If cached, get user from db
-// 4.1. If not cached, Get user from riot api
-// 5. Get match list from riot api
-// 6. update match list in db
-// 7. Get match list from db
-// 8. Get match missing from db from riot api
-// 9. Make calculations
