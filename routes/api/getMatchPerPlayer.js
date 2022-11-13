@@ -5,6 +5,7 @@ const db = require('../../models/db');
 const cors = require("cors");
 const { getMatchTimeline } = require("../../models/LolApiRequest");
 const cache = require("../../models/cache");
+const { localToRegional } = require("../../models/regions");
 
 // whole file is in use
 
@@ -96,9 +97,16 @@ router.get("/matches/:puuid", cors(), cache(10), async function (req, res) {
     res.send(outmatches);
 });
 
-router.get("/match/:matchId/timeline", cors(), cache(10), async function (req, res) {
+// deprecated
+// router.get("/match/:matchId/timeline", cors(), cache(10), async function (req, res) {
+//     const {matchId} = req.params;
+//     let timeLine = await getMatchTimeline(matchId);
+//     res.send(timeLine);
+// });
+
+router.get("/match/:matchId/timeline/:region", cors(), cache(10), async function (req, res) {
     const {matchId} = req.params;
-    let timeLine = await getMatchTimeline(matchId);
+    let timeLine = await getMatchTimeline(matchId, localToRegional(req.params.region));
     res.send(timeLine);
 });
 

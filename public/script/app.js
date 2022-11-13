@@ -695,7 +695,7 @@ const loadMatchDetails = async (matchId, match ,card) => {
     }
 
 
-    const url = `${backend}/api/v2/match/${matchId}/timeline`;
+    const url = `${backend}/api/v2/match/${matchId}/timeline/${user.region}`;
     const timeLine = await getRequest(url)
     console.info("matchID: ",matchId , "match: " ,match, "timeLine: ", timeLine)
     const matchBody = document.createElement('div');

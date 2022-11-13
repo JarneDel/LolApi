@@ -1,6 +1,7 @@
 const cacheUsers = require("./cacheUsers");
 const {getAndResolveMatch} = require("./cacheMatchHistory");
 const db = require("./db");
+const { localToRegional } = require("./regions");
 
 // used in /api/cacheMatches
 async function newUser(userObject, matchList, res) {
@@ -8,13 +9,13 @@ async function newUser(userObject, matchList, res) {
     let outMatches = [];
     // const user = await cacheUsers.cacheUser(username, region); // 450 ms when user is cached, 650 ms when user is not cached
     // // get recent matches from league api
-    // const matchList = await getMatch.getMatchID(user.puuid, "europe", 100); // 190 ms
     // check if new matches can be cached
 
     // check if any matches are cached at all
     if (!userObject.hasOwnProperty("matchList")) {
         console.log("No matches cached yet");
         // immediately cache the new matches
+
         for (const matchID of matchList) {
             // get match info from league api and cache it
             // check if match is already cached
@@ -29,7 +30,7 @@ async function newUser(userObject, matchList, res) {
                             res.status(201).send(userObject);
                         }
                     }
-                });
+                }, localToRegional(userObject.region));
                 // wait 60 ms to not exceed the rate limit
                 await new Promise((resolve) => setTimeout(resolve, 80));
             }else{
@@ -64,7 +65,7 @@ async function newUser(userObject, matchList, res) {
                         res.status(201).send(userObject);
                         callbackCoupleMachToUser(outMatches, userObject);
                     }
-                });
+                }, localToRegional(userObject.region));
                 // wait 60 ms to not exceed the rate limit
                 await new Promise((resolve) => setTimeout(resolve, 60));
             }
