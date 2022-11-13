@@ -34,7 +34,7 @@ async function newUser(userObject, matchList, res) {
                 await new Promise((resolve) => setTimeout(resolve, 80));
             }else{
                 console.info("Match already cached: ", matchID);
-                outMatches.push(exists.matchid);
+                outMatches.push({matchid: exists.matchid});
                 console.info("cached / total: ", outMatches.length, "/", matchList.length);
                 if (outMatches.length === matchList.length) {
                     const success = callbackCoupleMachToUser(outMatches, userObject);
@@ -47,6 +47,12 @@ async function newUser(userObject, matchList, res) {
     } else {
         // check if there are new matches
         const newMatches = matchList.filter((matchID) => !userObject.matchList.includes(matchID));
+        // double check if these matches don't exist in the database
+        const doubleCheck = await db.checkIfMatchesExist(newMatches);
+        console.log("New matches found: ", doubleCheck.length);
+
+
+
         console.log("New matches found: ", newMatches.length);
         if (newMatches.length > 0) {
             // cache new matches

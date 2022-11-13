@@ -24,6 +24,16 @@ async function checkIfMatchExists(matchId, puuid) {
     if (resources.length > 0) return resources[0]; else return null;
 }
 
+async function checkIfMatchesExist(matchList){
+    const query = {
+        query: "SELECT c.matchid FROM c WHERE ARRAY_CONTAINS(@matchList, c.matchid)",
+        parameters: [{name: "@param1", value: matchList}]
+    }
+    const {resources} = await matchContainer.items.query(query).fetchAll();
+    return resources;
+}
+
+
 
 // -- this one is already updated with the new partition key
 /** create a match item if it does not exist */
@@ -123,7 +133,6 @@ async function checkIfUserExitsByPuuid(puuid) {
 }
 
 
-
 async function getUserByPuuid(puuid) {
     const {resources} = await userContainer
         .items.query({
@@ -142,4 +151,5 @@ module.exports = {
     addMatchToUser,
     checkIfUserExitsByPuuid,
     checkIfUserExits,
+    checkIfMatchesExist
 };
