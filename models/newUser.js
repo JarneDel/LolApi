@@ -1,20 +1,21 @@
 const cacheUsers = require("./cacheUsers");
 const {getAndResolveMatch} = require("./cacheMatchHistory");
 const db = require("./db");
+const { localToRegional } = require("./regions");
 
-
+// used in /api/cacheMatches
 async function newUser(userObject, matchList, res) {
     // list of matches
     let outMatches = [];
     // const user = await cacheUsers.cacheUser(username, region); // 450 ms when user is cached, 650 ms when user is not cached
     // // get recent matches from league api
-    // const matchList = await getMatch.getMatchID(user.puuid, "europe", 100); // 190 ms
     // check if new matches can be cached
 
     // check if any matches are cached at all
     if (!userObject.hasOwnProperty("matchList")) {
         console.log("No matches cached yet");
         // immediately cache the new matches
+
         for (const matchID of matchList) {
             // get match info from league api and cache it
             // check if match is already cached
@@ -29,12 +30,12 @@ async function newUser(userObject, matchList, res) {
                             res.status(201).send(userObject);
                         }
                     }
-                });
+                }, localToRegional(userObject.region));
                 // wait 60 ms to not exceed the rate limit
                 await new Promise((resolve) => setTimeout(resolve, 80));
             }else{
                 console.info("Match already cached: ", matchID);
-                outMatches.push(exists.matchid);
+                outMatches.push({matchid: exists.matchid});
                 console.info("cached / total: ", outMatches.length, "/", matchList.length);
                 if (outMatches.length === matchList.length) {
                     const success = callbackCoupleMachToUser(outMatches, userObject);
@@ -47,6 +48,12 @@ async function newUser(userObject, matchList, res) {
     } else {
         // check if there are new matches
         const newMatches = matchList.filter((matchID) => !userObject.matchList.includes(matchID));
+        // double check if these matches don't exist in the database
+        const doubleCheck = await db.checkIfMatchesExist(newMatches);
+        console.log("New matches found: ", doubleCheck.length);
+
+
+
         console.log("New matches found: ", newMatches.length);
         if (newMatches.length > 0) {
             // cache new matches
@@ -58,7 +65,7 @@ async function newUser(userObject, matchList, res) {
                         res.status(201).send(userObject);
                         callbackCoupleMachToUser(outMatches, userObject);
                     }
-                });
+                }, localToRegional(userObject.region));
                 // wait 60 ms to not exceed the rate limit
                 await new Promise((resolve) => setTimeout(resolve, 60));
             }

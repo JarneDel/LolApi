@@ -1,6 +1,6 @@
 // please add this to your .gitignore file
 
-var config = {};
+let config = {};
 require("dotenv").config();
 
 config.endpoint = process.env.COSMOS_ENDPOINT;

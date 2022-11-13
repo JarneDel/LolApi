@@ -18,7 +18,8 @@ const get = function (url, extraHeaders) {
         console.debug("Date in Response header:", headerDate);
         if(res.statusCode === 429){
           console.warn("Too many requests");
-          reject({status: 429})
+          console.warn("Retry-After:", res.headers["retry-after"]);
+          reject({status: 429, retryAfter: res.headers["retry-after"]});
         }
         res.on("data", (chunk) => {
           data.push(chunk);

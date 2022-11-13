@@ -341,6 +341,18 @@ html {
         animation: expand .4s ease;
         transform-box: border-box;
         transform-origin: var(--mouse-pos-x) var(--mouse-pos-y);
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        min-width: 95vw;
+        max-height: 95vh;
+    }
+}
+@media (min-width: 800px) {
+    .c-popup{
+        min-width: 80vw;
+        max-width: 90rem;
+        max-height: 95vh;
     }
 }
 
@@ -380,7 +392,7 @@ html {
 }
 
 .c-popup h2{
-    font-size: 2.75rem;
+    font-size: 2.5rem;
     font-family: var(--seriffont);
     font-weight: 700;
     text-transform: uppercase;
@@ -494,15 +506,7 @@ html {
 /* endregion */
 
 @media (min-width: 576px) {
-    .c-popup {
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        min-width: 80vw;
-        max-width: 90rem;
-        max-height: 95vh;
-        /*min-height: unset;*/
-    }
+
     /* darken the page when popup is shown*/
     .c-popup__overlay {
         position: fixed;
@@ -815,6 +819,7 @@ html {
     align-items: center;
     padding: 1rem;
     gap: 1rem;
+    width: 100%;
 }
 .c-match-card__container span{
     color: var(--dark-neutral-text-color);
@@ -822,17 +827,33 @@ html {
 .c-match-card{
     display: flex;
     flex-direction: column;
+    margin: 0;
+    width: 100%;
 }
+
+/* do with grid instead, for mobile first, change the grid columns and grid rows*/
 .c-match-card__header{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 2rem;
-    align-items: center;
-    padding: 1rem;
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
+    /*padding: 1rem;*/
     --notched-border-color: var(--dark-line-color) !important;
     --notched-border-width: .1em !important;
 }
+
+.c-match-card__header{
+    display: grid;
+    grid-template-columns: 2fr 2fr 4fr;
+    grid-template-rows: 2rem 4rem 2rem 1fr;
+    padding: 1rem;
+    column-gap: 0;
+    justify-items: start;
+}
+
+
+
+
 .c-match-card__header--metadata{
     display: flex;
     flex-direction: column;
@@ -846,6 +867,8 @@ html {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
+    max-width: 4rem;
+    max-height: 4rem;
 }
 .c-match-card__header--summoners-runes-container :nth-child(2n+1){
     grid-row: 1;
@@ -855,6 +878,8 @@ html {
 }
 .c-match-card__header--champ{
     position: relative;
+    max-height: 4rem;
+    max-width: 4rem;
 }
 .c-match-card__header--champ img{
     width: 4rem;
@@ -873,6 +898,7 @@ html {
     width: 2rem;
     aspect-ratio: 1/1;
     object-fit: contain;
+
 }
 .c-match-card__header--result{
     display: flex;
@@ -888,6 +914,7 @@ html {
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     gap: 4px;
+    max-height: 4.25rem;
 }
 .c-match-card__header--items img{
     width: 2rem;
@@ -927,6 +954,98 @@ html {
 .c-expand-container svg{
     fill: white;
 }
+
+@media(min-width: 576px){
+    .c-match-card__header{
+        grid-template-columns: 4fr 2fr 2fr 4fr 4fr 1fr;
+        grid-template-rows: 1fr;
+        gap: .5rem;
+    }
+    .c-match-card__container{
+        width: auto;
+        max-width: 40rem;
+    }
+
+}
+
+
+@media (max-width: 576px) {
+    .c-match-card{
+
+    }
+    .c-match-card__header{
+        padding: .5rem;
+    }
+
+
+    .c-match-card__header--champ{
+        grid-column: 1;
+        grid-row : 2
+    }
+    .c-match-card__header--metadata{
+        grid-column: 1/4;
+        grid-row : 1;
+        flex-direction: row;
+        gap: 1rem;
+
+    }
+    .c-match-card__header--metadata :where(h3, p){
+        margin: 0;
+        font-size: .9rem;
+    }
+
+    .c-match-card__header--metadata h3 {
+        order: 2;
+    }
+    .c-match-card__header--metadata p {
+        order: 3;
+    }
+    .c-match-card__header--metadata p:last-child {
+        order: 1;
+    }
+
+
+    .c-match-card__header--summoners-runes-container{
+        grid-row: 2;
+        grid-column: 2;
+
+    }
+    .c-match-card__header--items{
+        grid-row: 2;
+        grid-column: 3;
+    }
+    .c-expand-container{
+        grid-row: 4;
+        grid-column: 1/4;
+        padding-left: 0;
+        border-left: none;
+        border-top: var(--global-border);
+        width: 100%;
+    }
+    .c-expand-container button{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 .5rem;
+    }
+    .c-match-card__header--result{
+        grid-row: 3;
+        grid-column: 1/4;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: .5rem;
+
+    }
+    .c-match-card__header--result p{
+        font-size: .9rem;
+    }
+
+}
+
+
+
+
 
 /* endregion */
 
@@ -1145,7 +1264,7 @@ html {
     bottom: 1px;
     background: #C2902D;
     height: 3px;
-    width: 0%;
+    width: 0;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1;

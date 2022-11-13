@@ -2,68 +2,47 @@
 
 const express = require('express');
 const router = express.Router();
-const { getSummonerInfo, getMatchID, getMatchInfo, getMatchTimeline, getMatchInfoAsync } = require('../../models/LolApiRequest');
-const db = require('../../models/db');
-const calculator = require('../../models/calculator');
+const { getMatchID } = require('../../models/LolApiRequest');
 const { cacheUser } = require("../../models/cacheUsers");
-const getMatch = require("../../models/LolApiRequest");
 const { newUser } = require("../../models/newUser");
+const cors = require("cors");
+const { localToRegional } = require("../../models/regions");
 
 /* GET home page. */
-router.get('/:region/winrate/:username', function(req, res, next) {
-  const { username, region } = req.params;
-  getSummonerInfo(username, region).then((summonerInfo) => {
-    db.getMatchesByPuuid(summonerInfo.puuid).then((matches) => {
-      let winRates ={};
-      winRates.normal = calculator.calculateWinRateNormal(matches, summonerInfo.puuid);
-      winRates.aram=calculator.calculateWinRateAram(matches, summonerInfo.puuid);
-      winRates.urf=calculator.calculateWinRateURF(matches, summonerInfo.puuid);
-      res.send(winRates);
-    });
-  }).catch(err => {
-    console.log(err);
-    res.status(429).send(err);
-  });
-});
-
-// cache the matches for real
-router.post('/cacheMatches/', async function (req, res, next) {
+// used
+router.post('/cacheMatches/', cors(),async function (req, res) {
   const body = req.body;
   // get matches from api
-  console.info("Caching matches for user: ", body.username, "body: ",body);
-  const matchList = await getMatchID(body.puuid, "europe", 100);
+  console.info("Caching matches for user: ", body.name);
+  // region to global region
+  const globalRegion = localToRegional(body.region);
+  const matchList = await getMatchID(body.puuid, globalRegion, 100).catch((err) => {
+    console.error(err);
+    res.status(500).send(err);
+  });
   newUser(body, matchList, res).catch((err) => {
     console.error("Error while caching users: getRoutes >"+ err);
     res.status(404);
   });
 });
 
-router.get('/:region/cacheMatches/:username/count', function(req, res, next) {
-  const { username, region } = req.params;
-  getSummonerInfo(username, region).then((summonerInfo) => {
-    db.getMatchesByPuuid(summonerInfo.puuid).then((matches) => {
-      res.send(matches.length.toString());
-    });
-  });
-});
-
-// user login
-router.get('/user/:username/:region/', async function(req, res, next) {
+// user login -- used
+router.get('/user/:username/:region/', cors(), async function(req, res) {
   const { username, region } = req.params;
   const user = await cacheUser(username, region);
-  if(user.firstTime){
-    const matchList = await getMatch.getMatchID(user.puuid, "europe", 100);
-    newUser(user, matchList).then((result) => {
+  const globalRegion = localToRegional(region);
+  if(user.firstTime){ // never goes in here
+    const matchList = await getMatchID(user.puuid, globalRegion, 100);
+    newUser(user, matchList).then(() => {
       console.log("New user created");
     }).catch((err)=>{
       console.warn(err)
       res.status(429).send("To many requests")
     });
   }
-  console.log("getRoutes/user: userObject:", user);
+  console.log("getRoutes/user: puuid:", user.puuid);
   res.send(user);
 });
-
 
 
 module.exports = router;
