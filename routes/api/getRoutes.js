@@ -2,32 +2,13 @@
 
 const express = require('express');
 const router = express.Router();
-const { getSummonerInfo, getMatchID, getMatchInfo, getMatchTimeline, getMatchInfoAsync } = require('../../models/LolApiRequest');
-const db = require('../../models/db');
-const calculator = require('../../models/calculator');
+const { getMatchID } = require('../../models/LolApiRequest');
 const { cacheUser } = require("../../models/cacheUsers");
-const getMatch = require("../../models/LolApiRequest");
 const { newUser } = require("../../models/newUser");
 
 /* GET home page. */
-router.get('/:region/winrate/:username', function(req, res, next) {
-  const { username, region } = req.params;
-  getSummonerInfo(username, region).then((summonerInfo) => {
-    db.getMatchesByPuuid(summonerInfo.puuid).then((matches) => {
-      let winRates ={};
-      winRates.normal = calculator.calculateWinRateNormal(matches, summonerInfo.puuid);
-      winRates.aram=calculator.calculateWinRateAram(matches, summonerInfo.puuid);
-      winRates.urf=calculator.calculateWinRateURF(matches, summonerInfo.puuid);
-      res.send(winRates);
-    });
-  }).catch(err => {
-    console.log(err);
-    res.status(429).send(err);
-  });
-});
-
-// cache the matches for real
-router.post('/cacheMatches/', async function (req, res, next) {
+// used
+router.post('/cacheMatches/', async function (req, res) {
   const body = req.body;
   // get matches from api
   console.info("Caching matches for user: ", body.username, "body: ",body);
@@ -38,22 +19,13 @@ router.post('/cacheMatches/', async function (req, res, next) {
   });
 });
 
-router.get('/:region/cacheMatches/:username/count', function(req, res, next) {
-  const { username, region } = req.params;
-  getSummonerInfo(username, region).then((summonerInfo) => {
-    db.getMatchesByPuuid(summonerInfo.puuid).then((matches) => {
-      res.send(matches.length.toString());
-    });
-  });
-});
-
-// user login
-router.get('/user/:username/:region/', async function(req, res, next) {
+// user login -- used
+router.get('/user/:username/:region/', async function(req, res) {
   const { username, region } = req.params;
   const user = await cacheUser(username, region);
   if(user.firstTime){
-    const matchList = await getMatch.getMatchID(user.puuid, "europe", 100);
-    newUser(user, matchList).then((result) => {
+    const matchList = await getMatchID(user.puuid, "europe", 100);
+    newUser(user, matchList).then(() => {
       console.log("New user created");
     }).catch((err)=>{
       console.warn(err)
@@ -63,7 +35,6 @@ router.get('/user/:username/:region/', async function(req, res, next) {
   console.log("getRoutes/user: userObject:", user);
   res.send(user);
 });
-
 
 
 module.exports = router;

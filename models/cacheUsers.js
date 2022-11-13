@@ -1,25 +1,11 @@
 const db = require("../models/db");
 const getMatch = require("./LolApiRequest");
-const calculator = require("../models/calculator");
-const {checkIfUserExits, getUser} = require("./db");
-
-
-async function checkIfCached(username, region) {
-    return db.checkIfUserExits(username, region).then((result) => {
-        if (result.length === 0) {
-            return false;
-        } else {
-            return result
-        }
-    });
-}
 
 async function checkIfUserExitsByPuuid(puuid) {
     return db.checkIfUserExitsByPuuid(puuid).then((result) => {
         return result["$1"] !== 0;
     });
 }
-
 
 async function cacheUser(username, region) {
     try {
@@ -50,15 +36,6 @@ async function cacheUser(username, region) {
     }
 }
 
-async function getUserByUsername(username, region) {
-    if (await cacheUser(username, region)) {
-        return await db.getUser(username, region);
-    } else {
-        console.warn("Error occured while caching user");
-        return false;
-    }
-}
-
 async function cacheMatchIds(puuid, matchList) {
     if (await checkIfUserExitsByPuuid(puuid)) {
         return await db.addMatchToUser(puuid, matchList);
@@ -67,45 +44,10 @@ async function cacheMatchIds(puuid, matchList) {
     return false;
 }
 
-async function test(username, region, puuid) {
-    // checkIfCached(username, region).then((result) => {
-    //   console.log(`User ${username} is cached: ${result}`);
-    // });
-    //
-    // cacheUser(username, region).then(
-    //   (result) => {
-    //     console.log(`caching user ${username} is ${result}`);
-    //   }
-    // );
-    //
-    // getUserByUsername(username, region).then(
-    //   (result) => {
-    //     console.log(`user: ${username} ${result}`);
-    //   }
-    // );
-    //
-    // checkIfUserExitsByPuuid(puuid).then(
-    //   (result) => {
-    //     console.log(`user with puuid ${puuid} is cached: ${result}`);
-    //   });
-    // getUser(username, region).then(
-    //   (result) => {
-    //     console.log(`user: ${username} ${result}`);
-    //   });
 
-    let matchList = await db.getMatchIDsByPuuid(puuid)
-    console.log(matchList);
-    const outputList = [];
-    for (const matchObject of matchList) {
-        outputList.push(matchObject.matchid);
-    }
-    console.log(outputList);
-    console.log(await cacheMatchIds(puuid, outputList));
-}
 
 module.exports = {
     cacheUser,
-    checkIfCached,
     cacheMatchIds
 }
 // flow:

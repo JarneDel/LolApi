@@ -2,7 +2,7 @@ const cacheUsers = require("./cacheUsers");
 const {getAndResolveMatch} = require("./cacheMatchHistory");
 const db = require("./db");
 
-
+// used in /api/cacheMatches
 async function newUser(userObject, matchList, res) {
     // list of matches
     let outMatches = [];
