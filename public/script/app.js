@@ -506,11 +506,11 @@ function createTeamHeader(TeamColor, userWon) {
     header.classList.add('c-team__header', 'c-team__grid');
     let victoryText = userWon ? "Victory" : "Defeat";
     let redTeamBlueTeam = TeamColor === "Red" ? "Blue Team" : "Red Team";
-    const headerList = [`${victoryText} (${redTeamBlueTeam})`, 'KDA', 'Damage', 'Vision', 'Gold', 'CS', 'Items'];
+    const headerList = [`${victoryText} <span class="team">(${redTeamBlueTeam})<span></span>`, 'KDA', 'Damage', 'Vision', 'Gold', 'CS', 'Items'];
     for (const headerItem of headerList) {
         const headerElement = document.createElement('div');
         headerElement.classList.add('c-team__header-item');
-        headerElement.textContent = headerItem;
+        headerElement.innerHTML = headerItem;
         header.appendChild(headerElement);
     }
     return header;
