@@ -1,6 +1,6 @@
 - [ ] add difficulty to the champion
 - [ ] add animation to switching types
-- [ ] make popup take in full width on mobile
+- [x] make popup take in full width on mobile
 - [ ] skin selector
 - [ ] spell tooltip
 
@@ -8,3 +8,5 @@
 - [ ] Loading animation for cards, and for the champion statistics
 - [ ] focus states for the input fields
 - [ ] MORE input validation
+- [ ] make the cards a11y friendly
+- [ ] fix the slide in animation for the match data
