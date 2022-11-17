@@ -1299,6 +1299,7 @@ html {
         position: relative;
         grid-column: span 3;
         height: 20px;
+        align-self: center;
     }
     .c-participant__damage-ratio{
         width: 100%;
