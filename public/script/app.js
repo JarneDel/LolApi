@@ -206,7 +206,7 @@ const listenToEvents = () => {
         document.querySelector('.js-search-username').focus();
         hidePopup();
     });
-    document.querySelector('.js-to-searchbar').addEventListener('keyup', () => {
+    document.querySelector('.js-to-searchbar').addEventListener('keyup', (e) => {
         if (a11yClick(e)) {
             document.querySelector('.js-search-username').focus();
             hidePopup();
@@ -322,14 +322,17 @@ const createSvg = (name) => {
 
 
 const displayAndQsAbilityImg = function (champion) {
-    // nesting the functions to use the champion variable
-    function abilityImgClicked() {
+        // nesting the functions to use the champion variable
+    function abilityImgClicked(spellButton, type, id) {
+        console.log(this)
         // console.log(e);
         // console.log(this);
         // remove the border from all elements
         document.querySelectorAll('.c-abilities__icon__border').forEach((border) => {
             border.classList.add('u-hidden');
-            if (border.dataset.name === this.dataset.spellButton || this.dataset.type === border.dataset.name) {
+            console.info(border.dataset.name, spellButton, type)
+            if (border.dataset.name === spellButton) {
+                console.info("border found");
                 border.classList.remove('u-hidden');
                 border.querySelector('.js-svg-animate').beginElement();
             }
@@ -343,9 +346,13 @@ const displayAndQsAbilityImg = function (champion) {
             console.warn("No icon selected");
         }
         // add the u-selected-icon class to the clicked icon
-        this.classList.add('u-selected-icon');
-        const ability = this.dataset.type;
-        if (ability === "passive") {
+        document.querySelectorAll('.c-abilities__img-container').forEach((img) => {
+            if (img.dataset.id == id) {
+                img.classList.add('u-selected-icon');
+            }
+        });
+        // this.classList.add('u-selected-icon');
+        if (type === "passive") {
             const spell = champion.passive;
             htmlElements.abilities.name.textContent = spell.name;
             htmlElements.abilities.description.innerHTML = spell.description;
@@ -353,7 +360,6 @@ const displayAndQsAbilityImg = function (champion) {
             toggleVideo("P");
             // show passive description
         } else {
-            const id = this.dataset.id;
             for (const spell of champion.spells) {
                 if (spell.id === id) {
                     // console.log(spell);
@@ -362,8 +368,8 @@ const displayAndQsAbilityImg = function (champion) {
                     // get the last character of the id: [q, w, e, r]
                     // scrapped because of kennen who dislikes naming conventions
                     // htmlElements.abilities.type.textContent = spell.id.substring(spell.id.length -1).toUpperCase();
-                    htmlElements.abilities.type.textContent = this.dataset.spellButton;
-                    toggleVideo(this.dataset.spellButton);
+                    htmlElements.abilities.type.textContent = spellButton;
+                    toggleVideo(spellButton);
                 }
             }
         }
@@ -389,7 +395,12 @@ const displayAndQsAbilityImg = function (champion) {
     imgContainer.classList.add("c-abilities__img-container");
     imgContainer.classList.add("u-selected-icon");
     imgContainer.tabIndex = 0;
-    imgContainer.addEventListener("click", abilityImgClicked);
+    imgContainer.addEventListener("click", ()=>{(abilityImgClicked("passive", "passive", imgContainer.dataset.id))});
+    imgContainer.addEventListener("keyup", (e) => {
+        if (a11yClick(e)) {
+            abilityImgClicked("passive", "passive", imgContainer.dataset.id);
+        }
+    });
     // imgContainer.classList.add("u-notched-border");
     imgContainer.appendChild(pImg);
     imgContainer.appendChild(svg);
@@ -411,9 +422,14 @@ const displayAndQsAbilityImg = function (champion) {
         imgContainer.dataset.type = "spell";
         imgContainer.dataset.id = spellElement.id;
         imgContainer.dataset.spellButton = spellButtons[i];
-        imgContainer.addEventListener("click", abilityImgClicked);
+        imgContainer.addEventListener("click", ()=>{(abilityImgClicked(imgContainer.dataset.spellButton, "spell", imgContainer.dataset.id))});
         imgContainer.tabIndex = 0;
         htmlElements.abilities.imgContainer.appendChild(imgContainer);
+        imgContainer.addEventListener("keyup", (e) => {
+            if (a11yClick(e)) {
+                abilityImgClicked(imgContainer.dataset.spellButton, "spell", imgContainer.dataset.id)
+            }
+        });
         i += 1;
     }
 
