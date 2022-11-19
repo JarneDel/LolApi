@@ -17,7 +17,7 @@
 </head>
 
 <body>
-<form class="userForm">
+<form class="userForm js-search-container">
     <label for="user-username" class="u-hidden">username</label>
     <div class="c-searchBar u-center u-notched-border">
         <input type="text" name="username" class="js-search-username  c-searchBar__query" id="user-username" required
@@ -34,7 +34,6 @@
             <option value="oc1">OCE</option>
             <option value="tr1">TR</option>
             <option value="ru">RU</option>
-
         </select>
         <button type="submit" value="Submit" class="js-submit-user c-searchBar__submit c-focus-border">
             <svg style="width:24px;height:24px" class="c-searchBar__search-icon" viewBox="0 0 24 24">
@@ -51,7 +50,7 @@
 
 <div class="c-popup__container js-popup-container u-hidden">
     <div class="c-popup__overlay js-popup-overlay"></div>
-    <article class="c-popup js-popup-animate">
+    <article class="c-popup js-popup-animate" id="pup-up">
         <div class="c-popup__container js-popup-content">
             <div class="c-popup__close">
                 <div class="c-popup__close--svg-container u-notched-border u-notched-to-square js-popup-close"
@@ -143,15 +142,7 @@
                     </div>
                     <div class="c-row__lore u-1-of-1-bp-1">
                         <p class="c-row__lore--text c-popup__text js-champ-lore">
-                            Once honored defenders of Shurima against the Void, Aatrox and
-                            his brethren would eventually become an even greater threat to
-                            Runeterra, and were defeated only by cunning mortal sorcery.
-                            But after centuries of imprisonment, Aatrox was the first to
-                            find freedom once more, corrupting and transforming those
-                            foolish enough to try and wield the magical weapon that
-                            contained his essence. Now, with stolen flesh, he walks
-                            Runeterra in a brutal approximation of his previous form,
-                            seeking an apocalyptic and long overdue vengeance.
+                            "Champion lore"
                         </p>
                     </div>
                 </div>
@@ -181,7 +172,7 @@
                                 <h4 class="js-ability-type">PASSIVE</h4>
                                 <h3 class="js-ability-name">Blood Well</h3>
                                 <p class="js-ability-description c-ability-description">
-                                    periodically ...
+                                    "Description"
                                 </p>
                             </div>
                         </div>

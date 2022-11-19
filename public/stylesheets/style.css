@@ -50,9 +50,6 @@ a {
     color: var(--global-focus-color);
 }
 
-:root {
-    --padding-button: 18px;
-}
 
 
 footer{
@@ -211,9 +208,8 @@ html {
     justify-content: center;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     padding: 0 1rem;
-    /*bad performance wise*/
-    /*animation: append-animate-from-left .3s linear;*/
-    /*transform-origin: 50% 0;*/
+    grid-template-rows: max-content;
+
 
 }
 
@@ -229,14 +225,19 @@ html {
 /* region cards */
 .c-card {
     background: var(--dark-background-color);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     display: grid;
     /*grid-template-rows: auto 1fr auto;*/
     cursor: pointer;
+    height: 100%;
 
     /*max-width: 18.875rem;*/
 }
-
+.c-card__container{
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0 ,.3));
+    cursor: pointer;
+    text-decoration: none;
+    /*min-height: 100%;*/
+}
 
 
 
@@ -307,11 +308,11 @@ html {
 }
 
 
-.c-card:where(:hover, :focus-within, :active) .c-card__img {
+.c-card__container:where(:hover, :focus-within, :active) .c-card__img {
     transform: scale(1.1);
 }
 
-.c-card:where(:hover, :focus-within, :active) .c-card__title {
+.c-card__container:where(:hover, :focus-within, :active) .c-card__title {
     transform: translateX(1.5%);
 }
 
@@ -833,22 +834,14 @@ html {
 
 /* do with grid instead, for mobile first, change the grid columns and grid rows*/
 .c-match-card__header{
-    /*display: flex;*/
-    /*flex-direction: row;*/
-    /*justify-content: center;*/
-    /*align-items: center;*/
-    /*padding: 1rem;*/
-    --notched-border-color: var(--dark-line-color) !important;
-    --notched-border-width: .1em !important;
-}
-
-.c-match-card__header{
     display: grid;
     grid-template-columns: 2fr 2fr 4fr;
     grid-template-rows: 2rem 4rem 2rem 1fr;
     padding: 1rem;
     column-gap: 0;
     justify-items: start;
+    --notched-border-color: var(--dark-line-color) !important;
+    --notched-border-width: .1em !important;
 }
 
 
@@ -867,8 +860,7 @@ html {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
-    max-width: 4rem;
-    max-height: 4rem;
+
 }
 .c-match-card__header--summoners-runes-container :nth-child(2n+1){
     grid-row: 1;
@@ -882,7 +874,7 @@ html {
     max-width: 4rem;
 }
 .c-match-card__header--champ img{
-    width: 4rem;
+    max-width: 4rem;
     aspect-ratio: 1/1;
     object-fit: cover;
     border-radius: 5px;
@@ -957,14 +949,40 @@ html {
 
 @media(min-width: 576px){
     .c-match-card__header{
-        grid-template-columns: 4fr 2fr 2fr 4fr 4fr 1fr;
+        grid-template-columns: 3fr 5rem 2fr 4fr 4fr 1fr;
         grid-template-rows: 1fr;
         gap: .5rem;
+        justify-items: center;
     }
     .c-match-card__container{
-        width: auto;
-        max-width: 40rem;
+        /*width: auto;*/
+        max-width: 50rem;
+
     }
+    .c-match-card__container :where(p, h3) {
+        font-size: 1.3rem;
+    }
+    .c-match-card__header--summoners-runes-container img{
+        width: 2.5rem;
+    }
+    .c-match-card__header--champ{
+        max-height: 5rem;
+        max-width: 5rem;
+    }
+    .c-match-card__header--champ img{
+        max-width: 5rem;
+    }
+    .c-match-card__header--items{
+        max-height: 5rem;
+    }
+    .c-match-card__header--items img{
+        width: 2.5rem;
+    }
+
+    .c-match__body *{
+        font-size: 1.1rem;
+    }
+
 
 }
 
@@ -1064,9 +1082,6 @@ html {
     margin: 0 1rem;
 }
 
-
-
-
 .c-participant__general{
     grid-column: 1;
     display: grid;
@@ -1083,11 +1098,16 @@ html {
     width: 1.25rem;
 
 }
+.c-participant__general .c-match-card__header--champ{
+    max-height: 3.2rem;
+    max-width: 3.2rem;
+}
+
 .c-participant__general .c-match-card__header--champ img{
-    width: 2.5rem;
+    width: 3.2rem;
 }
 .c-participant__general .c-match-card__header--champ span{
-    font-size: .6rem;
+    font-size: .7rem;
 }
 .c-match-card__header--summoner{
     grid-column: 3;
@@ -1152,11 +1172,10 @@ html {
     grid-template-rows: 1fr 1fr;
     gap: 2px;
     align-items: center;
-    height: 40px;
-    width: 90px;
+    height: 3rem;
 }
 .c-participant__item img{
-    height: 1.25rem;
+    height: 1.4rem;
 }
 .c-participant__items :nth-child(odd){
     grid-row: 1;
@@ -1213,8 +1232,95 @@ html {
 }
 
 .c-match__body{
-    animation: append-animate .3s linear;
+    animation: append-animate .2s linear;
     transform-origin: 50% 0;
+}
+.js-summoner-name{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    /*max-width: 80px;*/
+}
+
+
+@media (max-width: 576px) {
+    .c-team__header.c-team__grid{
+        /*grid-template-columns: repeat(6, 1fr);*/
+        display: none;
+    }
+    .c-team__header .team{
+        display: none;
+    }
+    .c-team__header-item:last-child{
+        display: none;
+    }
+    .c-team__grid{
+        grid-template-columns: 6rem 1fr 1fr 1fr 1fr 1fr 2fr;
+        grid-template-rows: repeat(2, 2rem);
+    }
+    .c-participant__items{
+
+    }
+    .c-participant__general{
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        grid-row: 1 /3;
+    }
+    .c-participant__general *{
+        grid-row: 1;
+    }
+    .c-participant__general .c-match-card__header--summoner{
+        grid-row: 2;
+        grid-column: 1/3;
+
+    }
+    .c-team__grid :where(.c-match-card__header--summoner, .c-match-card__header--summoners-runes-container, .c-match-card__header--champ){
+        grid-row: 1;
+    }
+    .c-team__grid :where(.c-participant__cs, .c-participant__gold, .c-participant__vision, .c-participant__kda, .c-participant__damage){
+        grid-row: 2;
+    }
+    .c-participant__vision, .c-participant__gold{
+        display: none;
+    }
+    .c-participant__items{
+        grid-row: 1;
+        grid-column: 2/-1;
+        grid-template-rows: 1fr;
+        grid-template-columns: repeat(7, 1fr);
+    }
+    .c-participant__item{
+        grid-row: 1 !important;
+    }
+    .c-participant__kda-ratio{
+        display: none;
+    }
+    .c-participant__damage{
+        display: block;
+        position: relative;
+        grid-column: span 3;
+        height: 20px;
+        align-self: center;
+    }
+    .c-participant__damage-ratio{
+        width: 100%;
+        position: relative;
+    }
+    .c-participant__damage-progress-bar{
+        height: 20px;
+    }
+    .c-participant__damage-value{
+        text-align: left;
+        position: absolute;
+        z-index: 2;
+    }
+    .js-summoner-level{
+        display: none;
+    }
+    .js-summoner-name{
+        max-width: 90px;
+    }
+
 }
 
 
@@ -1283,6 +1389,12 @@ html {
 
 .c-filter__class:where(.u-selected)::after {
     width: 120%;
+}
+
+.u-is-loading{
+    -webkit-animation: opacity-shift .5s;
+    -o-animation: opacity-shift .5s;
+    animation: opacity-shift .7s infinite alternate linear;
 }
 
 /*endregion */
@@ -1355,10 +1467,13 @@ html {
 .u-notched-content:where(:hover, :focus, :active) {
     clip-path: polygon(100% 0%, 100% 0, 100% 100%, 0 100%, 0 0);
 }
-.c-card:focus-visible{
-    outline: 4px solid var(--global-focus-color) !important;
+.c-card__container:focus-visible{
+    outline: 4px solid var(--global-focus-color);
+}
+.c-card__container:focus-visible .c-card{
     clip-path: none;
 }
+
 
 
 
@@ -1431,6 +1546,12 @@ html {
 .perfect{
     color: #C2902D !important;
 }
+.u-overflow-hidden{
+    overflow-y: hidden;
+}
+
+
+
 
 /*endregion*/
 
@@ -1457,40 +1578,31 @@ html {
 @keyframes error {
 
     5% {
-        padding-left: calc(var(--padding-button) - 8px);
-        padding-right: calc(var(--padding-button) + 8px);
+        translate: -8px 0;
     }
     10% {
-        padding-left: calc(var(--padding-button) + 7px);
-        padding-right: calc(var(--padding-button) - 7px);
+        translate: 7px 0;
     }
     20% {
-        padding-left: calc(var(--padding-button) - 6px);
-        padding-right: calc(var(--padding-button) + 6px);
+        translate: -6px 0;
     }
     30% {
-        padding-left: calc(var(--padding-button) + 5px);
-        padding-right: calc(var(--padding-button) - 5px);
+        translate: 5px 0;
     }
     40% {
-        padding-left: calc(var(--padding-button) - 4px);
-        padding-right: calc(var(--padding-button) + 4px);
+        translate: -4px 0;
     }
     50% {
-        padding-left: calc(var(--padding-button) + 3px);
-        padding-right: calc(var(--padding-button) - 3px);
+        translate: 3px 0;
     }
     60% {
-        padding-left: calc(var(--padding-button) - 2px);
-        padding-right: calc(var(--padding-button) + 2px);
+        translate: 2px 0;
     }
     70% {
-        padding-left: calc(var(--padding-button) + 1px);
-        padding-right: calc(var(--padding-button) - 1px);
+        translate: 1px 0;
     }
     80% {
-        padding-left: var(--padding-button);
-        padding-right: var(--padding-button);
+        translate: 0 0;
     }
 }
 @keyframes dash {
@@ -1501,11 +1613,11 @@ html {
 
 @keyframes append-animate {
     from {
-        scale: 1 0;
+        transform: translateY(-100%);
         opacity: 0;
     }
     to {
-        scale: 1 1;
+        translate: 0;
         opacity: 1;
     }
 }
@@ -1539,6 +1651,15 @@ html {
     }
     to {
         transform: translatey(0);
+    }
+}
+
+@keyframes opacity-shift {
+    from{
+        opacity: 1;
+    }
+    to{
+        opacity: 0.2;
     }
 }
 /*endregion*/
