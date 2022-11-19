@@ -50,9 +50,6 @@ a {
     color: var(--global-focus-color);
 }
 
-:root {
-    --padding-button: 18px;
-}
 
 
 footer{
@@ -211,9 +208,8 @@ html {
     justify-content: center;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     padding: 0 1rem;
-    /*bad performance wise*/
-    /*animation: append-animate-from-left .3s linear;*/
-    /*transform-origin: 50% 0;*/
+    grid-template-rows: max-content;
+
 
 }
 
@@ -229,14 +225,19 @@ html {
 /* region cards */
 .c-card {
     background: var(--dark-background-color);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     display: grid;
     /*grid-template-rows: auto 1fr auto;*/
     cursor: pointer;
+    height: 100%;
 
     /*max-width: 18.875rem;*/
 }
-
+.c-card__container{
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0 ,.3));
+    cursor: pointer;
+    text-decoration: none;
+    /*min-height: 100%;*/
+}
 
 
 
@@ -307,11 +308,11 @@ html {
 }
 
 
-.c-card:where(:hover, :focus-within, :active) .c-card__img {
+.c-card__container:where(:hover, :focus-within, :active) .c-card__img {
     transform: scale(1.1);
 }
 
-.c-card:where(:hover, :focus-within, :active) .c-card__title {
+.c-card__container:where(:hover, :focus-within, :active) .c-card__title {
     transform: translateX(1.5%);
 }
 
@@ -1231,7 +1232,7 @@ html {
 }
 
 .c-match__body{
-    animation: append-animate .3s linear;
+    animation: append-animate .2s linear;
     transform-origin: 50% 0;
 }
 .js-summoner-name{
@@ -1390,6 +1391,12 @@ html {
     width: 120%;
 }
 
+.u-is-loading{
+    -webkit-animation: opacity-shift .5s;
+    -o-animation: opacity-shift .5s;
+    animation: opacity-shift .7s infinite alternate linear;
+}
+
 /*endregion */
 
 /* region utilities */
@@ -1460,10 +1467,13 @@ html {
 .u-notched-content:where(:hover, :focus, :active) {
     clip-path: polygon(100% 0%, 100% 0, 100% 100%, 0 100%, 0 0);
 }
-.c-card:focus-visible{
-    outline: 4px solid var(--global-focus-color) !important;
+.c-card__container:focus-visible{
+    outline: 4px solid var(--global-focus-color);
+}
+.c-card__container:focus-visible .c-card{
     clip-path: none;
 }
+
 
 
 
@@ -1536,6 +1546,12 @@ html {
 .perfect{
     color: #C2902D !important;
 }
+.u-overflow-hidden{
+    overflow-y: hidden;
+}
+
+
+
 
 /*endregion*/
 
@@ -1562,40 +1578,31 @@ html {
 @keyframes error {
 
     5% {
-        padding-left: calc(var(--padding-button) - 8px);
-        padding-right: calc(var(--padding-button) + 8px);
+        translate: -8px 0;
     }
     10% {
-        padding-left: calc(var(--padding-button) + 7px);
-        padding-right: calc(var(--padding-button) - 7px);
+        translate: 7px 0;
     }
     20% {
-        padding-left: calc(var(--padding-button) - 6px);
-        padding-right: calc(var(--padding-button) + 6px);
+        translate: -6px 0;
     }
     30% {
-        padding-left: calc(var(--padding-button) + 5px);
-        padding-right: calc(var(--padding-button) - 5px);
+        translate: 5px 0;
     }
     40% {
-        padding-left: calc(var(--padding-button) - 4px);
-        padding-right: calc(var(--padding-button) + 4px);
+        translate: -4px 0;
     }
     50% {
-        padding-left: calc(var(--padding-button) + 3px);
-        padding-right: calc(var(--padding-button) - 3px);
+        translate: 3px 0;
     }
     60% {
-        padding-left: calc(var(--padding-button) - 2px);
-        padding-right: calc(var(--padding-button) + 2px);
+        translate: 2px 0;
     }
     70% {
-        padding-left: calc(var(--padding-button) + 1px);
-        padding-right: calc(var(--padding-button) - 1px);
+        translate: 1px 0;
     }
     80% {
-        padding-left: var(--padding-button);
-        padding-right: var(--padding-button);
+        translate: 0 0;
     }
 }
 @keyframes dash {
@@ -1606,11 +1613,11 @@ html {
 
 @keyframes append-animate {
     from {
-        scale: 1 0;
+        transform: translateY(-100%);
         opacity: 0;
     }
     to {
-        scale: 1 1;
+        translate: 0;
         opacity: 1;
     }
 }
@@ -1644,6 +1651,15 @@ html {
     }
     to {
         transform: translatey(0);
+    }
+}
+
+@keyframes opacity-shift {
+    from{
+        opacity: 1;
+    }
+    to{
+        opacity: 0.2;
     }
 }
 /*endregion*/

@@ -1,4 +1,3 @@
-
 // region Globals
 let htmlElements = {
     popup: {}, abilities: {}, filters: {}
@@ -6,20 +5,20 @@ let htmlElements = {
 let allChampions = {};
 let backend = window.location.origin;
 // for development only (live server)
-if (backend === "http://127.0.0.1:3000") {
+if (backend === 'http://127.0.0.1:3000' || backend === 'http://localhost:3000') {
     // set backend to 8080
-    backend = "http://127.0.0.1:8080";
+    backend = 'http://127.0.0.1:8080';
 }
 let version = "12.19.1";
 
 let userIsLoaded = false;
 let loadedChampion = undefined;
-let user;
+let user, lastInputUsername;
 let ddragon = `https://ddragon.leagueoflegends.com/cdn/${version}`;
 const ddragonImg = "https://ddragon.leagueoflegends.com/cdn/img/";
 let summonerSpells = {};
 let runes = {};
-let pos = {x: 0, y: 0}
+let pos = {x: 0, y: 0};
 // endregion
 
 // region api
@@ -31,16 +30,15 @@ const getRequest = async function (url) {
 };
 const postRequest = async function (url, data) {
     return await fetch(url, {
-        method: "POST", headers: {
-            "Content-Type": "application/json",
-        }, body: JSON.stringify(data),
+        method: 'POST', headers: {
+            'Content-Type': 'application/json'
+        }, body: JSON.stringify(data)
     })
         .then((res) => res.json())
         .catch((err) => console.warn(err));
-}
+};
 const getChampions = async () => {
     const champions = await getRequest(`${ddragon}/data/en_GB/championFull.json`);
-    console.log(champions);
     allChampions = champions;
     fillChampions(champions);
 };
@@ -55,79 +53,69 @@ const getApiVersion = async () => {
 // region userInput
 
 const invalidateUserForm = () => {
-    htmlElements.submitUser.classList.add("is-invalid");
-    htmlElements.submitUser.addEventListener("animationend", () => {
-        htmlElements.submitUser.classList.remove("is-invalid");
+    htmlElements.search_container.classList.add('is-invalid');
+    htmlElements.search_container.addEventListener('animationend', () => {
+        htmlElements.search_container.classList.remove('is-invalid');
     });
 };
 
-const filterChampionsByPlayed = out => {
-    document.querySelector('#orderChampion').classList.add('u-hidden');
-
-    const selector = element => element.querySelector()
-
-
-};
 
 const loadUser = async userObject => {
+    // show loading
+    htmlElements.championsContainer.classList.add('u-is-loading')
     // cache the user
-    let url = backend + "/api/cacheMatches/";
-    const res = await postRequest(url, userObject)
-    console.info(url, res)
-    user = userObject
+    let url = backend + '/api/cacheMatches/';
+    const res = await postRequest(url, userObject);
+    console.info(url, res);
+    user = userObject;
     // get the matches per champion
-    url = backend + "/api/v2/matches/" + userObject.puuid;
+    url = backend + '/api/v2/matches/' + userObject.puuid;
     const out = await getRequest(url);
     console.info(url, out);
     userIsLoaded = true;
     // add the data to the cards
-    console.info("About to add the values to the cards");
-    const cards = document.querySelectorAll('.c-card')
-    cards.forEach((card) => {
-        let found = false
+    console.info('About to add the values to the cards');
+    const cardBoxes = document.querySelectorAll('.js-card-box');
+    cardBoxes.forEach((cardBox) => {
+        let found = false;
+        const card = cardBox.firstElementChild;
         for (const [i, champion] of out.entries()) {
             if (parseInt(card.dataset.championId) === champion.championId) {
                 found = true;
-                // console.info(i, champion);
-                card.dataset.order = out.length - i;
-                // card.style.order = 0 - out.length + i;
-                // card.tabIndex = 1+ i;
+                cardBox.dataset.order = out.length - i;
                 const body = card.querySelector('.c-card__body');
-                body.classList.remove("u-hidden")
-                body.querySelector('.c-card__played').innerText = `${champion.matches}${champion.matches > 1 ? " games" : " game"}`;
+                body.classList.remove('u-hidden');
+                body.querySelector('.c-card__played').innerText = `${champion.matches}${champion.matches > 1 ? ' games' : ' game'}`;
                 const winrateElement = body.querySelector('.c-card__winrate');
-                winrateElement.innerText = Math.round(champion.winrate * 100) + "%";
+                winrateElement.innerText = Math.round(champion.winrate * 100) + '%';
                 if (champion.winrate > .5) {
-                    winrateElement.classList.add("u-positive-color")
+                    winrateElement.classList.add('u-positive-color');
                 } else {
-                    winrateElement.classList.add("u-negative-color")
+                    winrateElement.classList.add('u-negative-color');
                 }
                 body.querySelector('.c-card__kda').innerText = champion.kda;
             }
         }
-        if (!found){
-            // console.info("not found", card.dataset.championId, out.length);
-            // card.tabIndex = out.length + 1;
-            card.dataset.order = "0";
+        if (!found) {
+            cardBox.dataset.order = '0';
         }
     });
     // sort the cards
     // console.log(cards)
-    const cardsArray = Array.prototype.slice.call(cards);
+
+    const cardsArray = Array.prototype.slice.call(cardBoxes);
     cardsArray.sort((a, b) => {
         return parseInt(b.dataset.order) - parseInt(a.dataset.order);
     });
-    // console.log(cardsArray)
+
     let fragment = document.createDocumentFragment();
     cardsArray.forEach((card) => {
         fragment.appendChild(card);
     });
-    const container = document.querySelector('.js-champ-card-container')
-    container.innerHTML = "";
-    container.appendChild(fragment);
+    htmlElements.championsContainer.innerHTML = '';
+    htmlElements.championsContainer.appendChild(fragment);
+    htmlElements.championsContainer.classList.remove("u-is-loading")
 
-
-    // filterChampionsByPlayed(out);
 };
 
 // endregion
@@ -135,51 +123,62 @@ const loadUser = async userObject => {
 // region eventListeners
 
 function saveCursorPosition(clientX, clientY) {
-    pos.x = (clientX / window.innerWidth).toFixed(2)*100;
-    pos.y = (clientY / window.innerHeight).toFixed(2)*100;
+    pos.x = (clientX / window.innerWidth).toFixed(2) * 100;
+    pos.y = (clientY / window.innerHeight).toFixed(2) * 100;
     // Do not save the cursor position if the animation is already running
     if (htmlElements.popup.animated.classList.contains('running')) {
         return;
     }
-    
     document.documentElement.style.setProperty('--mouse-pos-x', `${pos.x}%`);
     document.documentElement.style.setProperty('--mouse-pos-y', `${pos.y}%`);
 }
 
 const listenToEvents = () => {
     // user form
-    const usernameInput = document.querySelector('.js-search-username')
-    usernameInput.addEventListener("focus", (e) => {document.querySelector('.c-searchBar').style.setProperty("--notched-border-color", "#00B7FF")
+    const usernameInput = document.querySelector('.js-search-username');
+    usernameInput.addEventListener('focus', () => {
+        document.querySelector('.c-searchBar').style.setProperty('--notched-border-color', '#00B7FF');
     });
-    usernameInput.addEventListener('blur', (e) => {
-        document.querySelector('.c-searchBar').style.removeProperty("--notched-border-color")
-    })
+    usernameInput.addEventListener('blur', () => {
+        document.querySelector('.c-searchBar').style.removeProperty('--notched-border-color');
+    });
 
-    htmlElements.searchForm.addEventListener("submit", async (e) => {
+    htmlElements.searchForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        let username = document.querySelector(".js-search-username").value.trim();
-        let region = document.querySelector(".js-search-region").value;
+        let username = document.querySelector('.js-search-username').value.trim();
+        let region = document.querySelector('.js-search-region').value;
+        if (lastInputUsername === username) {
+            invalidateUserForm();
+            return;
+        }
+
+
         const res = await getRequest(`${backend}/api/user/${username}/${region}`);
         if (!res) {
             invalidateUserForm();
         } else {
             userIsLoaded = false;
-            document.querySelector(".c-searchBar").classList.add("c-form-valid")
-            document.querySelector(".js-search-username").textContent = `${res.username} found!`;
+            document.querySelector('.c-searchBar').classList.add('c-form-valid');
+            const searchBar = document.querySelector('.c-searchBar');
+            searchBar.style.setProperty('--notched-border-color', 'green');
+            searchBar.style.setProperty('--notched-border-width', '.15em');
+            document.querySelector('.js-search-username').textContent = `${res.username} found!`;
             loadUser(res);
         }
+        lastInputUsername = username;
     });
 
-    const searchInput = htmlElements.searchForm.querySelector('.js-search-username')
-    const searchBar = document.querySelector('.c-searchBar')
+    const searchInput = htmlElements.searchForm.querySelector('.js-search-username');
+    const searchBar = document.querySelector('.c-searchBar');
 
-    searchInput.addEventListener('keyup', (e) => {
+    searchInput.addEventListener('keyup', () => {
         // console.log("change")
-        searchBar.classList.remove('c-form-valid')})
+        searchBar.classList.remove('c-form-valid');
+    });
 
 
     // close popup via click on the background
-    htmlElements.popup.overlay.addEventListener("click", hidePopup);
+    htmlElements.popup.overlay.addEventListener('click', hidePopup);
 
     htmlElements.popup.close.addEventListener("click", hidePopup);
     htmlElements.popup.close.addEventListener("keyup", (e) => {
@@ -195,7 +194,7 @@ const listenToEvents = () => {
             tagClicked(e, item);
         });
         // so that the element is selectable with the keyboard
-        item.addEventListener("keyup", (e) => {
+        item.addEventListener('keyup', (e) => {
             if (a11yClick(e)) {
                 // console.log("a11y click");
                 tagClicked(e, item);
@@ -204,19 +203,19 @@ const listenToEvents = () => {
     });
 
     document.querySelector('.js-to-searchbar').addEventListener('click', () => {
-        document.querySelector('.js-search-username').focus()
+        document.querySelector('.js-search-username').focus();
         hidePopup();
     });
     document.querySelector('.js-to-searchbar').addEventListener('keyup', () => {
         if (a11yClick(e)) {
-            document.querySelector('.js-search-username').focus()
+            document.querySelector('.js-search-username').focus();
             hidePopup();
         }
     });
 
     document.addEventListener('mousemove', e => {
-        saveCursorPosition(e.clientX, e.clientY)
-    })
+        saveCursorPosition(e.clientX, e.clientY);
+    });
 
 };
 
@@ -226,17 +225,18 @@ const listenToEvents = () => {
 
 const tagClicked = (e, item) => {
     htmlElements.filters.itemAll.forEach((filter) => {
-        filter.classList.remove("u-selected");
+        filter.classList.remove('u-selected');
     });
-    item.classList.add("u-selected");
+    item.classList.add('u-selected');
     // show the champions that have the tag
-    document.querySelectorAll('.c-card').forEach((card) => {
+    document.querySelectorAll('.js-card-box').forEach((cardContainer) => {
+        let card = cardContainer.firstElementChild;
         let tags = card.dataset.tags.split(',');
         // console.log(tags);
-        if (tags.includes(item.dataset.tag) || item.dataset.tag === "All") {
-            card.classList.remove("u-hidden");
+        if (tags.includes(item.dataset.tag) || item.dataset.tag === 'All') {
+            cardContainer.classList.remove('u-hidden');
         } else {
-            card.classList.add('u-hidden');
+            cardContainer.classList.add('u-hidden');
         }
     });
 };
@@ -296,41 +296,41 @@ function toggleVideo(type) {
 
 const createSvg = (name) => {
     // create polygon
-    const svgPathElement = document.createElementNS("http://www.w3.org/2000/svg", 'path');
-    svgPathElement.setAttribute("d", "M 0 0 53 0 74 22 75 75 0 75 0 0z")
+    const svgPathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    svgPathElement.setAttribute('d', 'M 0 0 53 0 74 22 75 75 0 75 0 0z');
 
 
     // animate polygon
-    const svgAnimateElement = document.createElementNS("http://www.w3.org/2000/svg", 'animate');
-    svgAnimateElement.setAttribute("from", "1000");
-    svgAnimateElement.setAttribute("to", "0");
-    svgAnimateElement.setAttribute("dur", "3s");
-    svgAnimateElement.setAttribute("fill", "freeze");
-    svgAnimateElement.setAttribute("begin", "indefinite");
-    svgAnimateElement.classList.add("js-svg-animate");
+    const svgAnimateElement = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+    svgAnimateElement.setAttribute('from', '1000');
+    svgAnimateElement.setAttribute('to', '0');
+    svgAnimateElement.setAttribute('dur', '3s');
+    svgAnimateElement.setAttribute('fill', 'freeze');
+    svgAnimateElement.setAttribute('begin', 'indefinite');
+    svgAnimateElement.classList.add('js-svg-animate');
     svgPathElement.appendChild(svgAnimateElement);
 
 
     // create the svg
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("viewBox", "0 0 75 75");
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 75 75');
     svg.appendChild(svgPathElement);
-    svg.classList.add("c-abilities__icon__border");
+    svg.classList.add('c-abilities__icon__border');
     svg.dataset.name = name;
-    return svg
-}
+    return svg;
+};
 
 
 const displayAndQsAbilityImg = function (champion) {
     // nesting the functions to use the champion variable
-    function abilityImgClicked(e) {
+    function abilityImgClicked() {
         // console.log(e);
         // console.log(this);
         // remove the border from all elements
-        document.querySelectorAll(".c-abilities__icon__border").forEach((border) => {
-            border.classList.add("u-hidden");
+        document.querySelectorAll('.c-abilities__icon__border').forEach((border) => {
+            border.classList.add('u-hidden');
             if (border.dataset.name === this.dataset.spellButton || this.dataset.type === border.dataset.name) {
-                border.classList.remove("u-hidden");
+                border.classList.remove('u-hidden');
                 border.querySelector('.js-svg-animate').beginElement();
             }
         });
@@ -338,12 +338,12 @@ const displayAndQsAbilityImg = function (champion) {
 
         // remove the u-selected-icon class from the selected icon
         try {
-            document.querySelector(".u-selected-icon").classList.remove("u-selected-icon");
+            document.querySelector('.u-selected-icon').classList.remove('u-selected-icon');
         } catch (e) {
             console.warn("No icon selected");
         }
         // add the u-selected-icon class to the clicked icon
-        this.classList.add("u-selected-icon")
+        this.classList.add('u-selected-icon');
         const ability = this.dataset.type;
         if (ability === "passive") {
             const spell = champion.passive;
@@ -380,7 +380,7 @@ const displayAndQsAbilityImg = function (champion) {
     let pName = champion.passive.name;
     // load passive on popup load
     // create spell elements
-    const pImg = createImageElement(`https://ddragon.leagueoflegends.com/cdn/${version}/img/passive/${pApiImg}`, pName, ["c-abilities__icon"]);
+    const pImg = createImageElement(`https://ddragon.leagueoflegends.com/cdn/${version}/img/passive/${pApiImg}`, pName, ['c-abilities__icon']);
     const imgContainer = document.createElement('a');
 
     const svg = createSvg("passive");
@@ -453,16 +453,16 @@ function secondsToMinutes(gameDuration) {
 function calculateRunes(firstTree, mainRune, secondTree) {
     if (runes == null) throw new Error("Runes not loaded");
     let out = {
-        firstTree: {}, secondTree: {},
+        firstTree: {}, secondTree: {}
     };
     runes.forEach(rune => {
         if (rune.id === firstTree) {
             // console.info(rune)
             rune.slots[0].runes.forEach(specificRune => {
                 if (specificRune.id === mainRune) {
-                    out.firstTree.icon = specificRune.icon
-                    out.firstTree.name = specificRune.name
-                    out.firstTree.key = specificRune.key
+                    out.firstTree.icon = specificRune.icon;
+                    out.firstTree.name = specificRune.name;
+                    out.firstTree.key = specificRune.key;
                 }
             });
         }
@@ -478,6 +478,7 @@ function calculateRunes(firstTree, mainRune, secondTree) {
 function showLoadingIconStatistics(ancestor) {
     ancestor.querySelector('.c-loader').classList.remove('u-hidden');
 }
+
 function hideLoadingIconStatistics(ancestor) {
     ancestor.querySelector('.c-loader').classList.add('u-hidden');
 }
@@ -486,17 +487,18 @@ function hideNoUser(ancestor) {
     ancestor.querySelector('.js-no-user').classList.add('u-hidden');
     ancestor.querySelector('.js-no-user-img').classList.add('u-hidden');
 }
+
 function showNoUser(ancestor) {
     ancestor.querySelector('.js-no-user').classList.remove('u-hidden');
     ancestor.querySelector('.js-no-user-img').classList.remove('u-hidden');
 }
-function noItem(item){
+
+function noItem(item) {
     // console.log("Item: ", item)
     if (item) {
-        return `<img src="${ddragon}/img/item/${item}.png" alt="item">`
-    }
-    else{
-        return `<div class="no-item"></div> `
+        return `<img src="${ddragon}/img/item/${item}.png" alt="item">`;
+    } else {
+        return `<div class="no-item"></div> `;
     }
 }
 
@@ -504,8 +506,8 @@ function createTeamHeader(TeamColor, userWon) {
     // create grid
     const header = document.createElement('div');
     header.classList.add('c-team__header', 'c-team__grid');
-    let victoryText = userWon ? "Victory" : "Defeat";
-    let redTeamBlueTeam = TeamColor === "Red" ? "Blue Team" : "Red Team";
+    let victoryText = userWon ? 'Victory' : 'Defeat';
+    let redTeamBlueTeam = TeamColor === 'Red' ? 'Blue Team' : 'Red Team';
     const headerList = [`${victoryText} <span class="team">(${redTeamBlueTeam})<span></span>`, 'KDA', 'Damage', 'Vision', 'Gold', 'CS', 'Items'];
     for (const headerItem of headerList) {
         const headerElement = document.createElement('div');
@@ -516,7 +518,7 @@ function createTeamHeader(TeamColor, userWon) {
     return header;
 }
 
-function createColumnGeneral(participant){
+function createColumnGeneral(participant) {
     const champion = participant.championName;
     const firstTree = participant.perks.styles[0].style;
     const mainRune = participant.perks.styles[0].selections[0].perk;
@@ -545,26 +547,28 @@ function createColumnGeneral(participant){
                 <div class="js-summoner-level">Level ${participant.summonerLevel}</div>
             </div>
             
-        `
+        `;
     columnGeneral.classList.add('c-participant__general');
     return columnGeneral;
 }
-function createColumnKDA(participant){
+
+function createColumnKDA(participant) {
     const columnKDA = document.createElement('div');
     columnKDA.classList.add('c-participant__kda');
-    let ratio
+    let ratio;
     if (participant.deaths !== 0) {
-        ratio = ((participant.kills + participant.assists) / participant.deaths).toFixed(2) + ":1";
-    }else{
-        ratio = `<span class="perfect">Perfect</span>`
+        ratio = ((participant.kills + participant.assists) / participant.deaths).toFixed(2) + ':1';
+    } else {
+        ratio = `<span class="perfect">Perfect</span>`;
     }
     columnKDA.innerHTML = `
         <span class="c-participant__kda-value"><span>${participant.kills}</span>/<span class="u-negative-color">${participant.deaths}</span>/<span>${participant.assists}</span> </span>
         <span class="c-participant__kda-ratio">${ratio}</span>
-    `
+    `;
     return columnKDA;
 }
-function createColumnDamage(participant, maxDamage){
+
+function createColumnDamage(participant, maxDamage) {
     const columnDamage = document.createElement('div');
     columnDamage.classList.add('c-participant__damage');
     const value = document.createElement('div');
@@ -583,24 +587,24 @@ function createColumnDamage(participant, maxDamage){
     return columnDamage;
 }
 
-function createColumnVision(participant){
+function createColumnVision(participant) {
     const vision = document.createElement('div');
     vision.classList.add('c-participant__vision');
     vision.textContent = participant.visionScore;
     return vision;
 }
 
-function createColumnGold(participant){
+function createColumnGold(participant) {
     const gold = document.createElement('div');
     gold.classList.add('c-participant__gold');
     gold.textContent = participant.goldEarned;
     return gold;
 }
 
-function createColumnCS(participant){
+function createColumnCS(participant) {
     const cs = document.createElement('div');
     cs.classList.add('c-participant__cs');
-    cs.textContent = participant.totalMinionsKilled  + participant.neutralMinionsKilled;
+    cs.textContent = participant.totalMinionsKilled + participant.neutralMinionsKilled;
     return cs;
 }
 
@@ -618,7 +622,7 @@ function createColumnItems(participant) {
     return divItems;
 }
 
-function createTeamList(participantsArray){
+function createTeamList(participantsArray) {
     const teamList = document.createElement('div');
     const maxDamage = Math.max(...participantsArray.map(participant => participant.totalDamageDealtToChampions));
 
@@ -640,7 +644,7 @@ function createTeamList(participantsArray){
     return teamList;
 }
 
-function createProgressBar(a, b, percentage, type, color){
+function createProgressBar(a, b, percentage, type, color) {
     const progressBar = document.createElement('div');
     progressBar.classList.add('c-progress-bar');
     progressBar.classList.add(color);
@@ -684,7 +688,7 @@ function createTeamDiff(yourTeam, enemyTeam, teamColor) {
     return container;
 }
 
-const loadMatchDetails = async (matchId, match ,card) => {
+const loadMatchDetails = async (matchId, match, card) => {
     // toggle up and down arrow
     // check if match details are already loaded
 
@@ -696,34 +700,36 @@ const loadMatchDetails = async (matchId, match ,card) => {
 
 
     const url = `${backend}/api/v2/match/${matchId}/timeline/${user.region}`;
-    const timeLine = await getRequest(url)
-    console.info("matchID: ",matchId , "match: " ,match, "timeLine: ", timeLine)
+    const timeLine = await getRequest(url);
+    console.info('matchID: ', matchId, 'match: ', match, 'timeLine: ', timeLine);
     const matchBody = document.createElement('div');
     matchBody.classList.add('c-match__body');
     matchBody.classList.add('js-match-body');
-    card.appendChild(matchBody);
-    const title = document.createElement('h3')
-    title.classList.add('c-match__title')
-    title.innerText = "Match performance"
-    matchBody.appendChild(title)
+    const overflow = document.createElement('div');
+    overflow.classList.add('u-overflow-hidden');
+    overflow.appendChild(matchBody);
+    card.appendChild(overflow);
+    const title = document.createElement('h3');
+    title.classList.add('c-match__title');
+    title.innerText = 'Match performance';
+    matchBody.appendChild(title);
     const grid = document.createElement('div');
     grid.classList.add('c-match__performance-grid');
 
 
     // team your team:
     let userWon = match.info.participants[match.userIndex].win;
-    let yourTeam = [], enemyTeam = [], yourTeamColor, enemyTeamColor;
+    let yourTeam, enemyTeam, yourTeamColor, enemyTeamColor;
     if (match.userIndex <= 4) {
         yourTeam = match.info.participants.slice(0, 5);
         enemyTeam = match.info.participants.slice(5, 10);
-        yourTeamColor = "Blue";
-        enemyTeamColor = "Red";
-    }
-    else {
+        yourTeamColor = 'Blue';
+        enemyTeamColor = 'Red';
+    } else {
         yourTeam = match.info.participants.slice(5, 10);
         enemyTeam = match.info.participants.slice(0, 5);
-        yourTeamColor = "Red";
-        enemyTeamColor = "Blue";
+        yourTeamColor = 'Red';
+        enemyTeamColor = 'Blue';
     }
     // create your team div
     const yourTeamDiv = document.createElement('div');
@@ -756,22 +762,21 @@ const loadMatchDetails = async (matchId, match ,card) => {
 
 const statCalculator = async e => {
     console.debug(e);
-    const containerElement = document.querySelector('.js-match-history')
+    const containerElement = document.querySelector('.js-match-history');
     // todo: figure out what to do with the stats
     // show loading icon
     showLoadingIconStatistics(containerElement);
     // hide notfound
     hideNoUser(containerElement);
-    const url = backend + `/api/v2/matches/${user.puuid}/${e.id}`
-    const matchList = await getRequest(url)
-    loadedChampion = e.id
+    const url = backend + `/api/v2/matches/${user.puuid}/${e.id}`;
+    const matchList = await getRequest(url);
+    loadedChampion = e.id;
     const cards = containerElement.querySelector('.js-card-container');
     // clear the cards
-    cards.innerHTML = "";
+    cards.innerHTML = '';
     matchList.forEach(match => {
         // console.log(match);
         const matchId = match.matchid;
-        const puuidUser = match.puuid;
         const userIndex = match.userIndex;
         const timeAgo = timeDifference(new Date(), new Date(match.info.gameEndTimestamp));
 
@@ -792,7 +797,7 @@ const statCalculator = async e => {
 
         card.classList.add('c-match-card');
         card.classList.add('js-match-card');
-        card.classList.add('u-notched-border')
+        card.classList.add('u-notched-border');
         card.innerHTML = `
                 <div class="c-match-card__header">
                     <div class="c-match-card__header--metadata">
@@ -852,16 +857,15 @@ const statCalculator = async e => {
                           </svg>
                         </button>
                     </div>
-                </div>`
+                </div>`;
         card.querySelector('.js-expand').addEventListener('click', () => {
             card.classList.toggle('js-card-expanded');
             card.querySelector('.js-expand').querySelector('svg').classList.toggle('u-rotate-180');
-            if(card.classList.contains('js-card-expanded')) {
+            if (card.classList.contains('js-card-expanded')) {
                 loadMatchDetails(matchId, match, card);
-            }
-            else {
+            } else {
                 console.log('remove');
-                card.querySelector('.js-match-body').classList.add('u-hidden')
+                card.querySelector('.js-match-body').classList.add('u-hidden');
             }
         });
         cards.appendChild(card);
@@ -874,42 +878,40 @@ const statCalculator = async e => {
 
 };
 
-const showPopup = e => {
+const showPopup = champion => {
     // make rest of the page not tabbable
-    htmlElements.submitUser.tabIndex = -1;
-
-
+    // htmlElements.submitUser.tabIndex = -1;
     // console.log(e);
-    htmlElements.popup.animated.classList.add("running");
-    htmlElements.popup.container.classList.remove("u-hidden");
-    document.documentElement.style.overflow = "hidden";
-    htmlElements.popup.image.src = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${e.id}_0.jpg`;
-    htmlElements.popup.name.textContent = e.name;
-    htmlElements.popup.title.textContent = e.title;
-    htmlElements.popup.lore.textContent = e.lore;
+    // htmlElements.popup.close.focus()
+    htmlElements.popup.animated.classList.add('running');
+    htmlElements.popup.container.classList.remove('u-hidden');
+    document.documentElement.style.overflow = 'hidden';
+    htmlElements.popup.image.src = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${champion.id}_0.jpg`;
+    htmlElements.popup.name.textContent = champion.name;
+    htmlElements.popup.title.textContent = champion.title;
+    htmlElements.popup.lore.textContent = champion.lore;
     for (const icon of htmlElements.popup.tagIconAll) {
         const tag = icon.dataset.name;
         // console.log(tag, e.tags);
-        if (e.tags.includes(tag)) {
+        if (champion.tags.includes(tag)) {
             // console.log("Tag found");
-            icon.classList.remove("u-hidden");
+            icon.classList.remove('u-hidden');
         }
     }
-    displayAndQsAbilityImg(e);
+    displayAndQsAbilityImg(champion);
     // hide previous matches
-
-    console.info("showPopup", e);
     // shouldn't reload the matches if they are already loaded
-    if (e.id === loadedChampion) return;
+    if (champion.id === loadedChampion) return;
     document.querySelector('.js-card-container').innerHTML = '';
     // clear the cards
 
 
     if (userIsLoaded) {
-        statCalculator(e);
-    }else{
-        showNoUser(htmlElements.popup.content)
+        statCalculator(champion);
+    } else {
+        showNoUser(htmlElements.popup.content);
     }
+    document.querySelector('.c-popup').scrollTo(0, 0);
 };
 
 const hidePopup = () => {
@@ -950,20 +952,24 @@ function createTitleElement(Title) {
     return title;
 }
 
-function createCardElement(img, title, card_body, tags) {
-    let card = document.createElement("a");
-    card.tabIndex = 0;
-    card.classList.add("c-card");
+function createCardElement(img, title, card_body) {
+    let card = document.createElement('div');
+    let cardContainer = document.createElement('a');
+    card.classList.add('u-notched-content');
+    card.classList.add('c-card');
     card.appendChild(img);
     card.appendChild(title);
     card.appendChild(card_body);
-    return card;
+    cardContainer.classList.add('c-card__container');
+    cardContainer.classList.add('js-card-box');
+    cardContainer.appendChild(card);
+    return cardContainer;
 }
 
-function createBodyElement(champion) {
-    const body = document.createElement("div");
-    body.classList.add("c-card__body");
-    body.classList.add("u-hidden")
+function createBodyElement() {
+    const body = document.createElement('div');
+    body.classList.add('c-card__body');
+    body.classList.add('u-hidden');
     // - todo: decide if i want to show the roles or not
     // const p = document.createElement("p");
     // p.classList.add("c-card__text");
@@ -978,13 +984,13 @@ function createBodyElement(champion) {
     // p.textContent = text;
     // body.appendChild(p);
     let kda = document.createElement("p");
-    kda.classList.add("c-card__text");
+    kda.classList.add('c-card__text');
     kda.classList.add('c-card__kda');
     let winrate = document.createElement("p");
-    winrate.classList.add("c-card__text");
+    winrate.classList.add('c-card__text');
     winrate.classList.add('c-card__winrate');
     let games = document.createElement("p");
-    games.classList.add("c-card__text");
+    games.classList.add('c-card__text');
     games.classList.add('c-card__played');
     body.appendChild(kda);
     body.appendChild(winrate);
@@ -1002,29 +1008,35 @@ function fillChampions(champions) {
         const champion = champions.data[dataKey];
         const championId = champion.key;
         let champName = championsName[i];
-        if (champName === "Fiddlesticks") {
-            champName = "FiddleSticks";
+        if (champName === 'Fiddlesticks') {
+            champName = 'FiddleSticks';
         }
         const imgUrl = `https://ddragon.leagueoflegends.com/cdn/img/champion/centered/${champName}_0.jpg`;
-        const img = createImageElement(imgUrl, champName, ["js-champ-img", "c-card__img"]);
-        const imgContainer = document.createElement("div");
-        imgContainer.classList.add("c-card__img-container");
+        const img = createImageElement(imgUrl, champName, ['js-champ-img', 'c-card__img']);
+        const imgContainer = document.createElement('div');
+        imgContainer.classList.add('c-card__img-container');
         imgContainer.appendChild(img);
         const title = createTitleElement(champion.name);
-        const card_body = createBodyElement(champion);
-        const card = createCardElement(imgContainer, title, card_body);
-        card.dataset.tags = champion.tags.join(",");
+        const card_body = createBodyElement();
+        const cardContainer = createCardElement(imgContainer, title, card_body);
+        const card = cardContainer.querySelector('.c-card');
+        card.dataset.tags = champion.tags.join(',');
         card.dataset.difficulty = champion.info.difficulty;
         card.dataset.champion = champion.name;
         card.dataset.championId = championId;
-        card.classList.add('u-notched-content');
-        card.addEventListener("click", (e) => {
+        cardContainer.href = `javascript:showPopup(allChampions.data.${champion.id});`;
+        cardContainer.href = '#';
+        cardContainer.addEventListener('click', () => {
             // console.log("clicked");
             showPopup(champion);
-            document.querySelector('.c-popup').scrollTo(0, 0);
+        });
+        cardContainer.addEventListener('keyup', (e) => {
+            if (a11yClick(e)) {
+                showPopup(champion);
+            }
         });
         // append child to container element
-        htmlElements.championsContainer.appendChild(card);
+        htmlElements.championsContainer.appendChild(cardContainer);
         i += 1;
     }
 }
@@ -1049,27 +1061,27 @@ async function getRunes() {
 }
 
 // region init
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM fully loaded and parsed");
-    htmlElements.searchForm = document.querySelector(".userForm");
-    htmlElements.submitUser = document.querySelector(".js-submit-user");
-    htmlElements.championsContainer = document.querySelector(".js-champ-card-container");
-    htmlElements.popup.container = document.querySelector(".js-popup-container");
-    htmlElements.popup.content = document.querySelector(".js-popup-content");
-    htmlElements.popup.image = document.querySelector(".js-popup-img");
-    htmlElements.popup.overlay = document.querySelector(".js-popup-overlay");
-    htmlElements.popup.close = document.querySelector(".js-popup-close");
-    htmlElements.popup.name = document.querySelector(".js-champ-name");
-    htmlElements.popup.title = document.querySelector(".js-champ-title");
-    htmlElements.popup.lore = document.querySelector(".js-champ-lore");
-    htmlElements.popup.animated = document.querySelector(".js-popup-animate");
-    htmlElements.popup.tagIconAll = document.querySelectorAll(".js-role-icon");
-    htmlElements.abilities.imgContainer = document.querySelector(".js-ability-img-container");
-    htmlElements.abilities.name = document.querySelector(".js-ability-name");
-    htmlElements.abilities.description = document.querySelector(".js-ability-description");
-    htmlElements.abilities.type = document.querySelector(".js-ability-type");
-    htmlElements.abilities.videos = document.querySelectorAll(".js-ability-video");
-    htmlElements.filters.itemAll = document.querySelectorAll(".js-filter-item");
+document.addEventListener('DOMContentLoaded', function () {
+    console.log('DOM fully loaded and parsed');
+    htmlElements.searchForm = document.querySelector('.userForm');
+    htmlElements.search_container = document.querySelector('.js-search-container');
+    htmlElements.championsContainer = document.querySelector('.js-champ-card-container');
+    htmlElements.popup.container = document.querySelector('.js-popup-container');
+    htmlElements.popup.content = document.querySelector('.js-popup-content');
+    htmlElements.popup.image = document.querySelector('.js-popup-img');
+    htmlElements.popup.overlay = document.querySelector('.js-popup-overlay');
+    htmlElements.popup.close = document.querySelector('.js-popup-close');
+    htmlElements.popup.name = document.querySelector('.js-champ-name');
+    htmlElements.popup.title = document.querySelector('.js-champ-title');
+    htmlElements.popup.lore = document.querySelector('.js-champ-lore');
+    htmlElements.popup.animated = document.querySelector('.js-popup-animate');
+    htmlElements.popup.tagIconAll = document.querySelectorAll('.js-role-icon');
+    htmlElements.abilities.imgContainer = document.querySelector('.js-ability-img-container');
+    htmlElements.abilities.name = document.querySelector('.js-ability-name');
+    htmlElements.abilities.description = document.querySelector('.js-ability-description');
+    htmlElements.abilities.type = document.querySelector('.js-ability-type');
+    htmlElements.abilities.videos = document.querySelectorAll('.js-ability-video');
+    htmlElements.filters.itemAll = document.querySelectorAll('.js-filter-item');
 
     listenToEvents();
     // fill cards with champions
