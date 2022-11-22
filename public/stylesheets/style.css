@@ -93,17 +93,22 @@ body {
     min-height: 100vh;
     position: relative;
     padding-bottom: 5rem;
-    display: grid;
-    justify-content: center;
 }
 body > * {
     margin-left: var(--global-whitespace-1);
     margin-right: var(--global-whitespace-1);
 }
 @media (min-width: 576px) {
+
     body > *{
         margin-left: var(--global-whitespace-2);
         margin-right: var(--global-whitespace-2);
+    }
+}
+@media (min-width: 1300px) {
+    body{
+        display: grid;
+        justify-content: center;
     }
 }
 
@@ -1770,7 +1775,7 @@ footer{
         opacity: 1;
     }
     to{
-        opacity: 0.9;
+        opacity: 0.7;
     }
 }
 
