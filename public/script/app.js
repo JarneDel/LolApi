@@ -4,11 +4,10 @@ let htmlElements = {
 };
 let allChampions = {};
 let backend = window.location.origin;
-// for development only (live server)
-if (backend === 'http://127.0.0.1:3000' || backend === 'http://localhost:3000') {
-    // set backend to 8080
-    backend = 'http://127.0.0.1:8080';
+if (window.location.port === "3000"){
+    backend = `http://${window.location.hostname}:8080`
 }
+console.log(backend, window.location.origin)
 let version = "12.19.1";
 
 let userIsLoaded = false;
@@ -121,16 +120,12 @@ const loadUser = async userObject => {
 // endregion
 
 // region eventListeners
-
+// todo - optimise
 function saveCursorPosition(clientX, clientY) {
     pos.x = (clientX / window.innerWidth).toFixed(2) * 100;
     pos.y = (clientY / window.innerHeight).toFixed(2) * 100;
     // Do not save the cursor position if the animation is already running
-    if (htmlElements.popup.animated.classList.contains('running')) {
-        return;
-    }
-    document.documentElement.style.setProperty('--mouse-pos-x', `${pos.x}%`);
-    document.documentElement.style.setProperty('--mouse-pos-y', `${pos.y}%`);
+
 }
 
 const listenToEvents = () => {
@@ -867,7 +862,7 @@ const statCalculator = async e => {
                     </div>
                     <div class="c-expand-container">
                         <button class="js-expand">
-                          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000000">
                             <path d="M24 24H0V0h24v24z" fill="none" opacity=".87"/>
                             <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z"/>
                           </svg>
@@ -894,7 +889,16 @@ const statCalculator = async e => {
 
 };
 
+function animatePopup() {
+    if (htmlElements.popup.animated.classList.contains('running')) {
+        return;
+    }
+    document.documentElement.style.setProperty('--mouse-pos-x', `${pos.x}%`);
+    document.documentElement.style.setProperty('--mouse-pos-y', `${pos.y}%`);
+}
+
 const showPopup = champion => {
+    animatePopup();
     // make rest of the page not tabbable
     // htmlElements.submitUser.tabIndex = -1;
     // console.log(e);
@@ -1028,7 +1032,7 @@ function fillChampions(champions) {
             champName = 'FiddleSticks';
         }
         const imgUrl = `https://ddragon.leagueoflegends.com/cdn/img/champion/centered/${champName}_0.jpg`;
-        const img = createImageElement(imgUrl, champName, ['js-champ-img', 'c-card__img']);
+        const img = createImageElement(imgUrl, "", ['js-champ-img', 'c-card__img']);
         const imgContainer = document.createElement('div');
         imgContainer.classList.add('c-card__img-container');
         imgContainer.appendChild(img);
