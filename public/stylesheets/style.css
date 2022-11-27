@@ -1479,7 +1479,7 @@ footer{
     color: var(--light-neutral-text-color);
     outline: none;
 }
-.c-filter__class:focus-within a{
+.c-filter__class a:focus-visible{
     outline: var(--global-focus-color) solid 2px    ;
     outline-offset: 4px;
 }
