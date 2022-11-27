@@ -908,7 +908,6 @@ footer{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: var(--global-whitespace-2);
     gap: var(--global-whitespace-2);
     width: 100%;
 }
