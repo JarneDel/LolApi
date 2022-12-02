@@ -16,7 +16,8 @@ router.post('/cacheMatches/', cors(),async function (req, res) {
   console.info("Caching matches for user: ", body.name);
   // region to global region
   const globalRegion = localToRegional(body.region);
-  const matchList = await getMatchID(body.puuid, globalRegion, 100).catch((err) => {
+  const count = process.env.REQUEST_COUNT
+  const matchList = await getMatchID(body.puuid, globalRegion, count).catch((err) => {
     console.error(err);
     res.status(500).send(err);
   });
@@ -32,7 +33,8 @@ router.get('/user/:username/:region/', cors(), async function(req, res) {
   const user = await cacheUser(username, region);
   const globalRegion = localToRegional(region);
   if(user.firstTime){ // never goes in here
-    const matchList = await getMatchID(user.puuid, globalRegion, 100);
+    let count = process.env.REQUEST_COUNT
+    const matchList = await getMatchID(user.puuid, globalRegion, count);
     newUser(user, matchList).then(() => {
       console.log("New user created");
     }).catch((err)=>{
