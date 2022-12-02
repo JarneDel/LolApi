@@ -473,9 +473,9 @@ footer{
     outline: none;
 }
 
-.c-popup__close:focus-within{
-    outline: 2px solid var(--global-focus-color);
-    outline-offset: 2px;
+.c-popup__close:focus{
+    box-shadow: 0 0 0 4px var(--global-focus-color);
+    outline: none;
 }
 
 .c-popup p{
@@ -841,6 +841,12 @@ footer{
     transition: transform .2s ease-in-out;
     position: relative;
 }
+
+.c-abilities__img-container:focus-visible{
+    box-shadow: 0 0 0 3px var(--global-focus-color);
+    outline: none;
+}
+
 .c-abilities__icon__border{
     position: absolute;
     stroke: var(--primary-color);

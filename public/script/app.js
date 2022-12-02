@@ -171,6 +171,9 @@ const listenToEvents = () => {
         searchBar.classList.remove('c-form-valid');
     });
 
+    // trap focus in the container
+    trapFocus(htmlElements.popup.container);
+
 
     // close popup via click on the background
     htmlElements.popup.overlay.addEventListener('click', hidePopup);
@@ -932,6 +935,7 @@ const showPopup = champion => {
         showNoUser(htmlElements.popup.content);
     }
     document.querySelector('.c-popup').scrollTo(0, 0);
+    document.querySelector('.c-popup__close').focus();
 };
 
 const hidePopup = () => {
@@ -1062,10 +1066,38 @@ function fillChampions(champions) {
 }
 
 
+const trapFocus = function (element) {
+    let focusableEls = element.querySelectorAll('a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled])');
+    let firstFocusableEl = focusableEls[0];
+    let lastFocusableEl = focusableEls[focusableEls.length - 1];
+    let KEYCODE_TAB = 9;
+
+    element.addEventListener('keydown', function (e) {
+        let isTabPressed = (e.key === 'Tab' || e.keyCode === KEYCODE_TAB);
+
+        if (!isTabPressed) {
+            return;
+        }
+
+        if (e.shiftKey) /* shift + tab */ {
+            if (document.activeElement === firstFocusableEl) {
+                lastFocusableEl.focus();
+                e.preventDefault();
+            }
+        } else /* tab */ {
+            if (document.activeElement === lastFocusableEl) {
+                firstFocusableEl.focus();
+                e.preventDefault();
+            }
+        }
+    });
+}
+
+
 // endregion
 
 async function getSummonerSpells() {
-    const res = await getRequest(ddragon + "/data/en_GB/summoner.json");
+    const res = await getRequest(ddragon + '/data/en_GB/summoner.json');
     // console.log(res.data);
     const data = res.data;
     for (const key in data) {
@@ -1083,6 +1115,7 @@ async function getRunes() {
 // region init
 document.addEventListener('DOMContentLoaded', function () {
     console.log('DOM fully loaded and parsed');
+
     htmlElements.searchForm = document.querySelector('.userForm');
     htmlElements.search_container = document.querySelector('.js-search-container');
     htmlElements.championsContainer = document.querySelector('.js-champ-card-container');
@@ -1104,6 +1137,7 @@ document.addEventListener('DOMContentLoaded', function () {
     htmlElements.filters.itemAll = document.querySelectorAll('.js-filter-item');
 
     listenToEvents();
+
     // fill cards with champions
     getApiVersion().then((res) => {
         version = res;
