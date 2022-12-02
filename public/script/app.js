@@ -129,6 +129,15 @@ function saveCursorPosition(clientX, clientY) {
 }
 
 const listenToEvents = () => {
+
+    // close popup with escape
+    htmlElements.popup.container.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            hidePopup();
+        }
+    });
+
+
     // user form
     const usernameInput = document.querySelector('.js-search-username');
     usernameInput.addEventListener('focus', () => {
@@ -1123,7 +1132,7 @@ document.addEventListener('DOMContentLoaded', function () {
     htmlElements.popup.content = document.querySelector('.js-popup-content');
     htmlElements.popup.image = document.querySelector('.js-popup-img');
     htmlElements.popup.overlay = document.querySelector('.js-popup-overlay');
-    htmlElements.popup.close = document.querySelector('.js-popup-close');
+    htmlElements.popup.close = document.querySelector('.c-popup__close');
     htmlElements.popup.name = document.querySelector('.js-champ-name');
     htmlElements.popup.title = document.querySelector('.js-champ-title');
     htmlElements.popup.lore = document.querySelector('.js-champ-lore');
