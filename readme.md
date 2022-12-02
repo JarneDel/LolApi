@@ -16,9 +16,9 @@ COSMOS_ENDPOINT: "cosmosdb primary key"
 REQUEST_COUNT: "amount of request that you want to do when caching match history 0-100 recommended: 20"  
 
 ## Database configuration
-1 noSql azure cosmosdb
-2 containers: match, userContainer2 
-(change the names in config.js)
+1 noSql azure cosmosdb  
+2 containers: match, userContainer2     
+(change the names in config.js)  
 
 ## Project installation
 run `npm install`
