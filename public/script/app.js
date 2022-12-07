@@ -897,6 +897,7 @@ const statCalculator = async e => {
 
     });
     hideLoadingIconStatistics(containerElement);
+    trapFocus(htmlElements.popup.container);
 
 
 };
