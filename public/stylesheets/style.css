@@ -96,9 +96,13 @@ body {
     padding-bottom: 5rem;
 }
 
+.o-row{
+    margin-inline: var(--global-whitespace-1);
+}
+
 @media (min-width: 576px) {
 
-    body > *{
+    .o-row{
         margin-left: var(--global-whitespace-2);
         margin-right: var(--global-whitespace-2);
     }
@@ -129,9 +133,7 @@ footer{
 /*endregion*/
 
 /*region objects*/
-.o-container {
-    max-width: calc(100vw - var(--global-whitespace-4));
-}
+
 .o-button-reset {
     border: none;
     margin: 0;
@@ -172,7 +174,7 @@ footer{
     align-items: center;
     width: 100%;
     max-width: 35rem;
-    margin: 0 auto;
+    margin: 0 auto ;
     transition: animation 0.5s;
     justify-self: center;
 }
@@ -290,10 +292,10 @@ footer{
 
 .c-cards__container{
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 1fr 1fr;
     grid-template-rows: max-content;
     gap: var(--global-whitespace-2);
-    margin: 0 var(--global-whitespace-2);
+    /*margin: 0 var(--global-whitespace-2);*/
 }
 
 @media (min-width: 576px) {
@@ -1546,33 +1548,33 @@ footer{
 /*endregion */
 
 /*region filter by name*/
-@media(min-width: 576px) {
-    .c-search-champions {
-        max-width: 6rem;
-        position: relative;
-    }
 
-    .c-search-champions label{
-        position: absolute;
-        top: .5rem;
-        left: var(--global-whitespace-1);
-        transition: transform .2s ease-in-out;
-        color: var(--dark-gray-text-color-6);
-    }
-    .c-search-champions input:is(:focus-visible, .c-form__input--filled) + label{
-        transform: translateY(-1.25rem);
-        background-color: white;
-        color: black;
-    }
+.c-search-champions {
+    max-width: 6rem;
+    position: relative;
+    justify-self: center;
+}
 
-    .c-search-champions input{
-        padding-block: .5rem;
-        outline: none;
-    }
-    .c-search-champions input:focus-visible{
-        box-shadow: var(--global-focus-color) 0 0 0 2px;
-    }
+.c-search-champions label{
+    position: absolute;
+    top: .5rem;
+    left: var(--global-whitespace-1);
+    transition: transform .2s ease-in-out;
+    color: var(--dark-gray-text-color-6);
+}
+.c-search-champions input:is(:focus-visible, .c-form__input--filled) + label{
+    transform: translateY(-1.25rem);
+    background-color: white;
+    color: black;
+}
 
+.c-search-champions input{
+    padding-block: .5rem;
+    outline: none;
+    max-width: 6rem;
+}
+.c-search-champions input:focus-visible{
+    box-shadow: var(--global-focus-color) 0 0 0 2px;
 }
 
 /*endregion*/
@@ -1580,14 +1582,15 @@ footer{
 /* region utilities */
 
 .u-horizontal{
-    display: grid;
-    grid-template-columns: 6rem 1fr 6rem;
-    max-width: 90rem;
-    margin: var(--global-whitespace-2) auto 0;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
+    margin: var(--global-whitespace-1) 0 auto;
+    max-width: 90rem;
+    gap: var(--global-whitespace-2);
 }
-
-
 
 .u-is-loading{
     -webkit-animation: opacity-shift .7s infinite alternate linear;
@@ -1757,8 +1760,7 @@ footer{
         flex-basis: 100%;
     }
     .u-center{
-        margin-left: var(--global-whitespace-1);
-        margin-right: var(--global-whitespace-1);
+        margin-inline: 0;
     }
 
 }

@@ -300,6 +300,8 @@ function loadAllVideo(champion) {
     const elements = htmlElements.abilities.videos;
     for (const element of elements) {
         element.dataset.video_error = false;
+        document.querySelector(".js-video-error").classList.add("u-hidden");
+        document.querySelector('.js-video-error-text').classList.add('u-hidden');
         element.pause();
         if (element.dataset.name === "P") {
             // remove hidden class
@@ -423,7 +425,7 @@ const displayAndQsAbilityImg = function (champion) {
         }
         // add the u-selected-icon class to the clicked icon
         document.querySelectorAll('.c-abilities__img-container').forEach((img) => {
-            if (img.dataset.id === id.toString()) {
+            if (img.dataset.id === String(id)) {
                 img.classList.add('u-selected-icon');
             }
         });
