@@ -466,16 +466,30 @@ footer{
     margin: var(--global-whitespace-1);
     z-index: 1000;
     fill: white;
-
-}
-
-.c-popup__close *:focus{
     outline: none;
 }
 
-.c-popup__close:focus{
-    box-shadow: 0 0 0 4px var(--global-focus-color);
-    outline: none;
+
+.c-popup__close:focus-visible .c-popup__close--svg-container{
+    --notched-border-color: var(--global-focus-color);
+    --notched-border-width: .2em;
+}
+
+.c-popup__close:is(:focus-visible, :hover) .u-notched-border
+{
+    clip-path: polygon(0 0, 100% 0, 100% 100% , 100%  100%, 0 100%, 0 0) !important;
+}
+
+.c-popup__close:is(:focus-visible, :hover) .u-notched-border::after
+{
+    clip-path: polygon(
+        /*top left 2*/      var(--notched-border-width) var(--notched-border-width),
+                /*top right*/       calc(100% - var(--notched-border-width)) var(--notched-border-width),
+                /*bottom 1*/        calc(100% - var(--notched-border-width)) calc(100% - var(--notched-border-width)) ,
+                /* bottom-right 2*/ calc(100% - var(--notched-border-width)) calc(100% - var(--notched-border-width)),
+                /* bottom left */   var(--notched-border-width) calc(100% - var(--notched-border-width)),
+                /* top left  1*/    var(--notched-border-width) var(--notched-border-width));
+    /*margin: 1px;*/
 }
 
 .c-popup p{
@@ -1613,28 +1627,6 @@ footer{
     clip-path: none;
 }
 
-
-
-
-.u-notched-to-square:where(:hover, :focus-visible).u-notched-border{
-    clip-path: polygon(
-        /*top left 2*/ 0 0,
-        /*top right*/ 100% 0,
-        /*bottom 1*/ 100% 100% ,
-        /* bottom-right 2*/100%  100%,
-        /* bottom left */ 0 100%,
-        /* top left  1*/ 0 0) !important;
-}
-.u-notched-to-square:where(:hover, :focus-visible).u-notched-border::after {
-    clip-path: polygon(
-        /*top left 2*/      var(--notched-border-width) var(--notched-border-width),
-        /*top right*/       calc(100% - var(--notched-border-width)) var(--notched-border-width),
-        /*bottom 1*/        calc(100% - var(--notched-border-width)) calc(100% - var(--notched-border-width)) ,
-        /* bottom-right 2*/ calc(100% - var(--notched-border-width)) calc(100% - var(--notched-border-width)),
-        /* bottom left */   var(--notched-border-width) calc(100% - var(--notched-border-width)),
-        /* top left  1*/    var(--notched-border-width) var(--notched-border-width));
-    /*margin: 1px;*/
-}
 
 .u-hidden {
     display: none;
