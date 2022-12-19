@@ -668,6 +668,10 @@ footer{
     padding: var(--global-whitespace-2) 0;
 }
 
+.c-row:last-child {
+    border-bottom: none;
+}
+
 
 .c-row__abilities {
     display: flex;

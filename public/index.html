@@ -12,8 +12,7 @@
     <link rel="stylesheet" href="https://use.typekit.net/lhq3vgm.css"/>
     <link rel="stylesheet" href="/stylesheets/normalize.css"/>
     <link rel="stylesheet" href="/stylesheets/style.css"/>
-    <script src="/script/accessibility.js"></script>
-    <script src="/script/app.js"></script>
+    <script src="/script/app.js" type="module"></script>
 </head>
 
 <body>
@@ -64,15 +63,15 @@
     <div class="c-popup__overlay js-popup-overlay"></div>
     <article class="c-popup js-popup-animate" id="pup-up">
         <div class="c-popup__container js-popup-content">
-            <button type="button" name="close-popup" class="c-popup__close o-button-reset">
-                <div class="c-popup__close--svg-container u-notched-border js-popup-close">
+            <button type="button" name="close-popup" class="c-popup__close js-popup-close js- o-button-reset">
+                <div class="c-popup__close--svg-container u-notched-border">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 15" width="20px" height="20px">
                         <path d="M12.8 8.4V4.8S13 1.1 7 0h-.1c-6 1.1-5.8 4.8-5.8 4.8v3.6c0 1.9-.8 2.5-.8 2.5C1.5 15.3 4.5 15 4.5 15c-1.6-2.1 0-5.8 0-5.8-2.3-.3-1.9-2.7-1.7-3.4 0 0 2.2-.1 3.3 1.6v4.2l.9.9.8-.8V7.5c1.2-1.8 3.3-1.7 3.3-1.6.2.7.6 3.1-1.7 3.3 0 0 1.6 3.8 0 5.8 0 0 3 .3 4.2-4.1.1 0-.8-.6-.8-2.5z"></path>
                     </svg>
 
                 </div>
             </button>
-            <div class="c-popup__header">
+            <div class="c-popup__header js-popup-header">
                 <img class="c-popup__champ--img js-popup-img" alt=""/>
                 <div class="c-champ__title">
                     <div class="c-popup__champ--description js-champ-title">
@@ -81,7 +80,7 @@
                     <div class="c-popup__champ--name js-champ-name">Aatrox</div>
                 </div>
             </div>
-            <div class="c-popup__content">
+            <div class="c-popup__content js-popup-body">
                 <div class="c-row c-row__abilities">
                     <div class="c-row__role u-1-of-1-bp-1">
                         <div class="c-row__role--roles">
@@ -158,7 +157,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="c-popup__abilities">
+                <div class="c-popup__abilities js-abilities-container">
                     <div class="c-popup__abilities--text-container">
                         <div class="u-side-fill"></div>
                         <div class="c-abilities__text u-1-of-1-bp-1">
