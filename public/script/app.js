@@ -128,6 +128,33 @@ function saveCursorPosition(clientX, clientY) {
 
 }
 
+const sortByChampion = (query) =>{
+    query = query.trim().toLowerCase();
+    const cards = document.querySelectorAll('.js-card-box');
+    cards.forEach((card) => {
+        const name = card.querySelector('.c-card__title').innerText.toLowerCase();
+        if (name.includes(query)) {
+            card.classList.remove('u-hidden-2');
+
+        } else {
+            card.classList.add('u-hidden-2');
+        }
+    });
+}
+
+
+const listenToSearchChampion = () => {
+    const searchChampion = document.querySelector('.js-search-champion');
+    if (searchChampion.value !== null){
+        sortByChampion(searchChampion.value);
+    }
+    searchChampion.addEventListener('input', () => {
+        const value = searchChampion.value.toLowerCase();
+        sortByChampion(value);
+    });
+};
+
+
 const listenToEvents = () => {
 
     // close popup with escape
@@ -224,6 +251,22 @@ const listenToEvents = () => {
         saveCursorPosition(e.clientX, e.clientY);
     });
 
+
+    document.querySelectorAll('.js-dynamic-form').forEach((inputField) => {
+        const input = inputField.querySelector('input');
+        console.log(input.value)
+        if (input.value.length > 0) {
+            input.classList.add('c-form__input--filled');
+
+        }
+        input.addEventListener('input', () => {
+            if(input.value.length > 0) {
+                input.classList.add('c-form__input--filled');
+            } else {
+                input.classList.remove('c-form__input--filled');
+            }
+        });
+    });
 };
 
 // endregion
@@ -241,9 +284,9 @@ const tagClicked = (e, item) => {
         let tags = card.dataset.tags.split(',');
         // console.log(tags);
         if (tags.includes(item.dataset.tag) || item.dataset.tag === 'All') {
-            cardContainer.classList.remove('u-hidden');
+            cardContainer.classList.remove('u-hidden-3');
         } else {
-            cardContainer.classList.add('u-hidden');
+            cardContainer.classList.add('u-hidden-3');
         }
     });
 };
@@ -256,6 +299,7 @@ const tagClicked = (e, item) => {
 function loadAllVideo(champion) {
     const elements = htmlElements.abilities.videos;
     for (const element of elements) {
+        element.dataset.video_error = false;
         element.pause();
         if (element.dataset.name === "P") {
             // remove hidden class
@@ -269,6 +313,17 @@ function loadAllVideo(champion) {
         for (let i = 0; i < 4 - length; i++) {
             id = "0" + id;
         }
+        element.children[0].onerror = function () {
+            console.log("error");
+        };
+        element.children[1].onerror = function () {
+            console.log("error");
+            document.querySelector(".js-video-error").classList.remove("u-hidden");
+            document.querySelector('.js-video-error-text').classList.remove('u-hidden');
+            element.dataset.video_error = true;
+            element.classList.add("u-hidden");
+        };
+
         const webm = `https://d28xe8vt774jo5.cloudfront.net/champion-abilities/${id}/ability_${id}_${element.dataset.name}1.webm`;
         const mp4 = `https://d28xe8vt774jo5.cloudfront.net/champion-abilities/${id}/ability_${id}_${element.dataset.name}1.mp4`;
         element.children[0].src = webm;
@@ -281,9 +336,21 @@ function loadAllVideo(champion) {
 }
 
 
+
+
 function toggleVideo(type) {
     for (let video of htmlElements.abilities.videos) {
+
         if (type === video.dataset.name) {
+            if (video.dataset.video_error === "true") {
+                console.log("video error");
+                document.querySelector(".js-video-error").classList.remove("u-hidden");
+                document.querySelector('.js-video-error-text').classList.remove('u-hidden');
+                continue;
+            }else{
+                document.querySelector(".js-video-error").classList.add("u-hidden");
+                document.querySelector('.js-video-error-text').classList.add('u-hidden');
+            }
             video.classList.remove("u-hidden");
             video.currentTime = 0;
             video.play();
@@ -331,6 +398,8 @@ const createSvg = (name) => {
 const displayAndQsAbilityImg = function (champion) {
         // nesting the functions to use the champion variable
     function abilityImgClicked(spellButton, type, id) {
+        document.querySelector('.js-video-error-text').classList.add('u-hidden');
+        document.querySelector('.js-video-error').classList.add('u-hidden');
         console.log(this)
         // console.log(e);
         // console.log(this);
@@ -354,7 +423,7 @@ const displayAndQsAbilityImg = function (champion) {
         }
         // add the u-selected-icon class to the clicked icon
         document.querySelectorAll('.c-abilities__img-container').forEach((img) => {
-            if (img.dataset.id == id) {
+            if (img.dataset.id === id.toString()) {
                 img.classList.add('u-selected-icon');
             }
         });
@@ -715,16 +784,13 @@ const loadMatchDetails = async (matchId, match, card) => {
     // toggle up and down arrow
     // check if match details are already loaded
 
-
+    // if data is already loaded, toggle up and down arrow and return
     if (card.classList.contains('loaded')) {
         card.querySelector('.js-match-body').classList.remove('u-hidden');
         return;
     }
 
 
-    const url = `${backend}/api/v2/match/${matchId}/timeline/${user.region}`;
-    const timeLine = await getRequest(url);
-    console.info('matchID: ', matchId, 'match: ', match, 'timeLine: ', timeLine);
     const matchBody = document.createElement('div');
     matchBody.classList.add('c-match__body');
     matchBody.classList.add('js-match-body');
@@ -738,7 +804,6 @@ const loadMatchDetails = async (matchId, match, card) => {
     matchBody.appendChild(title);
     const grid = document.createElement('div');
     grid.classList.add('c-match__performance-grid');
-
 
     // team your team:
     let userWon = match.info.participants[match.userIndex].win;
@@ -780,20 +845,19 @@ const loadMatchDetails = async (matchId, match, card) => {
     matchBody.appendChild(grid);
     card.classList.add('loaded');
 
-
 };
 
-const statCalculator = async e => {
-    console.debug(e);
+const statCalculator = async champion => {
+    console.debug(champion);
     const containerElement = document.querySelector('.js-match-history');
     // todo: figure out what to do with the stats
     // show loading icon
     showLoadingIconStatistics(containerElement);
     // hide notfound
     hideNoUser(containerElement);
-    const url = backend + `/api/v2/matches/${user.puuid}/${e.id}`;
+    const url = backend + `/api/v2/matches/${user.puuid}/${champion.id}`;
     const matchList = await getRequest(url);
-    loadedChampion = e.id;
+    loadedChampion = champion.id;
     const cards = containerElement.querySelector('.js-card-container');
     // clear the cards
     cards.innerHTML = '';
@@ -1072,7 +1136,9 @@ function fillChampions(champions) {
         // append child to container element
         htmlElements.championsContainer.appendChild(cardContainer);
         i += 1;
+
     }
+    listenToSearchChampion();
 }
 
 
