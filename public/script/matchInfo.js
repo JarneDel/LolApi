@@ -10,6 +10,7 @@ import {createTeamDiff, createTeamHeader, createTeamList} from './elementCreator
 
 export const statCalculator = async champion => {
     console.debug(champion);
+    hideNoMatches();
     const containerElement = document.querySelector('.js-match-history');
     // show loading icon
     showLoadingIconStatistics(containerElement);
@@ -35,7 +36,10 @@ export const statCalculator = async champion => {
         const participant = match.info.participants[userIndex];
         const win = participant.win ? "WIN" : "LOSS";
         const winColor = participant.win ? "u-positive-color" : "u-negative-color";
-        const champion = participant.championName;
+        let champion = participant.championName;
+        if (champion === "FiddleSticks") {
+            champion = "Fiddlesticks";
+        }
         const firstTree = participant.perks.styles[0].style;
         const mainRune = participant.perks.styles[0].selections[0].perk;
         const secondTree = participant.perks.styles[1].style;
@@ -131,11 +135,14 @@ export const statCalculator = async champion => {
 
 const noMatches = function (championName){
    let element = document.querySelector('.js-no-matches');
+   console.info("no matches for" + championName);
    element.classList.remove('u-hidden');
    element.querySelector('span').textContent = championName;
-
 }
-
+function hideNoMatches(){
+    let element = document.querySelector('.js-no-matches');
+    element.classList.add('u-hidden');
+}
 
 
 const loadMatchDetails = async (matchId, match, card) => {

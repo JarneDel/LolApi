@@ -166,7 +166,10 @@ function createProgressBar(a, b, percentage, type, color) {
 }
 
 function createColumnGeneral(participant) {
-    const champion = participant.championName;
+    let champion = participant.championName;
+    if (champion === "FiddleSticks") {
+        champion = "Fiddlesticks";
+    }
     const firstTree = participant.perks.styles[0].style;
     const mainRune = participant.perks.styles[0].selections[0].perk;
     const secondTree = participant.perks.styles[1].style;
