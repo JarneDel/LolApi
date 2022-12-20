@@ -36,6 +36,16 @@ export function listenToTags(){
 }
 
 
+const hideSearchBar = () =>{
+    document.querySelector('.c-filter__classes').classList.remove('u-hidden')
+    document.querySelector('.js-search-close').classList.add('u-hidden')
+    document.querySelector('#search-champion').classList.remove("active")
+    document.querySelector('.c-search-champions').classList.remove("active")
+    document.querySelector('.c-filter-by-class').classList.remove('active');
+
+
+}
+
 export const listenToSearchChampion = () => {
     const searchChampion = document.querySelector('.js-search-champion');
     if (searchChampion.value !== null){
@@ -45,8 +55,29 @@ export const listenToSearchChampion = () => {
         const value = searchChampion.value.toLowerCase();
         sortByChampion(value);
     });
+    document.querySelector('.js-search-icon').addEventListener('click',showSearchBar);
+    window.onresize = () => {
+       if (window.innerWidth > 576){
+              hideSearchBar();
+       }
+    }
+    document.querySelector('.js-search-close').onclick = function (){
+        hideSearchBar();
+        document.querySelector('.js-search-champion').value = ""
+        sortByChampion("")
+    }
 };
 
+
+const showSearchBar = ()=>{
+    if (window.innerWidth < 576) {
+        document.querySelector('.c-filter__classes').classList.add('u-hidden');
+        document.querySelector('#search-champion').classList.add("active")
+        document.querySelector('.c-search-champions').classList.add("active")
+        document.querySelector('.js-search-close').classList.remove('u-hidden')
+        document.querySelector('.c-filter-by-class').classList.add('active');
+    }
+}
 
 const sortByChampion = (query) =>{
     query = query.trim().toLowerCase();
