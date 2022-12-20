@@ -1,6 +1,7 @@
-# League Of Statistics
-League of Statistics is a League of legends champion and statistics viewer, You can see your winrate and match history, per champion.  
----
+# League Of Statistics.  
+
+League of Statistics is a League of legends champion and statistics viewer, You can see your winrate and match history, per champion.   
+
 ## Requirements 
 Azure cosmosdb  
 NodeJs  
