@@ -51,13 +51,21 @@ export const listenToSearchChampion = () => {
 const sortByChampion = (query) =>{
     query = query.trim().toLowerCase();
     const cards = document.querySelectorAll('.js-card-box');
+    let count = 0;
     cards.forEach((card) => {
         const name = card.querySelector('.c-card__title').innerText.toLowerCase();
         if (name.includes(query)) {
             card.classList.remove('u-hidden-2');
-
+            count +=1;
         } else {
             card.classList.add('u-hidden-2');
         }
     });
+    if (count === 0){
+        // show the no results message
+        document.querySelector('.js-no-results').classList.remove('u-hidden');
+    }else{
+        // hide the no results message
+        document.querySelector('.js-no-results').classList.add('u-hidden');
+    }
 }

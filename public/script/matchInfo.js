@@ -17,6 +17,9 @@ export const statCalculator = async champion => {
     hideNoUser(containerElement);
     const url = General.backend + `/api/v2/matches/${General.user.puuid}/${champion.id}`;
     const matchList = await get(url);
+    if (matchList.length === 0) {
+        noMatches(champion.name)
+    }
     General.loadedChampion = champion.id;
     const cards = containerElement.querySelector('.js-card-container');
     // clear the cards
@@ -124,6 +127,15 @@ export const statCalculator = async champion => {
     hideLoadingIconStatistics(containerElement);
     trapFocus(document.querySelector('.js-popup-container'));
 };
+
+
+const noMatches = function (championName){
+   let element = document.querySelector('.js-no-matches');
+   element.classList.remove('u-hidden');
+   element.querySelector('span').textContent = championName;
+
+}
+
 
 
 const loadMatchDetails = async (matchId, match, card) => {
