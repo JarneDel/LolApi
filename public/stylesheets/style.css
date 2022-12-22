@@ -1,4 +1,4 @@
-:root {
+:root, :root::after, :root::before {
     /*colors*/
     --primary-background-color: white;
     --primary-text-color: black;
