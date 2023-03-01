@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c74e7b6f-3231-409e-9825-22be9df91c24" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/Interfaces/IUser.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Models/Database/db.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Models/Fetch/League.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Models/region.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/api/users/[region]/[username].ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/api/users/matches/cache.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/master_leagueofstatistics.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/www" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/LolApiRequest.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/cache.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/cacheMatchHistory.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/cacheUsers.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/db.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/getRequest.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/newUser.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/regions.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/android-chrome-192x192.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/android-chrome-512x512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/apple-touch-icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicon-16x16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicon-32x32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/images/svg/assassins.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/images/svg/fighter.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/images/svg/mage.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/images/svg/marskmen.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/images/svg/supports.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/images/svg/tanks.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/script/accessibility.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/script/app.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/script/stat_calculator.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/site.webmanifest" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/stylesheets/normalize.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/stylesheets/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/todo.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api/getMatchPerPlayer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api/getRoutes.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/tests.http" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2MMYsZoZgjWLTezrpB8ITZ15ARC" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "javascript.nodejs.core.library.configured.version": "19.7.0",
+    "javascript.nodejs.core.library.typings.version": "18.14.2",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "node",
+    "nodejs_package_manager_path": "pnpm",
+    "prettierjs.PrettierConfiguration.Package": "C:\\Users\\jarne\\WebstormProjects\\LolApi\\node_modules\\prettier",
+    "settings.editor.selected.configurable": "settings.nodejs",
+    "ts.external.directory.path": "C:\\Users\\jarne\\WebstormProjects\\LolApi\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\jarne\WebstormProjects\LolApi\src\Models" />
+    </key>
+  </component>
+  <component name="RunManager" selected="npm.dev">
+    <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.dev" />
+        <item itemvalue="npm.start" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c74e7b6f-3231-409e-9825-22be9df91c24" name="Changes" comment="" />
+      <created>1677579127598</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1677579127598</updated>
+      <workItem from="1677579128618" duration="152000" />
+      <workItem from="1677656099865" duration="16000" />
+      <workItem from="1677686819285" duration="188000" />
+      <workItem from="1677687021849" duration="19905000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
