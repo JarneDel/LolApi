@@ -1,0 +1,11 @@
+.o-row{
+    margin-inline: var(--global-whitespace-1);
+}
+
+@media (min-width: 576px) {
+
+    .o-row{
+        margin-left: var(--global-whitespace-2);
+        margin-right: var(--global-whitespace-2);
+    }
+}

@@ -5,14 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c74e7b6f-3231-409e-9825-22be9df91c24" name="Changes" comment="API done">
-      <change afterPath="$PROJECT_DIR$/src/Interfaces/IMatch.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Interfaces/IMatchStats.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/api/matches/[puuid].ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/api/matches/[puuid]/[champion].ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/home.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/layout.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/SummonerSearch/SummonerSearch.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/SummonerSearch/SummonerSearch.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/styles/notch.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/styles/objects.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/styles/reset.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/styles/utilities.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Interfaces/IUser.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Interfaces/IUser.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Models/Database/db.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Models/Database/db.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/api/hello.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/api/hello.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/next.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/next.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/_app.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/_document.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/globals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +33,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="TypeScript File" />
+        <option value="TypeScript JSX File" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
@@ -49,6 +61,8 @@
     "WebServerToolWindowFactoryState": "false",
     "javascript.nodejs.core.library.configured.version": "19.7.0",
     "javascript.nodejs.core.library.typings.version": "18.14.2",
+    "last_opened_file_path": "C:/Users/jarne/WebstormProjects/LolApi/src/app",
+    "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -62,7 +76,12 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\jarne\WebstormProjects\LolApi\src\app" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\jarne\WebstormProjects\LolApi\src\components\SummonerSearch" />
+      <recent name="C:\Users\jarne\WebstormProjects\LolApi\src\styles" />
       <recent name="C:\Users\jarne\WebstormProjects\LolApi\src\Models" />
     </key>
   </component>
@@ -105,7 +124,7 @@
       <workItem from="1677579128618" duration="152000" />
       <workItem from="1677656099865" duration="16000" />
       <workItem from="1677686819285" duration="188000" />
-      <workItem from="1677687021849" duration="26537000" />
+      <workItem from="1677687021849" duration="34421000" />
     </task>
     <task id="LOCAL-00001" summary="user routes">
       <created>1677709036271</created>
@@ -114,7 +133,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677709036271</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="API done">
+      <created>1677746553909</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1677746553909</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

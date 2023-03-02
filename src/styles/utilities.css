@@ -1,0 +1,191 @@
+.u-horizontal{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: var(--global-whitespace-1) 0 auto;
+    max-width: 90rem;
+    gap: var(--global-whitespace-2);
+}
+
+.u-is-loading{
+    -webkit-animation: opacity-shift .7s infinite alternate linear;
+    -o-animation: opacity-shift .7s infinite alternate linear;
+    animation: opacity-shift .7s infinite alternate linear;
+}
+
+
+.u-gray-text {
+    color: var(--dark-gray-text-color);
+}
+
+.u-uppercase {
+    text-transform: uppercase;
+}
+
+.u-italic {
+    font-style: italic;
+}
+
+.u-focus-border:where(:focus-visible, :active){
+    border-bottom: 1px solid var(--global-focus-color) !important;
+    border-top: 1px solid var(--global-focus-color) !important;
+    outline: 1px solid var(--global-focus-color) !important;
+}
+
+.notchedBorder {
+
+    position: relative;
+    isolation: isolate;
+    /*padding: .5em 1.5em;*/
+    border: 0;
+    background: var(--notched-border-background-color);
+    clip-path: polygon(
+        /*top left 2*/ var(--notched-border-edge-size) 0,
+                /*top right*/ 100% 0,
+                /*bottom 1*/ 100% calc(100% - var(--notched-border-edge-size)),
+                /* bottom-right 2*/ calc(100% - var(--notched-border-edge-size)) 100%,
+                /* bottom left */ 0 100%,
+                /* top left  1*/ 0 var(--notched-border-edge-size));
+    transition: clip-path 250ms ease-in-out;
+}
+
+.notchedBorder::before,
+.notchedBorder::after {
+    content: "";
+    position: absolute;
+    /*shorthand of top, right, ...*/
+    inset: 0;
+}
+
+.notchedBorder::before {
+    transition: background-color .5s;
+    background: var(--notched-border-color);
+    z-index: -2;
+}
+
+.notchedBorder::after {
+    transition: clip-path .5s ease;
+    background: var(--notched-border-background-color);
+    z-index: -1;
+    clip-path: polygon(
+        /*top left 2*/ calc(var(--notched-border-edge-size) + var(--notched-border-width) * .25) var(--notched-border-width),
+                /*top right*/ calc(100% - var(--notched-border-width)) var(--notched-border-width),
+                /*bottom 1*/ calc(100% - var(--notched-border-width)) calc(100% - calc(var(--notched-border-edge-size) + var(--notched-border-width) * .25)),
+                /* bottom-right 2*/ calc(100% - calc(var(--notched-border-edge-size) + var(--notched-border-width) * .25)) calc(100% - var(--notched-border-width)),
+                /* bottom left */ var(--notched-border-width) calc(100% - var(--notched-border-width)),
+                /* top left  1*/ var(--notched-border-width) calc(var(--notched-border-edge-size) + var(--notched-border-width) * .25)
+    );
+}
+
+.u-notched-content {
+    /*background: var(--filter-background-color);*/
+    --notched-edge-size: var(--global-whitespace-3);
+    clip-path: polygon(calc(100% - var(--notched-edge-size)) 0%, 100% var(--notched-edge-size), 100% 100%, 0 100%, 0 0);
+    transition: clip-path .5s;
+}
+
+.u-notched-content:where(:hover, :focus, :active) {
+    clip-path: polygon(100% 0%, 100% 0, 100% 100%, 0 100%, 0 0);
+}
+.c-card__container:focus-visible{
+    outline: 4px solid var(--global-focus-color);
+}
+.c-card__container:focus-visible .c-card{
+    clip-path: none;
+}
+
+
+.u-hidden {
+    display: none;
+}
+
+.u-hidden-2.u-hidden-3{
+    display: none;
+}
+
+.u-hidden-2:not(.u-hidden-3){
+    display: none;
+}
+.u-hidden-3:not(.u-hidden-2){
+    display: none;
+}
+
+
+.u-serif {
+    font-family: var(--seriffont);
+}
+
+.u-sans {
+    font-family: var(--sans-font);
+}
+
+.u-fs-small {
+    font-size: var(--global-fz-3);
+}
+
+.u-negative-color {
+    color: var(--negative-color) !important;
+}
+
+.u-positive-color {
+    color: var(--positive-color) !important;
+}
+
+.u-mt-md {
+    margin-top: var(--global-whitespace-2);
+}
+.u-mb-md {
+    margin-bottom: var(--global-whitespace-2);
+}
+
+.u-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.u-mb-lg{
+    margin-bottom: 5rem;
+}
+
+.u-mg-md{
+    margin: var(--global-whitespace-2);
+}
+
+.u-rotate-180{
+    rotate: 180deg;
+}
+.perfect{
+    color: var(--primary-color) !important;
+}
+.u-overflow-hidden{
+    overflow-y: hidden;
+}
+
+.is-invalid {
+    /*shake animation*/
+    animation: error .5s;
+
+}
+
+
+/*endregion*/
+
+@media (max-width: 576px) {
+    .u-1-of-1-bp-1 {
+        flex-basis: 100%;
+    }
+    .u-center{
+        margin-inline: 0;
+    }
+
+}
+
+@media (min-width: 576px) {
+    .u-side-fill {
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: auto;
+    }
+}
