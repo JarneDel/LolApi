@@ -1,4 +1,6 @@
-export interface IUser {
+import { WithId , Document} from "mongodb";
+
+export interface IUser extends WithId<Document>{
   id: string;
   accountId: string;
   puuid: string;
