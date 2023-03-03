@@ -1,0 +1,15 @@
+.cardsContainer{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: max-content;
+    gap: var(--global-whitespace-2);
+}
+
+@media (min-width: 576px) {
+    .cardsContainer{
+        max-width: 90rem;
+        grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
+        gap: var(--global-whitespace-3);
+        margin: 0 auto;
+    }
+}
