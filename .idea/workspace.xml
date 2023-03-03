@@ -4,25 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c74e7b6f-3231-409e-9825-22be9df91c24" name="Changes" comment="API done">
-      <change afterPath="$PROJECT_DIR$/src/app/home.module.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/layout.module.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/SummonerSearch/SummonerSearch.module.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/SummonerSearch/SummonerSearch.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/styles/notch.module.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/styles/objects.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/styles/reset.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/styles/utilities.css" afterDir="false" />
+    <list default="true" id="c74e7b6f-3231-409e-9825-22be9df91c24" name="Changes" comment="App directory and working on search">
+      <change afterPath="$PROJECT_DIR$/.prettierrc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/next.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/next.config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/_app.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/_document.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/globals.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/SummonerSearch/SummonerSearch.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SummonerSearch/SummonerSearch.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/SummonerSearch/SummonerSearch.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SummonerSearch/SummonerSearch.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,27 +42,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "javascript.nodejs.core.library.configured.version": "19.7.0",
-    "javascript.nodejs.core.library.typings.version": "18.14.2",
-    "last_opened_file_path": "C:/Users/jarne/WebstormProjects/LolApi/src/app",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_interpreter_path": "node",
-    "nodejs_package_manager_path": "pnpm",
-    "prettierjs.PrettierConfiguration.Package": "C:\\Users\\jarne\\WebstormProjects\\LolApi\\node_modules\\prettier",
-    "settings.editor.selected.configurable": "settings.nodejs",
-    "ts.external.directory.path": "C:\\Users\\jarne\\WebstormProjects\\LolApi\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;19.7.0&quot;,
+    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;18.14.2&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/jarne/WebstormProjects/LolApi/src/app&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;C:\\Users\\jarne\\WebstormProjects\\LolApi\\node_modules\\prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.nodejs&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\jarne\\WebstormProjects\\LolApi\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\jarne\WebstormProjects\LolApi\src\app" />
@@ -124,7 +112,12 @@
       <workItem from="1677579128618" duration="152000" />
       <workItem from="1677656099865" duration="16000" />
       <workItem from="1677686819285" duration="188000" />
-      <workItem from="1677687021849" duration="34421000" />
+      <workItem from="1677687021849" duration="34572000" />
+      <workItem from="1677758201618" duration="1541000" />
+      <workItem from="1677761162921" duration="916000" />
+      <workItem from="1677765126130" duration="2355000" />
+      <workItem from="1677775945818" duration="2811000" />
+      <workItem from="1677784574128" duration="3272000" />
     </task>
     <task id="LOCAL-00001" summary="user routes">
       <created>1677709036271</created>
@@ -140,7 +133,21 @@
       <option name="project" value="LOCAL" />
       <updated>1677746553909</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="App directory and working on search">
+      <created>1677754822360</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1677754822360</updated>
+    </task>
+    <task id="LOCAL-00004" summary="App directory and working on search">
+      <created>1677754856499</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1677754856499</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -149,6 +156,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="user routes" />
     <MESSAGE value="API done" />
-    <option name="LAST_COMMIT_MESSAGE" value="API done" />
+    <MESSAGE value="App directory and working on search" />
+    <option name="LAST_COMMIT_MESSAGE" value="App directory and working on search" />
   </component>
 </project>

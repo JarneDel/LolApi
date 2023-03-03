@@ -16,12 +16,12 @@
     "axios": "^1.3.4",
     "eslint": "8.35.0",
     "eslint-config-next": "13.2.3",
-    "lucide-react": "^0.121.0",
     "mongodb": "^5.1.0",
     "next": "13.2.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "riot-api-nodejs": "^2.1.0",
+    "swr": "^2.0.4",
     "typescript": "4.9.5"
   },
   "devDependencies": {
