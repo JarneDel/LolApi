@@ -4,11 +4,11 @@
     text-decoration: none;
 }
 
-.cardContainer:where(:hover, :focus-within, :active) .c-card__img {
+.cardContainer:where(:hover, :focus-within, :active) .cardImage {
     transform: scale(1.1);
 }
 
-.cardContainer:where(:hover, :focus-within, :active) .c-card__title {
+.cardContainer:where(:hover, :focus-within, :active) .cardTitle {
     transform: translateX(1.5%);
 }
 
@@ -21,6 +21,7 @@
 .imageContainer{
     height: 100%;
     overflow: hidden;
+    aspect-ratio: 1/1;
 }
 
 .card{
@@ -28,4 +29,28 @@
     display: grid;
     cursor: pointer;
     height: 100%;
+}
+.cardImage{
+    transition: transform 250ms, visibility 250ms ease-in;
+    transform-origin: 50% 50% ;
+    display: inline-block;
+    object-fit: cover  ;
+}
+
+.cardTitle {
+    color: white;
+    letter-spacing: .08rem;
+    padding: 0 .5rem;
+    margin: .5rem 0;
+    font-size: 1rem;
+    max-width: 80%;
+    transition: transform 250ms ease;
+    transform-origin: left;
+    font-family: beaufort-pro, serif;
+    font-weight: 700;
+    font-style: italic;
+    text-transform: uppercase;
+    padding-inline: 1rem;
+    margin-block: 1rem;
+/*    adobe fonts font*/
 }

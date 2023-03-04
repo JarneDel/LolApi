@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@total-typescript/ts-reset': github:total-typescript/ts-reset
   '@types/node': 18.14.2
   '@types/react': 18.0.28
   '@types/react-dom': 18.0.11
@@ -17,6 +18,7 @@ specifiers:
   typescript: 4.9.5
 
 dependencies:
+  '@total-typescript/ts-reset': github.com/total-typescript/ts-reset/37dc8f0af0b8aa055ec1c740c83a45ccf3d34cf7
   '@types/node': 18.14.2
   '@types/react': 18.0.28
   '@types/react-dom': 18.0.11
@@ -2597,4 +2599,10 @@ packages:
   /yocto-queue/0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+    dev: false
+
+  github.com/total-typescript/ts-reset/37dc8f0af0b8aa055ec1c740c83a45ccf3d34cf7:
+    resolution: {tarball: https://codeload.github.com/total-typescript/ts-reset/tar.gz/37dc8f0af0b8aa055ec1c740c83a45ccf3d34cf7}
+    name: '@total-typescript/ts-reset'
+    version: 0.3.7
     dev: false

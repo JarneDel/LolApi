@@ -2,10 +2,11 @@
 
 import styles from './SummonerSearch.module.css'
 import notch from '@/styles/notch.module.css'
-import { ChangeEventHandler, useEffect, useState } from 'react'
+import { ChangeEventHandler, useContext, useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { IUser } from '@/Interfaces/IUser'
 import { IUserCallback } from '@/Interfaces/IUserCallback'
+import { AppContext } from '@/components/AppContext'
 
 const SummonerSearch = ({onUserFound}: {onUserFound: IUserCallback}) => {
   const regions = [
@@ -21,14 +22,14 @@ const SummonerSearch = ({onUserFound}: {onUserFound: IUserCallback}) => {
     { value: 'tr1', label: 'TR' },
     { value: 'ru', label: 'RU' },
   ]
-
   const [region, setRegion] = useState(regions[0].value)
   const [username, setUsername] = useState('');
   const [previousUsername, setPreviousUsername] = useState('');
   const [shouldFetch, setShouldFetch] = useState(false)
   const [success, setSuccess] = useState(false)
   const [hasError, setError] = useState(false)
-    useState('Summoner name')
+  // @ts-ignore
+  const [context, setContext] = useContext(AppContext)
 
   let url = `/api/users/${region}/${username}`
   const fetcher = (url: RequestInfo | URL) => fetch(url).then(r => r.json())
@@ -50,9 +51,11 @@ const SummonerSearch = ({onUserFound}: {onUserFound: IUserCallback}) => {
       if ('message' in data) setError(true)
       else if ("puuid" in data) {
         setPreviousUsername(data.name)
-        onUserFound(data)
+        // onUserFound(data)
         setUsername('')
         setSuccess(true)
+        // set context
+        setContext({user: data})
       }
       setShouldFetch(false)
     }
