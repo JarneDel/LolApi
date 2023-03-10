@@ -20,7 +20,11 @@ const getAndResolveMatch = function (matchId, puuidUser, callbackUseItem, global
         if (rejected.status.statusCode === 403) {
             setTimeout(function () {
                 tryAgain(matchId, puuidUser, callbackUseItem, globalRegion);
-            }, rejected.status.retryAfter * 1000);
+            }, rejected.status.retryAfter * 1100);
+        }
+        if (rejected.status.statusCode === 404) {
+            console.log("Match not found");
+            callbackUseItem(null);
         }
     });
 };

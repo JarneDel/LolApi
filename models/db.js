@@ -102,10 +102,12 @@ async function addUser(user) {
 async function addMatchToUser(puuid, matchList) {
     let user = await getUserByPuuid(puuid);
     if (user !== null) {
-        if (user.matchList === undefined) {
+        if (!("matchList" in user)) {
             user.matchList = [];
         }
-        user.matchList = user.matchList.concat(matchList);
+        let set = new Set(user.matchList);
+        matchList.forEach(match => set.add(match));
+        user.matchList = Array.from(set);
         const {resource} = await userContainer.items.upsert(user);
         return resource;
     }
@@ -146,6 +148,7 @@ module.exports = {
     addMatch,
     getAllMatches,
     getMatchesByPuuid,
+    getUserByPuuid,
     checkIfMatchExists,
     addUser,
     addMatchToUser,

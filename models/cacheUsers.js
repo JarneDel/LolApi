@@ -33,12 +33,15 @@ async function cacheUser(username, region) {
                     return false;
                 }
             }
-            summonerInfo.region = region;
-            const user = await db.addUser(summonerInfo);
-            user.firstTime = true;
-            return user;
-
-
+            if (summonerInfo.hasOwnProperty("puuid")) {
+                summonerInfo.region = region;
+                const user = await db.addUser(summonerInfo);
+                user.firstTime = true;
+                return user;
+            } else {
+                console.warn("rate limit probably exceeded");
+                return false;
+            }
         }
     } catch (e) {
         console.warn(e);

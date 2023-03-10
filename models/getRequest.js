@@ -21,6 +21,10 @@ const get = function (url, extraHeaders) {
           console.warn("Retry-After:", res.headers["retry-after"]);
           reject({status: 429, retryAfter: res.headers["retry-after"]});
         }
+        if (res.statusCode === 404) {
+          console.warn("Not found");
+          reject({status: 404});
+        }
         res.on("data", (chunk) => {
           data.push(chunk);
         });

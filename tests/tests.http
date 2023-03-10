@@ -1,2 +1,34 @@
 GET http://localhost:3000/api/v2/matches/raMMCxnYkKhsa40jF32jQjtndgeSrBVCp15GoRIyWv7tj51uoTkyEF789NJICQ0Omo-_nat5gM3bew
 content-type: application/json
+
+### get user by name and region
+
+GET http://localhost:8080/api/user/spaghetti/euw1
+
+###
+POST http://localhost:8080/api/cacheMatches
+Content-Type: application/json
+
+{
+  "id": "YuGmiLgqOgksIX_OaBCf3kd-DbixoNLuxWdWERCQc0RpiWk",
+  "accountId": "iyXy6iY-NA3dfy1shnMMw4KwIBaJuUv1N1eP04u0uDylOw",
+  "puuid": "ILkmkwMiXOiQA_rJOqwWzJme_3LlO5C6qnUa8yIyXZrOLiUzXKET_W0n0gryhlrpCLU8aqskYxx8VQ",
+  "name": "Spaghetti",
+  "profileIconId": 4804,
+  "revisionDate": 1678127574000,
+  "summonerLevel": 224,
+  "region": "euw1",
+  "nameLowerCase": "spaghetti",
+  "_rid": "HMtIAP1QGPMmAAAAAAAAAA==",
+  "_self": "dbs/HMtIAA==/colls/HMtIAP1QGPM=/docs/HMtIAP1QGPMmAAAAAAAAAA==/",
+  "_etag": "\"fb0167c5-0000-0d00-0000-640b89320000\"",
+  "_attachments": "attachments/",
+  "matchList": [],
+  "_ts": 1678477618
+}
+
+### get matches by user id
+
+
+GET http://localhost:8080/api/v2/matches/ILkmkwMiXOiQA_rJOqwWzJme_3LlO5C6qnUa8yIyXZrOLiUzXKET_W0n0gryhlrpCLU8aqskYxx8VQ
+

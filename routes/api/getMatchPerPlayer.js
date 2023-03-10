@@ -14,7 +14,6 @@ router.get("/matches/:puuid/:champion", cors(), cache(10), async function (req, 
     const matches = await db.getMatchesByPuuid(puuid);
     let outmatches = [];
     const idOrName = isNaN(champion) ? "championName" : "championId";
-    console.log("Puuid of user: ", puuid);
     for (const match of matches) {
         let userIndex = match.userIndex;
         const participantInfo = match.info.participants[userIndex]
